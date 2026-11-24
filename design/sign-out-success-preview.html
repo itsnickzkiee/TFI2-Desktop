@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#064b29">
+  <meta name="robots" content="noindex,nofollow">
+  <title>TFI | Signed Out</title>
+  <link rel="stylesheet" href="sign-out-success.css">
+</head>
+<body data-redirect-seconds="4">
+  <div class="signout-background" aria-hidden="true">
+    <div class="background-orbit orbit-one"></div>
+    <div class="background-orbit orbit-two"></div>
+    <div class="background-grid"></div>
+  </div>
+
+  <main class="signout-stage">
+    <section class="signout-card" aria-labelledby="signout-title" aria-describedby="signout-description">
+      <div class="signout-brand">
+        <div class="brand-logo">
+          <img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc.">
+        </div>
+        <span class="preview-chip"><span></span> UI PREVIEW</span>
+      </div>
+
+      <div class="success-icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="19"></circle>
+          <path d="m14 24 7 7 14-15"></path>
+        </svg>
+      </div>
+
+      <p class="signout-eyebrow">ACCOUNT SECURITY</p>
+      <h1 id="signout-title">You've been signed out</h1>
+      <p class="signout-description" id="signout-description">Your TFI administrator sign-out flow is complete. Thank you for using the Production Management System.</p>
+
+      <div class="signedout-status" role="status" aria-label="Sign-out status: complete">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>SIGN-OUT STATUS</span>
+        <strong>Complete</strong>
+      </div>
+
+      <div class="redirect-panel">
+        <div class="redirect-copy">
+          <span class="redirect-label">RETURNING TO SIGN IN</span>
+          <strong><span id="redirect-countdown">04</span><small> seconds</small></strong>
+        </div>
+        <div class="redirect-track" role="progressbar" aria-label="Automatic return to sign-in progress" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0" id="redirect-progress">
+          <span id="redirect-progress-fill"></span>
+        </div>
+      </div>
+
+      <a class="return-button" id="return-to-sign-in" href="admin-login-preview.html">
+        <span>Return to sign in now</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+
+      <div class="preview-disclaimer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.8 19h18.4L12 3Z"></path><path d="M12 9v4M12 16.5h.01"></path></svg>
+        <span><strong>Preview only.</strong> This is a simulated sign-out transition. No real session was revoked, and no account access was changed.</span>
+      </div>
+
+      <footer class="signout-footer">
+        <span>TOSEN FOODS, INC.</span>
+        <span>TFI ADMIN PORTAL</span>
+      </footer>
+    </section>
+  </main>
+  <script src="sign-out-success-ui.js"></script>
+</body>
+</html>

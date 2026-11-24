@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TFI | Reports &amp; Reconciliation</title>
+<link rel="stylesheet" href="tfi-shell-standard.css">
+<link rel="stylesheet" href="reports-reconciliation.css">
+<style>
+:root{--green:#086333;--deep:#064b29;--teal:#0b3c45;--teal2:#0f8585;--mint:#d9f2ed;--yellow:#ffc000;--line:#d3dfd8;--canvas:#f4f7f5;--ink:#17251d;--muted:#78857d}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Segoe UI",Inter,Arial,sans-serif;color:var(--ink);background:var(--canvas);font-size:13px}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.shell{min-height:100vh;display:flex}
+.sidebar{background:linear-gradient(180deg,var(--green),var(--deep));color:#fff;display:flex;flex-direction:column}
+.brand{background:#fff;border-radius:14px}
+.brand img{width:100%;max-width:208px;max-height:60px;object-fit:contain}
+.brand-caption{color:#ffffffb8;font-size:9px;font-weight:800;letter-spacing:1.65px;text-align:center}
+.nav-group{margin:0 0 18px}
+.nav-label{font-size:9px;text-transform:uppercase;font-weight:800;color:#ffffff85}
+.nav-link{width:100%;display:flex;align-items:center;border:0;background:transparent;color:#ffffffd1;text-align:left}
+.nav-link svg{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-link:hover{background:#ffffff1a}
+.nav-link.active{background:#fff;color:var(--green)}
+.spacer{flex:1;min-height:12px}
+.avatar{width:34px;height:34px;border-radius:50%;background:#e5f0e8;color:var(--green);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 34px}
+.user-foot{border-top:1px solid #ffffff26;display:flex;align-items:center}
+.user-foot strong{display:block;font-size:12px}
+.user-foot small{display:block;font-size:10px;color:#ffffffa3;margin-top:3px}
+.main{min-width:0;flex:1;display:flex;flex-direction:column}
+.topbar{background:#fff;border-bottom:1px solid #e5ece7;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}
+.crumb{display:flex;align-items:center;gap:9px;color:#89958d;font-size:12px;font-weight:600}
+.crumb b{color:#314239}
+.profile{display:flex;align-items:center;gap:9px}
+.profile strong{display:block;font-size:12px}
+.profile small{display:block;font-size:10px;color:#758279;margin-top:2px}
+.content{width:100%;max-width:1700px;margin:0 auto;padding:18px 22px 28px;min-width:0}
+.entry-banner{min-height:50px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 16px;border-bottom:1px solid #e6c000;border-radius:11px 11px 0 0}
+.entry-banner h1{font-size:22px;letter-spacing:-.45px;margin:0;font-weight:850}
+.entry-banner .banner-note{font-size:10px;font-style:italic;color:#a0e3d9;white-space:nowrap}
+.control-strip{display:grid;grid-template-columns:110px 210px minmax(180px,1fr) auto;align-items:stretch;background:var(--teal);min-height:45px;border-bottom:1px solid #e6c000}
+.control-label{display:flex;align-items:center;padding:0 12px;color:var(--yellow);font-size:11px;font-weight:850;letter-spacing:.25px}
+.date-input{width:100%;min-width:0;border:1px solid #e2b100;border-radius:0;background:var(--yellow);color:var(--teal);font-weight:800;font-size:14px;text-align:center;padding:0 10px;outline:0}
+.date-input:focus{box-shadow:inset 0 0 0 2px #fff4be}
+.report-title{display:flex;align-items:center;padding:0 15px;color:#fff;font-weight:800;font-size:12px;min-width:0}
+.report-actions{display:flex;align-items:center;gap:8px;padding:6px 10px}
+.action-btn{border:1px solid #ffffff45;border-radius:7px;padding:8px 12px;font-size:10px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
+.action-btn.save{background:#ffc000;color:#153b3b;border-color:#ffc000}
+.action-btn.reset{background:#ffffff12;color:#fff}
+.action-btn:hover{filter:brightness(1.05)}
+.snapshot-note{display:flex;align-items:center;justify-content:flex-end;padding:5px 11px;background:#f7faf8;border-left:1px solid var(--line);border-right:1px solid var(--line);color:#87938b;font-size:9px;letter-spacing:.2px}
+.summary-strip{display:grid;grid-template-columns:repeat(5,minmax(125px,1fr));background:var(--mint);border:1px solid #b9ddd4;border-top:0;border-bottom:3px solid #e6c000}
+.summary-item{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:56px;padding:8px 14px;border-right:1px solid #b9ddd4}
+.summary-item:last-child{border-right:0}
+.summary-label{font-size:9px;font-weight:850;letter-spacing:.55px;color:#285d5c}
+.summary-value{font-size:16px;font-weight:850;color:#073d47;font-variant-numeric:tabular-nums}
+.summary-value.small{font-size:14px}
+.report-band{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#e9f2ee;border:1px solid #d3dfd8;border-top:0;padding:8px 12px;color:#315c56}
+.report-band strong{font-size:10px;letter-spacing:.7px}
+.report-band span{font-size:9px;color:#71827a}
+.table-scroll{width:100%;overflow-x:auto!important;overflow-y:clip!important;background:#fff;border:1px solid #c7d0cd;border-top:0;border-radius:0 0 9px 9px;box-shadow:0 10px 24px rgba(25,55,37,.075);scrollbar-width:thin;scrollbar-color:#aebdb4 #eef2ef}
+.entry-table{border-collapse:separate;border-spacing:0;table-layout:fixed;width:max-content;min-width:100%;font-size:10px}
+.entry-table th,.entry-table td{border-right:1px solid #202b2a;border-bottom:1px solid #202b2a;padding:0;overflow:hidden}
+.entry-table thead th{white-space:normal;text-align:center;font-weight:800;line-height:1.15}
+.group-row th{height:32px;color:#fff;font-size:10px;padding:4px 7px;background:var(--teal)}
+.group-row th.teal{background:var(--teal2)}
+.group-row th.rownum{background:#e7eeea;color:#65746c}
+.column-row th{height:48px;background:var(--mint);color:#003e49;font-size:9px;padding:5px 5px;border-bottom:2px solid #70aaa1}
+.column-row th.rownum{background:#e7eeea;color:#65746c}
+.entry-table th.rownum{width:42px;min-width:42px;max-width:42px;position:sticky;left:0;z-index:12;background:#f3f5f4;color:#61716a;font-size:9px;font-weight:600;border-right:1px solid #aab5b0;text-align:center}
+.entry-table thead th.rownum{z-index:18}
+.entry-table tbody td{height:38px;background:#fff}
+.entry-table tbody tr:nth-child(even) td{background:#fbfdfb}
+.entry-table tbody tr:hover td{background:#f4faf6}
+.entry-table td.date-cell{background:#f3f7f4!important;color:#4d665a;font-weight:700;text-align:center}
+.entry-table td.line-cell{background:#f4f7f5!important;font-weight:800;text-align:center;white-space:nowrap}
+.line-agri{color:#14744b}
+.line-meat{color:#9a5a13}
+.line-finishing{color:#246b91}
+.entry-table td.calc-cell{background:#eaf5f1!important;color:#205a4c;text-align:center;font-weight:750}
+.entry-table td.trace-cell{background:#f7f9f7!important;color:#89958d;text-align:center}
+.cell-input,.cell-select{width:100%;height:36px;min-width:0;border:0;border-radius:0;background:transparent;color:#14251c;font-size:10px;padding:3px 6px;outline:0}
+.cell-input:focus,.cell-select:focus{background:#fff8d9;outline:2px solid #e1ad00;outline-offset:-2px;position:relative;z-index:3}
+.cell-input[type=number]{text-align:right;padding-right:8px}
+.cell-input[type=time]{font-variant-numeric:tabular-nums}
+.cell-select{padding-right:2px}
+.cell-select:disabled{color:#a3ada6;background:#f5f7f5}
+.cell-input[readonly]{color:#587368;background:#f3f7f4}
+.cell-input::placeholder{color:#aab4ae}
+.has-data{font-size:10px;font-weight:850;color:#829188}
+.has-data.yes{color:#087548}
+.table-status{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 11px;background:#fff;border:1px solid #d8e1dc;border-top:0;border-radius:0 0 9px 9px;color:#77857c;font-size:9px}
+.table-status strong{color:#34463b}
+.floating-sheet-head{position:fixed;display:none;overflow:hidden;z-index:19;pointer-events:none;background:#fff;box-shadow:0 5px 12px rgba(15,45,35,.14);border-bottom:1px solid #70aaa1}
+.floating-sheet-head .entry-table{min-width:0;margin:0;transform-origin:top left}
+.floating-sheet-head .entry-table thead th{position:relative;top:auto}
+.floating-sheet-head .entry-table thead th.rownum{position:sticky;left:0;z-index:25}
+.toast{position:fixed;right:20px;bottom:20px;z-index:50;max-width:340px;background:#173d29;color:#fff;padding:11px 14px;border-radius:9px;box-shadow:0 10px 25px #0003;font-size:11px;line-height:1.5}
+@media(max-width:1100px){.content{padding:14px 14px 24px}.control-strip{grid-template-columns:90px 190px minmax(150px,1fr)}.report-actions{grid-column:1/-1;justify-content:flex-end;border-top:1px solid #ffffff22}.summary-strip{grid-template-columns:repeat(3,minmax(120px,1fr))}.summary-item:nth-child(3){border-right:0}.summary-item:nth-child(n+4){border-top:1px solid #b9ddd4}}
+@media(max-width:650px){.content{padding:10px 8px 20px}.entry-banner{align-items:flex-start;flex-direction:column;gap:4px}.entry-banner h1{font-size:18px}.entry-banner .banner-note{font-size:9px;white-space:normal}.control-strip{grid-template-columns:76px minmax(130px,1fr)}.report-title{grid-column:1/-1;min-height:34px;border-top:1px solid #ffffff20}.report-actions{grid-column:1/-1;justify-content:flex-start}.summary-strip{grid-template-columns:repeat(2,minmax(120px,1fr))}.summary-item:nth-child(odd){border-right:1px solid #b9ddd4}.summary-item:nth-child(even){border-right:0}.summary-item:nth-child(n+3){border-top:1px solid #b9ddd4}.summary-item:last-child{grid-column:1/-1}.report-band{align-items:flex-start;flex-direction:column}}
+.rr-connection{color:#087044;font-size:10px;font-weight:850;white-space:nowrap}
+.rr-connection.is-error{color:#8e3028}
+.rr-selected-actions{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 14px;border-top:1px solid #e1e9e4;background:#fbfdfb}
+.rr-selected-actions>span{color:#64756b;font-size:10px;line-height:1.5}
+.rr-selected-actions>div{display:flex;gap:8px;flex-wrap:wrap}
+.rr-table tbody tr{cursor:pointer}
+.rr-table tbody tr.is-selected td{background:#fff8dc!important;box-shadow:inset 0 1px 0 #e2b33b,inset 0 -1px 0 #e2b33b}
+.rr-record-modal{width:min(880px,calc(100vw - 32px));max-height:calc(100vh - 40px);overflow:auto}
+.rr-edit-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.rr-edit-fields .rr-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.rr-edit-fields .rr-field>span,.rr-change-reason>span{font-size:10px;font-weight:800;color:#5e7066}
+.rr-edit-fields input,.rr-edit-fields select,.rr-change-reason input{width:100%;min-width:0;border:1px solid #d3ded7;border-radius:7px;padding:9px 10px;background:#fff;color:#1c3024;font:inherit;font-size:12px}
+.rr-edit-fields input:focus,.rr-edit-fields select:focus,.rr-change-reason input:focus{outline:2px solid #acd1bd;border-color:#087044}
+.rr-change-reason{display:flex;flex-direction:column;gap:6px;margin-top:14px}
+.rr-history-content{display:flex;flex-direction:column;gap:12px;max-height:58vh;overflow:auto}
+.rr-history-item{border:1px solid #dce6df;border-radius:9px;padding:12px;background:#fbfdfb}
+.rr-history-item-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.rr-history-item-head strong{color:#1e4934;font-size:12px}
+.rr-history-item-head span{color:#78877e;font-size:10px}
+.rr-history-table{width:100%;border-collapse:collapse;font-size:10px}
+.rr-history-table th,.rr-history-table td{padding:7px;border-bottom:1px solid #e2e9e4;text-align:left;vertical-align:top}
+.rr-history-table th{color:#4d6657;width:28%}
+.rr-history-empty{padding:22px;text-align:center;color:#74837a;font-size:11px}
+@media(max-width:650px){.rr-selected-actions{align-items:flex-start;flex-direction:column}.rr-selected-actions>div{width:100%}.rr-selected-actions button{flex:1}.rr-edit-fields{grid-template-columns:1fr}.rr-record-modal{padding:14px}}
+</style>
+</head>
+<body class="rr-page">
+<div class="shell">
+<aside class="sidebar">
+ <div class="brand"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div>
+ <div class="brand-caption">PRODUCTION MANAGEMENT</div>
+ <nav>
+  <div class="nav-group"><div class="nav-label">Overview</div>
+   <button class="nav-link" data-page="Dashboard"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link" data-page="Product Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 20V9l8-5 8 5v11"/><path d="M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="5" width="18" height="16" rx="2"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="5" y="4" width="14" height="16"/></svg><span>DMR Production</span></button>
+   <button class="nav-link" data-page="DMR Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+   <button class="nav-link" data-page="Yield Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21c4-2 7-6 7-10A7 7 0 0 0 5 11c0 4 3 8 7 10Z"/></svg><span>Yield Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link" data-page="CO QA"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link" data-page="Spreadsheet Import"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24" width="17" height="17"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link active" data-page="Reports" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports &amp; Reconciliation</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Audit Trail"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link" data-page="Settings"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav>
+ <div class="spacer"></div><div class="user-foot"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div>
+</aside>
+<div class="main">
+ <header class="topbar"><div class="crumb"><span>TFI</span><span>/</span><span>Data &amp; Reports</span><span>/</span><b>Reports &amp; Reconciliation</b><span>/</span><b>Production Summary</b></div><div class="profile"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div></header>
+<main class="content rr-content">
+  <section class="rr-hero">
+    <div class="rr-hero-copy">
+      <span class="rr-eyebrow">REPORTS &amp; RECONCILIATION · SAVED PRODUCTION HISTORY</span>
+      <h1>Production Summary</h1>
+      <p>Review saved production runs captured from the Production Entry workflow. This report is a historical register, not a second production-entry form.</p>
+    </div>
+    <div class="rr-hero-actions">
+      <span class="rr-admin-tag"><i></i> ADMIN ACCESS ONLY</span>
+      <button class="rr-btn rr-btn-primary" id="rr-import-open" type="button" aria-haspopup="dialog" aria-controls="rr-import-modal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 15v5h16v-5"/></svg>
+        IMPORT SPREADSHEET
+      </button>
+    </div>
+  </section>
+
+  <nav class="rr-report-tabs" aria-label="Reports and reconciliation views">
+    <button class="rr-report-tab active" type="button" data-report-page="Reports" aria-current="page">Production Summary</button>
+    <button class="rr-report-tab" type="button" data-report-page="Schedule Summary">Schedule Summary</button>
+    <button class="rr-report-tab" type="button" data-report-page="Summary">Summary</button>
+    <button class="rr-report-tab" type="button" data-report-page="Removed Rows">Removed Rows</button>
+  </nav>
+
+  <section class="rr-analytics-strip" aria-label="Cross-module KPI and report reconciliation snapshot">
+    <div class="rr-analytics-head"><div><strong>Cross-module Reconciliation Snapshot</strong><span id="rr-analytics-caption">Checking verified TFI2 calculations…</span></div><span id="rr-analytics-source">TFI2 · CONNECTING</span></div>
+    <div class="rr-analytics-kpis">
+      <div><span>Total output</span><strong id="rr-analytics-output">—</strong></div>
+      <div><span>Output attainment</span><strong id="rr-analytics-attainment">—</strong></div>
+      <div><span>Productivity</span><strong id="rr-analytics-productivity">—</strong></div>
+      <div><span>OEE</span><strong id="rr-analytics-oee">—</strong></div>
+      <div><span>DMR Production downtime</span><strong id="rr-analytics-downtime">—</strong></div>
+      <div><span>Yield</span><strong id="rr-analytics-yield">Pending</strong></div>
+    </div>
+    <div class="rr-analytics-sources">
+      <span>Production Summary <b id="rr-source-production">Checking</b></span>
+      <span>Schedule Summary <b id="rr-source-schedule">Checking</b></span>
+      <span>Summary projection <b id="rr-source-summary">Checking</b></span>
+      <span>Removed Rows <b id="rr-source-removed">Checking</b></span>
+    </div>
+  </section>
+
+  <div class="rr-source-meta" aria-label="Verified source details">
+    <span><strong>OFFICIAL WORKBOOK</strong> <b id="rr-source-workbook">Copy of TFI - Production Monitoring Sheet 1</b></span>
+    <span><strong>WORKSHEET</strong> <b id="rr-source-sheet">Production Summary · sheetId 1846667474</b></span>
+    <span><strong>STRUCTURE</strong> 24 SOURCE COLUMNS · A:X</span><span id="rr-connection" class="rr-connection">CONNECTING TO TFI2…</span>
+    <span><strong>HEADER ROW</strong> ROW 6</span>
+  </div>
+
+  <section class="rr-kpi-grid" aria-label="Production Summary report metrics">
+    <article class="rr-kpi">
+      <div class="rr-kpi-top"><span class="rr-kpi-label">Logged production runs</span><span class="rr-kpi-icon"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg></span></div>
+      <div class="rr-kpi-value" id="rr-kpi-runs">0</div><div class="rr-kpi-note">Live TFI2 saved runs</div>
+    </article>
+    <article class="rr-kpi">
+      <div class="rr-kpi-top"><span class="rr-kpi-label">Days logged</span><span class="rr-kpi-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></span></div>
+      <div class="rr-kpi-value" id="rr-kpi-days">0</div><div class="rr-kpi-note">Distinct production dates in TFI2</div>
+    </article>
+    <article class="rr-kpi">
+      <div class="rr-kpi-top"><span class="rr-kpi-label">Average % attainment</span><span class="rr-kpi-icon"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M7 15l4-4 3 2 6-7"/></svg></span></div>
+      <div class="rr-kpi-value" id="rr-kpi-attainment">—</div><div class="rr-kpi-note">Average of saved run attainment values</div>
+    </article>
+    <article class="rr-kpi">
+      <div class="rr-kpi-top"><span class="rr-kpi-label">Last saved entry</span><span class="rr-kpi-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span></div>
+      <div class="rr-kpi-value" id="rr-kpi-last">—</div><div class="rr-kpi-note">Latest TFI2 saved timestamp</div>
+    </article>
+  </section>
+
+  <section class="rr-panel rr-filter-panel" aria-label="Production Summary filters">
+    <div class="rr-panel-head">
+      <div><span class="rr-panel-kicker">REGISTER CONTROLS</span><h2>Find production records</h2><p>Filter saved runs by date, line, product, or source details.</p></div>
+      <div class="rr-filter-actions">
+        <button class="rr-btn rr-btn-light" id="rr-reset" type="button">RESET FILTERS</button>
+        <button class="rr-btn rr-btn-light" id="rr-export" type="button" disabled title="Available after approved records are connected">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12m-5-5 5 5 5-5M4 20h16"/></svg>
+          EXPORT CSV
+        </button>
+      </div>
+    </div>
+    <div class="rr-filter-grid">
+      <label class="rr-field"><span>From date</span><input id="rr-from" type="date"></label>
+      <label class="rr-field"><span>To date</span><input id="rr-to" type="date"></label>
+      <label class="rr-field"><span>Line</span><select id="rr-line"><option value="">All lines</option><option value="Agri">Agri</option><option value="Meat">Meat</option><option value="Finishing">Finishing</option></select></label>
+      <label class="rr-field"><span>Product name</span><input id="rr-product" type="search" placeholder="Search product" autocomplete="off"></label>
+      <label class="rr-field"><span>Product code</span><input id="rr-code" type="search" placeholder="Search code" autocomplete="off"></label>
+      <label class="rr-field rr-search-field"><span>Search all fields</span><input id="rr-search" type="search" placeholder="Search date, line, product, remarks, or trace" autocomplete="off"></label>
+    </div>
+    <div class="rr-filter-foot"><span id="rr-filter-summary">Loading saved Production Entry runs from TFI2…</span><span><strong>FILTERS</strong> apply to the live saved-run register</span></div>
+  </section>
+
+  <section class="rr-panel rr-table-panel" aria-label="Production Summary saved production run register">
+    <div class="rr-table-head">
+      <div class="rr-table-head-copy"><strong>PRODUCTION SUMMARY REGISTER</strong><span>Exact source column order A:X · Source header row 6 · One row per saved product run · Scroll horizontally to view all columns</span></div>
+      <span class="rr-table-state"><i></i><b id="rr-record-state">CONNECTING TO TFI2</b></span>
+    </div>
+    <div class="rr-table-scroll" role="region" aria-label="Production Summary source columns A through X" tabindex="0">
+      <table class="rr-table" id="rr-table">
+        <colgroup>
+          <col style="width:96px"><col style="width:86px"><col style="width:190px"><col style="width:120px">
+          <col style="width:92px"><col style="width:94px"><col style="width:94px"><col style="width:65px"><col style="width:94px">
+          <col style="width:95px"><col style="width:95px"><col style="width:95px"><col style="width:112px"><col style="width:125px">
+          <col style="width:90px"><col style="width:78px"><col style="width:78px"><col style="width:94px"><col style="width:76px">
+          <col style="width:270px"><col style="width:122px"><col style="width:88px"><col style="width:82px"><col style="width:95px">
+        </colgroup>
+        <thead>
+          <tr class="rr-group-row">
+            <th colspan="4">PRODUCT</th>
+            <th colspan="5" class="rr-group-accent">PRODUCTION (PLAN VS ACTUAL)</th>
+            <th colspan="5">TIME</th>
+            <th colspan="5" class="rr-group-accent">MANPOWER &amp; OT (1ST ROW OF LINE PER DAY)</th>
+            <th colspan="1">REMARKS</th>
+            <th colspan="4" class="rr-group-accent">TRACE</th>
+          </tr>
+          <tr class="rr-column-row">
+            <th><button type="button" data-rr-sort="date">Date <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="line">Line <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="productName">Product Name <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="productCode">Product Code <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="batches">No. of Batches <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="target">Target <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="produced">Produced <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="uom">UOM <span>↕</span></button></th>
+            <th class="rr-derived-head"><button type="button" data-rr-sort="attainment">% Attainment <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="planStart">Plan Start <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="actualStart">Actual Start <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="planEnd">Plan End <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="actualEndProd">Actual End (Prod) <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="actualEndCleaning">Actual End (Cleaning) <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="manReqmt">Man Reqmt <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="present">Present <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="absent">Absent <span>↕</span></button></th>
+            <th class="rr-derived-head"><button type="button" data-rr-sort="attendance">% Attendance <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="otHrs">OT Hrs <span>↕</span></button></th>
+            <th><button type="button" data-rr-sort="remarks">Remarks / Reasons (Delay, &lt;95%, Co-run, PD) <span>↕</span></button></th>
+            <th class="rr-trace-head"><button type="button" data-rr-sort="savedOn">Saved on <span>↕</span></button></th>
+            <th class="rr-trace-head"><button type="button" data-rr-sort="check">Check <span>↕</span></button></th>
+            <th class="rr-trace-head"><button type="button" data-rr-sort="hasData">Has data <span>↕</span></button></th>
+            <th class="rr-trace-head"><button type="button" data-rr-sort="dayHasData">Day has data <span>↕</span></button></th>
+          </tr>
+        </thead>
+        <tbody id="rr-tbody"></tbody>
+      </table>
+    </div>
+    <div class="rr-table-footer"><span id="rr-table-count">Loading saved Production Entry runs…</span><div class="rr-pagination"><button id="rr-prev" type="button" aria-label="Previous page" disabled>‹</button><span id="rr-page">—</span><button id="rr-next" type="button" aria-label="Next page" disabled>›</button></div></div>
+    <div class="rr-selected-actions"><span id="rr-selected-label">Select a saved production run to edit it or inspect its revision history.</span><div><button id="rr-edit-selected" class="rr-btn rr-btn-light" type="button" disabled>EDIT SELECTED RUN</button><button id="rr-history-selected" class="rr-btn rr-btn-light" type="button" disabled>REVISION HISTORY</button></div></div>
+  </section>
+
+  <div class="rr-modal-backdrop" id="rr-edit-modal" role="dialog" aria-modal="true" aria-labelledby="rr-edit-title" aria-hidden="true">
+  <div class="rr-modal rr-record-modal">
+    <div class="rr-modal-head"><div><span class="rr-panel-kicker">VERSION-CHECKED UPDATE</span><h3 id="rr-edit-title">Edit saved production run</h3></div><button class="rr-modal-close" id="rr-edit-close" type="button" aria-label="Close edit dialog">×</button></div>
+    <p>Only source input fields are editable. Calculated and trace columns are recomputed or preserved by TFI2.</p>
+    <form id="rr-edit-form">
+      <div id="rr-edit-fields" class="rr-edit-fields"></div>
+      <label class="rr-field rr-change-reason"><span>Change reason (optional)</span><input id="rr-change-reason" type="text" maxlength="500" placeholder="Why is this saved run being corrected?"></label>
+      <div class="rr-modal-actions"><button class="rr-btn rr-btn-light" id="rr-edit-cancel" type="button">CANCEL</button><button class="rr-btn rr-btn-primary" id="rr-edit-save" type="submit">SAVE CHANGES</button></div>
+    </form>
+  </div>
+</div>
+<div class="rr-modal-backdrop" id="rr-history-modal" role="dialog" aria-modal="true" aria-labelledby="rr-history-title" aria-hidden="true">
+  <div class="rr-modal rr-record-modal">
+    <div class="rr-modal-head"><div><span class="rr-panel-kicker">APPEND-ONLY AUDIT</span><h3 id="rr-history-title">Production run revision history</h3></div><button class="rr-modal-close" id="rr-history-close" type="button" aria-label="Close history dialog">×</button></div>
+    <div id="rr-history-content" class="rr-history-content"><div class="rr-history-empty">Loading revision history…</div></div>
+    <div class="rr-modal-actions"><button class="rr-btn rr-btn-light" id="rr-history-dismiss" type="button">CLOSE</button></div>
+  </div>
+</div>
+
+<section class="rr-source-note">
+    <span class="rr-note-icon">i</span>
+    <span><strong>Source treatment:</strong> Production Summary is the live TFI2 register of Production Entry runs. One row represents one saved product run. Columns A:X remain in the verified source order; calculated fields are server-derived and U:X are retained as trace fields. Historical workbook rows are not automatically imported or modified.</span>
+  </section>
+</main>
+
+<div class="rr-modal-backdrop" id="rr-import-modal" role="dialog" aria-modal="true" aria-labelledby="rr-modal-title" aria-hidden="true">
+  <div class="rr-modal">
+    <div class="rr-modal-head">
+      <div><span class="rr-panel-kicker">ADMIN-ONLY ACTION</span><h3 id="rr-modal-title">Import Production Summary</h3></div>
+      <button class="rr-modal-close" id="rr-modal-close" type="button" aria-label="Close import dialog">×</button>
+    </div>
+    <p>This is the dedicated import entry point for the Production Summary worksheet. Paste a Google Sheets URL below and validate its format. Access checking, scanning, file upload, and database import are not connected in this UI preview.</p>
+    <div class="rr-source-card">
+      <strong>Copy of TFI - Production Monitoring Sheet 1</strong>
+      <span>Worksheet: Production Summary · sheetId: 1846667474<br>Header row: 6 · Source columns: A:X<br>Record type: saved production-run history<br>Spreadsheet ID: 1rCbQ16wj7MRjQCFF3tA-WEMkudraJK0RkwcqayUlz7k</span>
+    </div>
+        <div class="rr-link-import" aria-label="Paste Google Sheets source link">
+      <div class="rr-link-import-head"><div><strong>PASTE SPREADSHEET LINK</strong><span>Paste the Google Sheets URL for the source workbook.</span></div><span class="rr-link-badge">GOOGLE SHEETS</span></div>
+      <label class="rr-link-label" for="rr-spreadsheet-link">Google Sheets URL</label>
+      <div class="rr-link-input-row"><input id="rr-spreadsheet-link" type="url" inputmode="url" placeholder="https://docs.google.com/spreadsheets/d/..." autocomplete="off" aria-describedby="rr-link-feedback"><button class="rr-btn rr-btn-light" id="rr-link-validate" type="button">VALIDATE LINK</button></div>
+      <div class="rr-link-feedback" id="rr-link-feedback" role="status" aria-live="polite">Paste a Google Sheets link, then select Validate Link.</div>
+      <div class="rr-link-id" id="rr-link-id" hidden><span>DETECTED SPREADSHEET ID</span><code id="rr-link-id-value"></code></div>
+    </div>
+<div class="rr-modal-warning"><strong>!</strong><span>No source link has been validated, and no data has been scanned or imported. The original Google Sheet and existing production records remain unchanged.</span></div>
+    <div class="rr-modal-actions">
+      <button class="rr-btn rr-btn-light" id="rr-modal-dismiss" type="button">CLOSE</button>
+      <button class="rr-btn rr-btn-primary" type="button" disabled title="Import workflow will be connected in a later phase">IMPORT NOT CONNECTED</button>
+    </div>
+  </div>
+</div>
+<div id="rr-toast" class="toast" hidden></div>
+
+
+
+
+</div>
+</div>
+<div id="toast" class="toast" hidden></div>
+<script src="reports-reconciliation-ui.js"></script>
+<script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+</body>
+</html>
+

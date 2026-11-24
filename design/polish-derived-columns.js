@@ -1,0 +1,14 @@
+const fs = require("fs");
+const file = "C:/Users/Rominick/Desktop/TFI_NEW/design/reports-reconciliation-ui.js";
+let js = fs.readFileSync(file, "utf8");
+const backup = file + ".pre-derived-column-style-20261120.bak";
+if (fs.existsSync(backup)) throw new Error("Existing backup found; refusing to overwrite.");
+const from = '          if (["number","percent"].includes(type)) td.classList.add("rr-numeric");\n          if (["date","time","dateTime","flag"].includes(type)) td.classList.add("rr-center");';
+const to = '          if (["number","percent"].includes(type)) td.classList.add("rr-numeric");\n          if (index === 8 || index === 17) td.classList.add("rr-derived");\n          if (["date","time","dateTime","flag"].includes(type)) td.classList.add("rr-center");';
+const i = js.indexOf(from);
+if (i < 0 || js.indexOf(from, i + from.length) >= 0) throw new Error("Target cell-style block not found uniquely.");
+fs.copyFileSync(file, backup);
+js = js.slice(0,i) + to + js.slice(i + from.length);
+new (require("vm").Script)(js, {filename:"reports-reconciliation-ui.js"});
+fs.writeFileSync(file,js,"utf8");
+console.log(JSON.stringify({updated:file,backup,derivedColumns:["I · % Attainment","R · % Attendance"],syntax:"passed"},null,2));

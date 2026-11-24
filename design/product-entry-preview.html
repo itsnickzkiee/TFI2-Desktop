@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TFI | Product Record Entry</title>
+<style>
+:root{--green:#086333;--deep:#064b29;--teal:#0b3c45;--teal2:#126d70;--mint:#d9f2ed;--yellow:#ffc000;--line:#9aa7a3;--canvas:#f4f7f5;--ink:#17251d;--muted:#78857d}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,"Segoe UI",sans-serif;color:var(--ink);background:var(--canvas);font-size:13px}button,input,select{font:inherit}button{cursor:pointer}
+.shell{min-height:100vh;display:flex}.sidebar{width:242px;flex:0 0 242px;background:linear-gradient(180deg,var(--green),var(--deep));color:#fff;display:flex;flex-direction:column;height:100vh;position:sticky;top:0;overflow:auto;padding:16px 13px}.brand{height:68px;border-radius:11px;background:#fff;display:flex;align-items:center;justify-content:center;padding:7px 10px}.brand img{width:100%;max-width:190px;max-height:55px;object-fit:contain}.brand-caption{text-align:center;color:#ffffffb8;font-size:9px;font-weight:800;letter-spacing:1.45px;margin:12px 0 20px}.nav-group{margin:0 0 15px}.nav-label{font-size:9px;text-transform:uppercase;letter-spacing:1.25px;font-weight:800;color:#ffffff85;padding:0 11px;margin:0 0 6px}.nav-link{width:100%;display:flex;align-items:center;gap:11px;padding:9px 11px;margin:2px 0;border:0;border-radius:9px;background:transparent;color:#ffffffd1;font-size:11px;font-weight:650;text-align:left}.nav-link svg{width:16px;height:16px;flex:0 0 16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.nav-link:hover{background:#ffffff1a;color:#fff}.nav-link.active{background:#fff;color:var(--green);box-shadow:0 4px 12px #0002}.spacer{flex:1;min-height:12px}.avatar{width:32px;height:32px;border-radius:50%;background:#e5f0e8;color:var(--green);display:grid;place-items:center;font-size:10px;font-weight:900;flex:0 0 32px}.user-foot{border-top:1px solid #ffffff26;padding:13px 6px 0;display:flex;align-items:center;gap:9px}.user-foot strong{display:block;font-size:10px}.user-foot small{display:block;font-size:9px;color:#ffffffa3;margin-top:3px}
+.main{min-width:0;flex:1;display:flex;flex-direction:column}.topbar{height:58px;flex:0 0 58px;background:#fff;border-bottom:1px solid #e5ece7;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:20}.crumb{display:flex;align-items:center;gap:9px;color:#89958d;font-size:11px;font-weight:600}.crumb b{color:#314239}.slash{color:#c1cbc4}.profile{display:flex;align-items:center;gap:9px}.profile strong{display:block;font-size:10px}.profile small{display:block;font-size:9px;color:#758279;margin-top:2px}
+.content{padding:16px 18px 18px;min-width:0;display:flex;flex-direction:column;gap:0}.sheet-banner{min-height:45px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:8px 13px;border-bottom:1px solid #f5c400}.sheet-banner h1{font-size:21px;letter-spacing:-.35px;margin:0;font-weight:800}.sheet-banner span{font-size:10px;font-style:italic;color:#a0e3d9;white-space:nowrap}
+.product-strip{min-height:43px;background:var(--teal);display:grid;grid-template-columns:103px 280px minmax(200px,1fr);align-items:stretch;border-bottom:1px solid #e6c000}.product-label{display:flex;align-items:center;padding:0 10px;color:var(--yellow);font-weight:800;font-size:11px;letter-spacing:.2px}.product-select{width:100%;border:1px solid #e2b100;border-radius:0;background:var(--yellow);color:var(--teal);font-weight:800;font-size:14px;text-align:center;padding:0 28px 0 10px;outline:0}.product-title{display:flex;align-items:center;padding:0 12px;color:#fff;font-weight:800;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.summary-strip{min-height:28px;background:var(--mint);display:flex;align-items:center;gap:0;border-bottom:3px solid #e6c000;color:var(--teal);font-size:9px}.summary-item{display:flex;align-items:center;gap:10px;padding:5px 13px;min-width:180px;border-right:1px solid #b9ddd4}.summary-item strong{font-size:10px;color:#073d47}.summary-item .label{font-size:9px;font-weight:800}.summary-item:nth-child(2){min-width:210px}.summary-item:nth-child(3){min-width:170px}
+.sheet-table-wrap{margin-top:0;border:1px solid #c7d0cd;border-top:0;background:#fff;overflow:auto;height:calc(100vh - 218px);min-height:420px;max-height:calc(100vh - 218px);position:relative;scrollbar-color:#b6c1bd #eef2ef;scrollbar-width:thin}.sheet-table{border-collapse:separate;border-spacing:0;table-layout:fixed;width:max-content;min-width:100%;font-size:10px}.sheet-table th,.sheet-table td{border-right:1px solid #202b2a;border-bottom:1px solid #202b2a;padding:0;overflow:hidden}.sheet-table thead th{white-space:normal;text-align:center;font-weight:700;line-height:1.15}.group1 th{height:31px;background:var(--teal);color:#fff;font-size:10px;padding:3px 5px;position:sticky;top:0;z-index:8}.group2 th{height:26px;background:#0d8586;color:#fff;font-size:9px;padding:3px 5px;position:sticky;top:31px;z-index:8}.column-head th{height:48px;background:#d9f2ed;color:#003e49;font-size:9px;padding:4px 4px;position:sticky;top:57px;z-index:8;border-bottom:2px solid #70aaa1}.sheet-table th.rownum{width:42px;min-width:42px;max-width:42px;background:#f3f5f4;color:#61716a;font-size:9px;font-weight:500;border-right:1px solid #aab5b0;position:sticky;left:0;z-index:12}.sheet-table thead th.rownum{background:#e7eeea;color:#65746c}.sheet-table tbody th.rownum{height:26px;text-align:center;padding:0 4px;font-variant-numeric:tabular-nums}.sheet-table td{height:26px;background:#fff}.sheet-table td.frozen{position:sticky;z-index:4}.sheet-table thead th.frozen{z-index:14}.sheet-table thead .group1 th.frozen{z-index:16}.sheet-table thead .group2 th.frozen{z-index:16}.sheet-table thead .column-head th.frozen{z-index:16}
+.cell-input,.cell-select{width:100%;height:25px;min-width:0;border:0;border-radius:0;background:transparent;color:#101b19;font-size:10px;padding:2px 4px;outline:0;box-shadow:none}.cell-input:focus,.cell-select:focus{background:#fff8d9;outline:2px solid #e1ad00;outline-offset:-2px}.cell-select{appearance:auto;padding-right:1px}.calculated{width:100%;height:25px;background:transparent}.sheet-table td.calculated-cell{cursor:default}.sheet-table td[data-fill]{background:var(--cell-fill)}.sheet-table td.calculated-cell[data-fill]{background:var(--cell-fill)}.sheet-table td.input-cell[data-fill]{background:var(--cell-fill)}
+.sheet-table tbody tr:hover td{filter:brightness(.985)}.sheet-table tbody tr:hover th.rownum{background:#e7eeea}
+.table-status{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 10px;background:#fff;border:1px solid #d8e1dc;border-top:0;color:#77857c;font-size:9px}.table-status strong{color:#34463b}
+.toast{position:fixed;right:20px;bottom:20px;z-index:40;background:#173d29;color:#fff;padding:10px 13px;border-radius:8px;box-shadow:0 10px 25px #0003;font-size:10px}
+@media(max-width:900px){.sidebar{width:76px;flex-basis:76px;padding:12px 8px}.brand{height:48px;padding:4px}.brand img{width:46px;height:40px;object-fit:contain}.brand-caption,.nav-label,.nav-link span,.user-foot>div:last-child{display:none}.nav-link{justify-content:center;padding:11px 6px}.user-foot{justify-content:center;padding:12px 0 0}.content{padding:10px}.product-strip{grid-template-columns:85px minmax(180px,240px) minmax(120px,1fr)}}
+@media(max-width:650px){.topbar{height:50px;flex-basis:50px;padding:0 11px}.profile>div:last-child{display:none}.content{padding:7px}.sheet-banner{align-items:flex-start;flex-direction:column;gap:4px}.sheet-banner h1{font-size:17px}.sheet-banner span{font-size:9px}.product-strip{grid-template-columns:76px minmax(135px,1fr)}.product-title{grid-column:1/-1;min-height:30px;border-top:1px solid #ffffff20}.summary-strip{flex-wrap:wrap}.summary-item{min-width:33.33%!important;padding:5px 7px}.sheet-table-wrap{height:calc(100vh - 240px);max-height:calc(100vh - 240px)}}
+</style>
+<link rel="stylesheet" href="tfi-shell-standard.css">
+<link rel="stylesheet" href="product-entry-ui.css">
+</head>
+<body class="tfi-product-entry">
+<div class="shell">
+<aside class="sidebar">
+ <div class="brand"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div>
+ <div class="brand-caption">PRODUCTION MANAGEMENT</div>
+ <nav>
+  <div class="nav-group"><div class="nav-label">Overview</div>
+   <button class="nav-link" data-page="Dashboard"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link active" data-page="Product Entry" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 20V9l8-5 8 5v11"/><path d="M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="5" width="18" height="16" rx="2"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="5" y="4" width="14" height="16"/></svg><span>DMR Production</span></button>
+   <button class="nav-link" data-page="DMR Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+   <button class="nav-link" data-page="Yield Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21c4-2 7-6 7-10A7 7 0 0 0 5 11c0 4 3 8 7 10Z"/></svg><span>Yield Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link" data-page="CO QA"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link" data-page="Spreadsheet Import"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24" width="17" height="17"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link" data-page="Reports"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Audit Trail"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link" data-page="Settings"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav>
+ <div class="spacer"></div><div class="user-foot"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div>
+</aside>
+<div class="main">
+<header class="topbar"><div class="crumb"><span>TFI</span><span class="slash">/</span><span>Production</span><span class="slash">/</span><b>Product Entry</b></div><div class="profile"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div></header>
+<main class="content">
+ <section class="sheet-banner"><h1>PRODUCT RECORD ENTRY</h1><span>TFI&nbsp; | &nbsp;DPR / DMR 2026&nbsp; | &nbsp;Daily Production Record</span></section>
+ <section class="product-strip"><div class="product-label">PRODUCT&nbsp; ▶</div><select id="product-select" class="product-select" aria-label="Product"></select><div id="product-title" class="product-title"></div></section>
+ <section class="pe-toolbar" aria-label="Product Entry actions">
+  <div class="pe-mode-group">
+   <button id="pe-mode-new" class="pe-mode-btn active" type="button">NEW ENTRY</button>
+   <button id="pe-mode-saved" class="pe-mode-btn" type="button">SAVED RECORDS</button>
+  </div>
+  <div class="pe-toolbar-actions">
+   <span id="pe-connection" class="pe-connection">CONNECTING TO TFI2…</span>
+   <span id="pe-table-mode" class="pe-summary-note">NEW ENTRY</span>
+   <button id="pe-add-rows" class="pe-btn" type="button">ADD 40 ROWS</button>
+   <button id="pe-refresh" class="pe-btn" type="button" hidden>REFRESH</button>
+   <button id="pe-save" class="pe-btn pe-btn-primary" type="button" disabled>SAVE ENTRIES</button>
+  </div>
+ </section>
+ <section id="pe-filters" class="pe-filters" aria-label="Saved Product Entry filters" hidden>
+  <div class="pe-filter-field"><label for="pe-filter-from">DATE FROM</label><input id="pe-filter-from" type="date"></div>
+  <div class="pe-filter-field"><label for="pe-filter-to">DATE TO</label><input id="pe-filter-to" type="date"></div>
+  <div class="pe-filter-field code"><label for="pe-filter-code">PRODUCT CODE</label><select id="pe-filter-code"><option value="">All Product Codes</option></select></div>
+  <div class="pe-filter-field pr"><label for="pe-filter-pr">PR NUMBER</label><input id="pe-filter-pr" type="text" placeholder="Search PR No."></div>
+  <div class="pe-filter-field"><label for="pe-filter-review">SUPERVISOR REVIEW</label><select id="pe-filter-review"><option value="">All Review Statuses</option></select></div>
+  <div class="pe-filter-actions">
+   <button id="pe-filter-apply" class="pe-btn pe-btn-primary" type="button">APPLY FILTERS</button>
+   <button id="pe-filter-clear" class="pe-btn" type="button">CLEAR</button>
+  </div>
+ </section>
+ <section class="summary-strip">
+  <div class="summary-item"><span class="label" id="logged-label">ROWS WITH DATA</span><strong id="logged-rows">0</strong></div>
+  <div class="summary-item"><span class="label" id="last-label">ENTRY MODE</span><strong id="last-entry">New entry</strong></div>
+  <div class="summary-item"><span class="label" id="free-label">BLANK ROWS REMAINING</span><strong id="free-rows">960</strong></div>
+ </section>
+ <section class="sheet-table-wrap" id="table-scroll" aria-label="Product Entry spreadsheet table">
+  <table class="sheet-table" id="entry-table"><colgroup id="entry-colgroup"></colgroup><thead id="entry-thead"></thead><tbody id="entry-tbody"></tbody></table>
+ </section>
+ <div class="table-status"><span>Source layout: <strong>Product Entry</strong> · <strong id="block-name">BLK_38</strong> · Source columns and block-specific rules preserved</span><div class="pe-table-status-actions"><span id="loaded-status">Connecting to TFI2…</span><button id="pe-load-more" class="pe-btn pe-load-more" type="button" hidden>LOAD MORE RECORDS</button></div></div>
+ <section id="pe-history-backdrop" class="pe-history-backdrop" hidden aria-label="Product Entry revision history">
+  <div class="pe-history-panel" role="dialog" aria-modal="true" aria-labelledby="pe-history-title">
+   <div class="pe-history-heading"><strong id="pe-history-title">Product Entry Revision History</strong><button id="pe-history-close" type="button">CLOSE</button></div>
+   <div id="pe-history-content" class="pe-history-content"><div class="pe-history-empty">Loading…</div></div>
+  </div>
+ </section>
+</main>
+</div>
+</div>
+<div id="toast-root"></div>
+<script src="product-entry-data.js"></script>
+<script src="product-entry-options.js"></script>
+<script src="product-entry-ui.js"></script>
+<script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+<script src="tfi-module-inbox-shortcut.js"></script>
+</body>
+</html>

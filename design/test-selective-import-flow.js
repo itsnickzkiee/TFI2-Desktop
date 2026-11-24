@@ -1,0 +1,32 @@
+const puppeteer=require("C:/Users/Rominick/AppData/Local/npm-cache/_npx/4b4c857f6efdfb61/node_modules/puppeteer");const path=require("path");const{pathToFileURL}=require("url");const dir="C:/Users/Rominick/Desktop/TFI_NEW/design";
+(async()=>{
+ const browser=await puppeteer.launch({headless:true,args:["--no-sandbox","--disable-setuid-sandbox","--allow-file-access-from-files"]});
+ const page=await browser.newPage();await page.setViewport({width:1440,height:1000});
+ const errors=[];page.on("pageerror",e=>errors.push(e.message));page.on("console",m=>{if(m.type()==="error")errors.push(m.text())});
+ await page.goto(pathToFileURL(path.join(dir,"spreadsheet-import-center-preview.html")).href,{waitUntil:"load"});
+ const initial=await page.evaluate(()=>({options:[...document.querySelectorAll("#target-module option")].filter(o=>o.value).map(o=>o.textContent),groups:[...document.querySelectorAll("#target-module optgroup")].map(g=>g.label),excluded:[...document.querySelectorAll("#target-module option")].some(o=>/Master Data|Reports|Summary|Removed Rows|Yield Monitoring|Import All/i.test(o.textContent)),steps:document.querySelectorAll(".stepper .step").length,methodGrid:document.querySelectorAll(".section-body > .method-grid").length}));
+ const expected={
+ "product-entry":["Product Entry","545274882"],"production-entry":["Production Entry","1923467491"],"production-schedule":["Production Schedule","1538651320"],
+ "dmp-production":["DMP - Production","1312335050"],"dmr-production":["DMR Production","2048043346"],"dmr-coding":["DMR Coding","675328096"],
+ "hourly-meat":["Hourly Meat","428082343"],"hourly-coding":["Hourly Coding","1916766220"],"hourly-agri":["Hourly Agri","534145404"],
+ "oee":["OEE","1750442014"],"productivity":["Productivity","1688444278"],"coding-dpr":["Coding DPR","1266086431"],
+ "co-qa":["co QA","1359678099"],"non-prod":["NON-PROD","1381857831"],"pr-monitoring":["PR MONITORING","867256143"]
+ };
+ const mapping=[];
+ for(const [key,want] of Object.entries(expected)){await page.select("#target-module",key);mapping.push(await page.evaluate(()=>[document.querySelector("#target-sheet-name").textContent,(document.querySelector("#target-sheet-meta").textContent.match(/\d{6,}/)||[])[0]]));}
+ await page.select("#target-module","");await page.click("#continue-button");const noModule=await page.evaluate(()=>document.querySelector("#toast").textContent);
+ await page.select("#target-module","dmr-production");const selected=await page.evaluate(()=>({sheet:document.querySelector("#target-sheet-name").textContent,id:document.querySelector("#target-sheet-meta").textContent,dest:document.querySelector("#readiness-destination").textContent}));
+ await page.click("#method-link");await page.type("#sheet-url","https://docs.google.com/spreadsheets/d/1rCbQ16wj7MRjQCFF3tA-WEMkudraJK0RkwcqayUlz7k/edit");await page.click("#continue-button");
+ await page.waitForFunction(()=>location.pathname.endsWith("scan-progress-worksheet-detection-preview.html"),{timeout:10000});
+ const scan=await page.evaluate(()=>({module:document.querySelector("#target-module-name")?.textContent,worksheet:document.querySelector("#target-source-name")?.textContent,id:document.querySelector("#target-source-id")?.textContent,destination:document.querySelector("#scan-destination")?.textContent,steps:document.querySelectorAll(".stepper .step").length,scope:document.querySelector(".target-banner p")?.textContent,sourceSheet:new URLSearchParams(location.search).get("sourceWorksheet"),sourceId:new URLSearchParams(location.search).get("sourceSheetId")}));
+ await page.click("#start-scan");const scanToast=await page.evaluate(()=>[...document.querySelectorAll(".toast.show")].at(-1)?.textContent||"");
+ await page.click("#continue-review");await page.waitForFunction(()=>location.pathname.endsWith("central-import-inbox-preview.html"),{timeout:10000});
+ const inbox=await page.evaluate(()=>({module:new URLSearchParams(location.search).get("targetLabel"),sheet:new URLSearchParams(location.search).get("sourceWorksheet"),id:new URLSearchParams(location.search).get("sourceSheetId")}));
+ await page.screenshot({path:path.join(dir,"selective-import-inbox-desktop.png"),fullPage:true});
+ const mobile=await browser.newPage();await mobile.setViewport({width:390,height:844});await mobile.goto(pathToFileURL(path.join(dir,"spreadsheet-import-center-preview.html")).href,{waitUntil:"load"});await mobile.select("#target-module","dmr-production");
+ const mobileLayout=await mobile.evaluate(()=>({viewport:document.documentElement.clientWidth,width:document.documentElement.scrollWidth,noOverflow:document.documentElement.scrollWidth<=document.documentElement.clientWidth,methodGrid:document.querySelectorAll(".section-body > .method-grid").length,selectWidth:document.querySelector("#target-module").getBoundingClientRect().width}));
+ await mobile.screenshot({path:path.join(dir,"selective-import-mobile.png"),fullPage:true});
+ const mappingPass=Object.entries(expected).every(([k,v],i)=>mapping[i][0]===v[0]&&mapping[i][1]===v[1]);
+ const checks={exactly15:initial.options.length===15,groups:initial.groups.join("|")==="Production|Monitoring|Quality & Control",excluded:!initial.excluded,fourSteps:initial.steps===4,singleMethodGrid:initial.methodGrid===1,all15Mappings:mappingPass,requiresModule:noModule.includes("Choose one destination module"),dmrSelected:selected.sheet==="DMR Production"&&selected.id.includes("2048043346")&&selected.dest==="DMR Production",scanContext:scan.module==="DMR Production"&&scan.worksheet==="Mapped worksheet: DMR Production"&&scan.id==="sheetId 2048043346"&&scan.destination==="DMR Production"&&scan.steps===4&&scan.sourceSheet==="DMR Production"&&scan.sourceId==="2048043346",scanToast:scanToast.includes("DMR Production")&&scanToast.includes("DMR Production"),inboxContext:inbox.module==="DMR Production"&&inbox.sheet==="DMR Production"&&inbox.id==="2048043346",mobile:mobileLayout.viewport===390&&mobileLayout.noOverflow&&mobileLayout.methodGrid===1,noBrowserErrors:errors.length===0};
+ console.log(JSON.stringify({initial,mapping,selected,scan,scanToast,inbox,mobileLayout,checks,errors,pass:Object.values(checks).every(Boolean)},null,2));await browser.close();if(!Object.values(checks).every(Boolean))process.exitCode=1;
+})().catch(e=>{console.error(e);process.exitCode=1;});

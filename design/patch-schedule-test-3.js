@@ -1,0 +1,14 @@
+const fs=require("fs");
+const file="C:/Users/Rominick/Desktop/TFI_NEW/design/test-schedule-summary.js";
+const lines=fs.readFileSync(file,"utf8").split(/\r?\n/);
+const wi=lines.findIndex(line=>line.includes('await page.waitForFunction(() => [...document.querySelectorAll("#tfi-module-frame-0,#tfi-module-frame-1")].some(x => (x.getAttribute("src") || "").includes("reports-reconciliation-preview.html"))'));
+if(wi<0) throw new Error("Reports route wait not found.");
+lines[wi]='  await page.waitForFunction(() => { const active=document.querySelector(".tfi-module-frame.is-active"); return !!active && (active.getAttribute("src")||"").includes("reports-reconciliation-preview.html"); }, { timeout: 10000 });';
+const ri=lines.findIndex(line=>line.startsWith("  const returnToProductionSummary ="));
+if(ri<0) throw new Error("Reports route assertion not found.");
+lines[ri]='  const returnToProductionSummary = await page.evaluate(() => { const active=document.querySelector(".tfi-module-frame.is-active"); return !!active && active.dataset.loadedModule==="Reports" && (active.getAttribute("src")||"").includes("reports-reconciliation-preview.html"); });';
+const bi=lines.findIndex(line=>line.startsWith("  const backToSchedule ="));
+if(bi<0) throw new Error("Schedule route assertion not found.");
+lines[bi]='  const backToSchedule = await page.evaluate(() => { const active=document.querySelector(".tfi-module-frame.is-active"); return !!active && active.dataset.loadedModule==="Schedule Summary" && (active.getAttribute("src")||"").includes("schedule-summary-preview.html"); });';
+fs.writeFileSync(file,lines.join("\n"),"utf8");
+console.log("Report subview route assertions updated.");

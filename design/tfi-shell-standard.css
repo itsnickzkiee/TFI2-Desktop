@@ -1,0 +1,544 @@
+/* TFI shared shell: consistent navigation, page scrolling and responsive sizing */
+:root{--tfi-sidebar-width:258px;--tfi-sidebar-compact:76px;--tfi-scroll-track:#eef2ef;--tfi-scroll-thumb:#b8c5bd}
+html{scrollbar-gutter:stable;scroll-behavior:smooth}
+body{overflow-y:scroll;scrollbar-gutter:stable}
+.sidebar{width:var(--tfi-sidebar-width)!important;flex:0 0 var(--tfi-sidebar-width)!important;min-height:100vh;height:100vh;position:sticky;top:0;overflow-x:hidden!important;overflow-y:auto!important;padding:22px 15px 18px!important;scrollbar-gutter:stable;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.34) transparent}
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.3);border-radius:10px}
+.brand,.brand-panel{min-height:76px!important;height:76px;display:flex;align-items:center;justify-content:center;padding:9px 11px!important;border-radius:14px}
+.brand img,.brand-panel img{display:block;width:100%;max-width:208px;max-height:60px;object-fit:contain!important;object-position:center!important}
+.brand-caption{margin:13px 0 26px!important;letter-spacing:1.65px!important}
+.nav-group,.nav-section{margin:0 0 18px!important}
+.nav-label{padding:0 12px!important;margin:0 0 8px!important;letter-spacing:1.35px!important}
+.nav-link{min-height:38px;padding:10px 12px!important;gap:12px!important;border-radius:10px!important;font-size:12px!important;font-weight:600!important;line-height:1.25;transition:background .18s ease,color .18s ease,transform .18s ease}
+.nav-link svg{width:17px!important;height:17px!important;flex:0 0 17px!important}
+.nav-link:hover{transform:translateX(1px)}
+.avatar{width:34px;height:34px;flex:0 0 34px}
+.user-foot,.sidebar-bottom{padding:15px 7px 0!important;gap:10px}
+.topbar{height:74px!important;min-height:74px;flex:0 0 74px!important;padding-left:28px!important;padding-right:28px!important;z-index:20}
+.main,.main-shell{min-width:0}
+@media(max-width:900px){
+ .sidebar{width:var(--tfi-sidebar-compact)!important;flex-basis:var(--tfi-sidebar-compact)!important;padding:18px 10px!important}
+ .brand,.brand-panel{min-height:52px!important;height:52px;padding:7px!important}
+ .brand img,.brand-panel img{width:48px;height:38px;max-width:48px;max-height:38px;object-fit:contain!important}
+ .brand-caption,.nav-label,.nav-link span,.nav-count,.sidebar-user,.user-foot>div:last-child{display:none!important}
+ .nav-link{justify-content:center;padding:12px 7px!important}
+ .user-foot,.sidebar-bottom{justify-content:center;padding:14px 0 0!important}
+ .topbar{padding-left:18px!important;padding-right:18px!important}
+}
+@media(max-width:620px){
+ .topbar{height:62px!important;min-height:62px;flex-basis:62px!important;padding:0 12px!important}
+}
+/* Product Entry refinement: preserve the source-sheet structure and its colors. */
+.tfi-product-entry{font-family:"Segoe UI",Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.tfi-product-entry .content{width:100%;max-width:1660px;margin:0 auto;padding:18px 22px 30px}
+.tfi-product-entry .topbar{box-shadow:0 2px 8px rgba(20,50,34,.035)}
+.tfi-product-entry .sheet-banner{min-height:48px;padding:10px 15px;background:linear-gradient(105deg,#0b3c45 0%,#0c4b50 100%);border-radius:10px 10px 0 0;box-shadow:0 3px 10px rgba(9,49,54,.10)}
+.tfi-product-entry .sheet-banner h1{font-family:"Segoe UI",Inter,Arial,sans-serif;font-size:22px;letter-spacing:-.45px}
+.tfi-product-entry .sheet-banner span{letter-spacing:.15px}
+.tfi-product-entry .product-strip{grid-template-columns:110px 280px minmax(200px,1fr)}
+.tfi-product-entry .product-select{font-family:"Segoe UI",Inter,Arial,sans-serif;transition:filter .16s ease}
+.tfi-product-entry .product-select:hover{filter:brightness(1.035)}
+.tfi-product-entry .summary-strip{box-shadow:0 2px 6px rgba(15,55,40,.055)}
+.tfi-product-entry .sheet-table-wrap{width:100%;height:auto!important;min-height:0!important;max-height:none!important;overflow-x:auto!important;overflow-y:clip!important;border:1px solid #c7d0cd;border-top:0;border-radius:0 0 9px 9px;box-shadow:0 10px 24px rgba(25,55,37,.075);scrollbar-width:thin;scrollbar-color:#aebdb4 #eef2ef}
+.tfi-product-entry .sheet-table{font-family:"Segoe UI",Inter,Arial,sans-serif}
+.tfi-product-entry .table-status{border-radius:0 0 9px 9px;background:#fff;box-shadow:0 5px 16px rgba(25,55,37,.035)}
+.tfi-product-entry .sheet-table tbody tr:hover td{filter:brightness(.975)}
+.tfi-product-entry .sheet-table td:focus-within{position:relative;z-index:6}
+.tfi-product-entry .floating-sheet-head{position:fixed;display:none;overflow:hidden;z-index:19;pointer-events:none;background:#fff;box-shadow:0 5px 12px rgba(15,45,35,.14);border-bottom:1px solid #70aaa1}
+.tfi-product-entry .floating-sheet-head .sheet-table{min-width:0;margin:0;transform-origin:top left}
+.tfi-product-entry .floating-sheet-head .sheet-table thead th{position:relative;top:auto}
+.tfi-product-entry .floating-sheet-head .sheet-table thead th.rownum{position:sticky;left:0}
+@media(max-width:900px){
+ .tfi-product-entry .content{padding:14px 14px 24px}
+ .tfi-product-entry .product-strip{grid-template-columns:90px minmax(170px,240px) minmax(120px,1fr)}
+}
+@media(max-width:650px){
+ .tfi-product-entry .content{padding:10px 8px 20px}
+ .tfi-product-entry .sheet-banner{align-items:flex-start;flex-direction:column;gap:4px}
+ .tfi-product-entry .sheet-banner h1{font-size:18px}
+ .tfi-product-entry .sheet-banner span{font-size:9px;white-space:normal}
+ .tfi-product-entry .product-strip{grid-template-columns:76px minmax(135px,1fr)}
+ .tfi-product-entry .product-title{grid-column:1/-1;min-height:30px;border-top:1px solid #ffffff20}
+ .tfi-product-entry .summary-strip{flex-wrap:wrap}
+ .tfi-product-entry .summary-item{min-width:33.33%!important;padding:5px 7px}
+}
+.tfi-product-entry .sheet-table thead th.frozen{position:sticky}
+.tfi-product-entry .floating-sheet-head .sheet-table thead th.frozen{position:sticky;z-index:22}
+.tfi-product-entry .floating-sheet-head .sheet-table thead th.rownum{position:sticky;left:0;z-index:25}
+
+/* Shared TFI shell controls — identical geometry on every module preview. */
+:root{--tfi-sidebar-width:258px;--tfi-sidebar-compact:76px}
+html,body{max-width:100%;overflow-x:hidden;scrollbar-gutter:stable}
+body{overflow-y:auto}
+.shell{display:flex!important;align-items:stretch!important;width:100%;min-height:100vh;max-width:100%;overflow-x:clip}
+.sidebar{position:sticky!important;top:0!important;align-self:flex-start!important;display:flex!important;flex-direction:column!important;width:var(--tfi-sidebar-width)!important;min-width:var(--tfi-sidebar-width)!important;max-width:var(--tfi-sidebar-width)!important;flex:0 0 var(--tfi-sidebar-width)!important;height:100vh!important;min-height:100vh!important;max-height:100vh!important;overflow-x:hidden!important;overflow-y:auto!important;box-sizing:border-box!important;transition:width .22s ease,min-width .22s ease,max-width .22s ease,flex-basis .22s ease,padding .22s ease!important;scrollbar-gutter:stable}
+.main{min-width:0!important;min-height:100vh;flex:1 1 0%!important;width:0}
+.topbar{flex:0 0 74px!important;min-height:74px!important;height:74px!important;min-width:0;box-sizing:border-box}
+.content{min-width:0!important;max-width:100%}
+.sidebar-toggle{position:fixed;z-index:60;left:calc(var(--tfi-sidebar-width) - 14px);top:50%;transform:translateY(-50%);width:28px;height:46px;border:1px solid #d9e5de;border-left:0;border-radius:0 9px 9px 0;background:#fff;color:#075a35;display:grid;place-items:center;box-shadow:3px 2px 10px rgba(0,0,0,.13);transition:left .22s ease,background .16s ease,color .16s ease;cursor:pointer;padding:0}
+.sidebar-toggle:hover{background:#f2faf5;color:#033d23}
+.sidebar-toggle svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+body.tfi-sidebar-collapsed .sidebar{width:var(--tfi-sidebar-compact)!important;min-width:var(--tfi-sidebar-compact)!important;max-width:var(--tfi-sidebar-compact)!important;flex-basis:var(--tfi-sidebar-compact)!important;padding-left:10px!important;padding-right:10px!important}
+body.tfi-sidebar-collapsed .brand,body.tfi-sidebar-collapsed .brand-panel{height:52px!important;min-height:52px!important;padding:7px!important}
+body.tfi-sidebar-collapsed .brand img,body.tfi-sidebar-collapsed .brand-panel img{width:48px!important;height:38px!important;max-width:48px!important;max-height:38px!important;object-fit:contain!important}
+body.tfi-sidebar-collapsed .brand-caption,body.tfi-sidebar-collapsed .nav-label,body.tfi-sidebar-collapsed .nav-link span,body.tfi-sidebar-collapsed .nav-count,body.tfi-sidebar-collapsed .sidebar-user,body.tfi-sidebar-collapsed .user-foot>div:last-child,body.tfi-sidebar-collapsed .sidebar-bottom>div:last-child{display:none!important}
+body.tfi-sidebar-collapsed .nav-link{justify-content:center!important;padding:12px 7px!important;gap:0!important}
+body.tfi-sidebar-collapsed .user-foot,body.tfi-sidebar-collapsed .sidebar-bottom{justify-content:center!important;padding-left:0!important;padding-right:0!important}
+body.tfi-sidebar-collapsed .sidebar-toggle{left:calc(var(--tfi-sidebar-compact) - 14px)}
+.tfi-topbar-actions{display:flex;align-items:center;justify-content:flex-end;gap:13px;min-width:0}
+.tfi-fullscreen-btn{height:36px;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 11px;border:1px solid #dce6e0;border-radius:9px;background:#fff;color:#315344;font-size:10px;font-weight:750;white-space:nowrap;box-shadow:0 1px 2px rgba(20,50,34,.04);transition:background .16s ease,border-color .16s ease}
+.tfi-fullscreen-btn:hover{background:#f3faf6;border-color:#b7d1c2}
+.tfi-fullscreen-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:900px){
+ .sidebar{width:var(--tfi-sidebar-width)!important;min-width:var(--tfi-sidebar-width)!important;max-width:var(--tfi-sidebar-width)!important;flex-basis:var(--tfi-sidebar-width)!important}
+ .topbar{padding-left:18px!important;padding-right:18px!important}
+}
+@media(max-width:620px){
+ .topbar{height:62px!important;min-height:62px!important;flex-basis:62px!important;padding:0 12px!important}
+ .tfi-fullscreen-btn{width:36px;padding:0}
+ .tfi-fullscreen-btn span{display:none}
+}
+
+/* Fully hide the navigation rail when collapsed; keep the external toggle reachable. */
+body.tfi-sidebar-collapsed .sidebar{
+  width:0!important;
+  min-width:0!important;
+  max-width:0!important;
+  flex:0 0 0px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  overflow:hidden!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+body.tfi-sidebar-collapsed .sidebar-toggle{
+  left:0!important;
+}
+
+/* Remove the collapsed sidebar from the layout entirely. */
+body.tfi-sidebar-collapsed .sidebar{display:none!important}
+
+/* Fixed navigation rail: page scrolling must never move the sidebar or its brand. */
+.shell{
+  display:block!important;
+  position:relative!important;
+  min-height:100vh!important;
+  width:100%!important;
+}
+.shell>.sidebar{
+  position:fixed!important;
+  inset:0 auto 0 0!important;
+  z-index:50!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  max-height:100vh!important;
+  width:var(--tfi-sidebar-width)!important;
+  min-width:var(--tfi-sidebar-width)!important;
+  max-width:var(--tfi-sidebar-width)!important;
+  flex:0 0 var(--tfi-sidebar-width)!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+.shell>.sidebar>nav{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.28) transparent;
+}
+.shell>.sidebar>nav::-webkit-scrollbar{width:5px}
+.shell>.sidebar>nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:10px}
+.shell>.sidebar>.spacer{display:none!important}
+.shell>.main,
+.shell>.main-shell,
+.shell>.main-content{
+  display:flex;
+  flex-direction:column;
+  min-width:0!important;
+  min-height:100vh!important;
+  width:calc(100% - var(--tfi-sidebar-width))!important;
+  max-width:calc(100% - var(--tfi-sidebar-width))!important;
+  margin:0 0 0 var(--tfi-sidebar-width)!important;
+  flex:none!important;
+}
+body.tfi-sidebar-collapsed .shell>.sidebar{display:none!important}
+body.tfi-sidebar-collapsed .shell>.main,
+body.tfi-sidebar-collapsed .shell>.main-shell,
+body.tfi-sidebar-collapsed .shell>.main-content{
+  width:100%!important;
+  max-width:100%!important;
+  margin-left:0!important;
+}
+@media(max-width:900px){
+  :root{--tfi-sidebar-width:76px}
+  .shell>.sidebar{
+    width:76px!important;min-width:76px!important;max-width:76px!important;
+    flex-basis:76px!important;
+  }
+  .shell>.main,.shell>.main-shell,.shell>.main-content{
+    width:calc(100% - 76px)!important;
+    max-width:calc(100% - 76px)!important;
+    margin-left:76px!important;
+  }
+  body.tfi-sidebar-collapsed .shell>.main,
+  body.tfi-sidebar-collapsed .shell>.main-shell,
+  body.tfi-sidebar-collapsed .shell>.main-content{
+    width:100%!important;max-width:100%!important;margin-left:0!important;
+  }
+}
+
+/* Dashboard uses the app-shell wrapper; apply the same fixed navigation behavior. */
+.app-shell{
+  display:block!important;
+  position:relative!important;
+  min-height:100vh!important;
+  width:100%!important;
+}
+.app-shell>.sidebar{
+  position:fixed!important;
+  inset:0 auto 0 0!important;
+  z-index:50!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  max-height:100vh!important;
+  width:var(--tfi-sidebar-width)!important;
+  min-width:var(--tfi-sidebar-width)!important;
+  max-width:var(--tfi-sidebar-width)!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+.app-shell>.sidebar>nav{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.28) transparent;
+}
+.app-shell>.sidebar>.sidebar-spacer{display:none!important}
+.app-shell>.main-shell{
+  display:flex!important;
+  flex-direction:column!important;
+  min-width:0!important;
+  min-height:100vh!important;
+  width:calc(100% - var(--tfi-sidebar-width))!important;
+  max-width:calc(100% - var(--tfi-sidebar-width))!important;
+  margin:0 0 0 var(--tfi-sidebar-width)!important;
+}
+body.tfi-sidebar-collapsed .app-shell>.sidebar{display:none!important}
+body.tfi-sidebar-collapsed .app-shell>.main-shell{
+  width:100%!important;max-width:100%!important;margin-left:0!important;
+}
+@media(max-width:900px){
+  .app-shell>.sidebar{
+    width:76px!important;min-width:76px!important;max-width:76px!important;
+  }
+  .app-shell>.main-shell{
+    width:calc(100% - 76px)!important;
+    max-width:calc(100% - 76px)!important;
+    margin-left:76px!important;
+  }
+  body.tfi-sidebar-collapsed .app-shell>.main-shell{
+    width:100%!important;max-width:100%!important;margin-left:0!important;
+  }
+}
+
+/* Static sidebar interaction: no nudge, lift, or press animation on module navigation. */
+.nav-link,.nav-link:hover,.nav-link:active,.nav-link:focus,.nav-link:focus-visible{transform:none!important;translate:none!important;animation:none!important;}
+.nav-link{transition:none!important;}
+
+
+/* Sidebar navigation: instant active state and exact-position restoration; no scroll animation. */
+.shell>.sidebar>nav,.app-shell>.sidebar>nav,.sidebar>nav{scroll-behavior:auto!important;overflow-anchor:none!important;scroll-snap-type:none!important;}
+.nav-link,.nav-link:hover,.nav-link:active,.nav-link:focus,.nav-link:focus-visible{transition:none!important;transform:none!important;translate:none!important;animation:none!important;}
+
+/* Module switching must never trigger smooth page or sidebar scrolling. */
+html,body{scroll-behavior:auto!important;}
+
+/* Lock identical vertical spacing for every module link across all preview pages. */
+.nav-link{margin:2px 0!important;}
+
+
+/* Persistent outer navigation: only the module workspace is replaced during navigation. */
+.shell>.main.tfi-module-host{
+  display:block!important;
+  position:relative!important;
+  width:calc(100% - var(--tfi-sidebar-width))!important;
+  max-width:calc(100% - var(--tfi-sidebar-width))!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  max-height:100vh!important;
+  margin:0 0 0 var(--tfi-sidebar-width)!important;
+  padding:0!important;
+  overflow:hidden!important;
+  flex:none!important;
+}
+#tfi-module-frame{
+  display:block!important;
+  width:100%!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  border:0!important;
+  margin:0!important;
+  padding:0!important;
+  background:#f4f7f5;
+}
+body.tfi-sidebar-collapsed .shell>.main.tfi-module-host{
+  width:100%!important;
+  max-width:100%!important;
+  margin-left:0!important;
+}
+/* Embedded module pages render their own workspace and topbar, not a second sidebar. */
+body.tfi-embedded-preview .shell{display:block!important;position:relative!important;width:100%!important;min-height:100vh!important;max-width:100%!important;overflow:visible!important;}
+body.tfi-embedded-preview .shell>.sidebar,
+body.tfi-embedded-preview .sidebar-toggle{display:none!important;}
+body.tfi-embedded-preview .shell>.main,
+body.tfi-embedded-preview .shell>.main-shell,
+body.tfi-embedded-preview .shell>.main-content{
+  display:flex!important;
+  flex-direction:column!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  min-height:100vh!important;
+  margin:0!important;
+  flex:none!important;
+}
+body.tfi-embedded-preview .main{width:100%!important;max-width:100%!important;margin:0!important;}
+
+/* Embedded dashboard variant uses app-shell/main-shell rather than shell/main. */
+body.tfi-embedded-preview .sidebar,
+body.tfi-embedded-preview .sidebar-toggle{display:none!important;}
+body.tfi-embedded-preview .app-shell{display:block!important;width:100%!important;min-height:100vh!important;max-width:100%!important;}
+body.tfi-embedded-preview .app-shell>.main-shell{display:flex!important;flex-direction:column!important;width:100%!important;max-width:100%!important;min-width:0!important;min-height:100vh!important;margin:0!important;flex:none!important;}
+
+/* Double-buffered module workspace: retain the previous screen until the next is ready. */
+.shell>.main.tfi-module-host,
+.app-shell>.main-shell.tfi-module-host{
+  display:block!important;
+  position:relative!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  max-height:100vh!important;
+  padding:0!important;
+  overflow:hidden!important;
+  flex:none!important;
+}
+.app-shell>.main-shell.tfi-module-host{
+  width:calc(100% - var(--tfi-sidebar-width))!important;
+  max-width:calc(100% - var(--tfi-sidebar-width))!important;
+  margin:0 0 0 var(--tfi-sidebar-width)!important;
+}
+body.tfi-sidebar-collapsed .app-shell>.main-shell.tfi-module-host{
+  width:100%!important;max-width:100%!important;margin-left:0!important;
+}
+@media(max-width:900px){
+  .app-shell>.main-shell.tfi-module-host{
+    width:calc(100% - 76px)!important;max-width:calc(100% - 76px)!important;margin-left:76px!important;
+  }
+  body.tfi-sidebar-collapsed .app-shell>.main-shell.tfi-module-host{width:100%!important;max-width:100%!important;margin-left:0!important;}
+}
+.tfi-module-stage{
+  position:relative!important;
+  width:100%!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  max-height:100vh!important;
+  overflow:hidden!important;
+  isolation:isolate;
+  background:var(--canvas,#f4f7f5);
+}
+.tfi-module-fallback{
+  position:absolute!important;
+  inset:0!important;
+  z-index:1;
+  display:block;
+  overflow:auto!important;
+  background:var(--canvas,#f4f7f5);
+}
+.tfi-module-frame{
+  position:absolute!important;
+  inset:0!important;
+  z-index:2;
+  display:none!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  max-height:100%!important;
+  border:0!important;
+  margin:0!important;
+  padding:0!important;
+  background:var(--canvas,#f4f7f5);
+}
+.tfi-module-frame.is-active{display:block!important;}
+
+
+/* TFI shared administrator profile menu and sign-out confirmation UI */
+.tfi-topbar-actions{display:flex;align-items:center;justify-content:flex-end;gap:13px;min-width:0}
+.tfi-profile-menu{position:relative;display:flex;align-items:center;min-width:0}
+.tfi-profile-trigger{
+  position:relative;display:flex;align-items:center;gap:9px;
+  min-height:42px;padding:4px 8px;
+  border:1px solid transparent;border-radius:10px;
+  background:transparent;color:inherit;text-align:left;
+  cursor:pointer;user-select:none;transition:none!important;
+}
+.tfi-profile-trigger:hover,.tfi-profile-menu.is-open .tfi-profile-trigger{
+  border-color:#e4ece6;background:#f6faf7;
+}
+.tfi-profile-trigger:focus-visible{
+  outline:3px solid rgba(8,99,51,.2);outline-offset:2px;
+}
+.tfi-profile-trigger .avatar{flex:0 0 35px}
+.tfi-profile-chevron{
+  width:15px;height:15px;flex:0 0 15px;
+  fill:none;stroke:#7b8a80;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round;
+  transition:transform .16s ease;
+}
+.tfi-profile-menu.is-open .tfi-profile-chevron{transform:rotate(180deg)}
+.tfi-profile-dropdown{
+  position:absolute;top:calc(100% + 9px);right:0;z-index:90;
+  width:226px;padding:9px;
+  border:1px solid #e4ebe6;border-radius:13px;
+  background:#fff;box-shadow:0 18px 48px rgba(17,43,27,.18);
+}
+.tfi-profile-dropdown[hidden]{display:none!important}
+.tfi-profile-menu-head{display:grid;gap:4px;padding:10px 11px 12px}
+.tfi-profile-menu-head>span{
+  color:#8a968e;font-size:8px;font-weight:850;letter-spacing:1.2px;
+}
+.tfi-profile-menu-head strong{color:#24372b;font-size:13px}
+.tfi-profile-menu-head small{color:#7e8b82;font-size:10px}
+.tfi-profile-menu-divider{height:1px;margin:0 3px 7px;background:#edf1ee}
+.tfi-signout-menu-item{
+  width:100%;min-height:40px;padding:0 11px;
+  display:flex;align-items:center;gap:10px;
+  border:0;border-radius:8px;background:#fff;
+  color:#b33b3f;text-align:left;font-size:11px;font-weight:750;
+}
+.tfi-signout-menu-item:hover,.tfi-signout-menu-item:focus-visible{
+  outline:none;background:#fff3f2;
+}
+.tfi-signout-menu-item:focus-visible{box-shadow:inset 0 0 0 2px rgba(179,59,63,.18)}
+.tfi-signout-menu-item svg{
+  width:16px;height:16px;flex:none;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+.tfi-signout-backdrop{
+  position:fixed;inset:0;z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;background:rgba(5,24,13,.58);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+}
+.tfi-signout-backdrop[hidden]{display:none!important}
+.tfi-signout-dialog{
+  width:min(100%,450px);padding:29px 30px 24px;
+  border:1px solid rgba(255,255,255,.7);border-radius:18px;
+  background:#fff;box-shadow:0 26px 80px rgba(0,0,0,.25);
+}
+.tfi-signout-icon{
+  width:49px;height:49px;margin-bottom:17px;
+  display:grid;place-items:center;border-radius:14px;
+  color:#b43e42;background:#fff1f0;
+  box-shadow:inset 0 0 0 1px #f2d9d7;
+}
+.tfi-signout-icon svg{
+  width:25px;height:25px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+.tfi-signout-eyebrow{
+  margin:0 0 8px;color:#a33c40;
+  font-size:9px;font-weight:850;letter-spacing:1.55px;
+}
+.tfi-signout-dialog h2{
+  margin:0;color:#17251d;font-size:25px;
+  font-weight:780;letter-spacing:-.65px;line-height:1.2;
+}
+.tfi-signout-copy{
+  margin:11px 0 17px;color:#718077;
+  font-size:12px;line-height:1.65;
+}
+.tfi-signout-preview-note{
+  padding:11px 12px;border:1px solid #eee7d7;
+  border-radius:9px;color:#786b50;background:#fffaf0;
+  font-size:10px;line-height:1.55;
+}
+.tfi-signout-preview-note strong{color:#66532e}
+.tfi-signout-actions{
+  display:flex;justify-content:flex-end;gap:9px;margin-top:21px;
+}
+.tfi-signout-actions button{
+  min-width:104px;min-height:42px;padding:0 15px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border-radius:9px;font-size:11px;font-weight:800;
+}
+.tfi-signout-cancel{
+  border:1px solid #dfe7e1;color:#435349;background:#fff;
+}
+.tfi-signout-cancel:hover{border-color:#c8d6cc;background:#f8faf8}
+.tfi-signout-confirm{
+  border:1px solid #b43e42;color:#fff;background:#b43e42;
+  box-shadow:0 5px 12px rgba(180,62,66,.14);
+}
+.tfi-signout-confirm:hover{background:#9f3236}
+.tfi-signout-confirm svg{
+  width:15px;height:15px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+.tfi-signout-actions button:focus-visible{
+  outline:3px solid rgba(8,99,51,.2);outline-offset:3px;
+}
+body.tfi-signout-open{overflow:hidden!important}
+@media(max-width:640px){
+  .tfi-topbar-actions{gap:7px}
+  .tfi-profile-trigger{gap:6px;padding:3px 5px}
+  .tfi-profile-trigger>div:nth-child(2),.tfi-profile-trigger .top-profile-text{display:none!important}
+  .tfi-profile-dropdown{right:0;width:214px}
+  .tfi-signout-dialog{padding:24px 21px 20px;border-radius:16px}
+  .tfi-signout-dialog h2{font-size:23px}
+}
+@media(prefers-reduced-motion:reduce){
+  .tfi-profile-chevron{transition:none!important}
+}
+/* On-demand module navigation: tiny, non-blocking loading status and instant active state. */
+.sidebar .nav-link{transition:none!important}
+.tfi-module-loading{
+  position:absolute!important;
+  top:12px!important;
+  right:16px!important;
+  z-index:60!important;
+  display:none;
+  align-items:center;
+  gap:8px;
+  max-width:calc(100% - 32px);
+  padding:7px 11px;
+  border:1px solid #dce8df;
+  border-radius:24px;
+  background:rgba(255,255,255,.96);
+  color:#496052;
+  box-shadow:0 5px 18px rgba(20,48,31,.10);
+  font-size:10px;
+  font-weight:750;
+  pointer-events:none;
+}
+.tfi-module-stage.is-loading .tfi-module-loading{display:flex}
+.tfi-module-loading-spinner{
+  width:12px;
+  height:12px;
+  flex:0 0 12px;
+  border:2px solid #d8e7dc;
+  border-top-color:#087044;
+  border-radius:50%;
+  animation:tfi-module-spin .72s linear infinite;
+}
+@keyframes tfi-module-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){
+  .tfi-module-loading-spinner{animation:none}
+}

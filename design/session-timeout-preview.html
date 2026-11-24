@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#064b29">
+  <meta name="robots" content="noindex,nofollow">
+  <title>TFI | Session Timeout Warning</title>
+  <link rel="stylesheet" href="session-timeout.css">
+</head>
+<body data-countdown-start="90">
+  <div class="workspace-backdrop" aria-hidden="true">
+    <img id="workspace-preview" src="dashboard-preview.png" alt="">
+  </div>
+  <div class="workspace-shade" aria-hidden="true"></div>
+
+  <main class="timeout-stage">
+    <section class="timeout-dialog" role="dialog" aria-modal="true" aria-labelledby="timeout-title" aria-describedby="timeout-description">
+      <div class="dialog-brand">
+        <div class="brand-logo">
+          <img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc.">
+        </div>
+        <span class="preview-chip"><span></span> UI PREVIEW</span>
+      </div>
+
+      <div class="timeout-icon" aria-hidden="true">
+        <svg viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="20"></circle>
+          <path d="M24 12v13l8 5"></path>
+          <path d="M17 3h14"></path>
+        </svg>
+      </div>
+
+      <p class="dialog-eyebrow">ACCOUNT SECURITY</p>
+      <h1 id="timeout-title">Your session is about to expire</h1>
+      <p class="dialog-description" id="timeout-description">For your security, your TFI administrator session will end after a period of inactivity. Choose an action below to continue.</p>
+
+      <section class="timer-panel" aria-label="Simulated session countdown">
+        <div class="timer-topline">
+          <div>
+            <span class="timer-label">TIME REMAINING</span>
+            <span class="timer-caption">Until automatic sign-out</span>
+          </div>
+          <strong class="timer-value" id="timeout-countdown" aria-live="polite" aria-atomic="true">01:30</strong>
+        </div>
+        <div class="timer-track" role="progressbar" aria-label="Time remaining" aria-valuemin="0" aria-valuemax="90" aria-valuenow="90" id="timeout-progress">
+          <span id="timeout-progress-fill"></span>
+        </div>
+      </section>
+
+      <div class="dialog-actions">
+        <button class="action-primary" id="stay-signed-in" type="button">
+          <span>Stay signed in</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5"></path><path d="M19 12a7 7 0 1 1-2-4.9L20 12"></path></svg>
+        </button>
+        <button class="action-secondary" id="sign-out-now" type="button">Sign out now</button>
+      </div>
+
+      <div class="action-status" id="action-status" role="status" aria-live="polite" hidden></div>
+      <p class="auto-signout-note">If no action is taken, the system will automatically end the session when the countdown reaches 00:00.</p>
+
+      <div class="preview-disclaimer">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.8 19h18.4L12 3Z"></path><path d="M12 9v4M12 16.5h.01"></path></svg>
+        <span><strong>Preview only.</strong> The countdown is simulated. No active session is monitored, extended, or ended.</span>
+      </div>
+
+      <footer class="dialog-footer">
+        <span>TOSEN FOODS, INC.</span>
+        <span>TFI ADMIN PORTAL</span>
+      </footer>
+    </section>
+  </main>
+
+  <script src="session-timeout-ui.js"></script>
+</body>
+</html>

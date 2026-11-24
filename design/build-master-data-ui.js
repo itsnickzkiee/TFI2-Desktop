@@ -1,0 +1,30 @@
+const fs=require("fs");
+const p="C:/Users/Rominick/Desktop/TFI_NEW/design/master-data-preview.html";
+let h=fs.readFileSync(p,"utf8");
+const backup=p+".pre-full-source-master-data-20261120.bak";
+if(!fs.existsSync(backup))fs.copyFileSync(p,backup);
+if(!h.includes('href="master-data-source-ui.css"'))h=h.replace("</head>",'<link rel="stylesheet" href="master-data-source-ui.css">\n</head>');
+h=h.replace('<div class="heading-actions"><span class="pill">Source baseline preview</span></div>',
+'<div class="heading-actions"><span class="pill admin-pill">ADMIN ONLY · PREVIEW</span></div>');
+h=h.replace('<div class="note"><span>ⓘ</span><span><strong>35-tab source baseline ? audited 20 Nov 2026.</strong> The categories and sample rows below are from ?Copy of TFI - Production Monitoring Sheet 1?. Counts are source-reference counts, not migrated records. This preview does not edit the source workbook or live database.</span></div>',
+'<div class="note"><span>ⓘ</span><span><strong>Admin-only Master Data workspace.</strong> Nine reference categories are aligned to the official 35-tab workbook. The displayed values are source snapshots, not migrated database records. Preview edits stay in browser memory only; no Google Spreadsheet or database writes are connected. Backend role enforcement is still pending.</span></div>');
+h=h.replace('<span>Product Standard</span><span class="count">58</span>','<span>Product Standard and Specificat</span><span class="count">58</span>');
+h=h.replace('<span>KPI Setup</span><span class="count">128</span>','<span>KPI Setup</span><span class="count">127 + All</span>');
+h=h.replace('<span>DPR Legend</span><span class="count">116</span>','<span>DPR LEGEND</span><span class="count">116</span>');
+h=h.replace('<span>Manpower</span><span class="count">445</span>','<span>MANPOWER</span><span class="count">445</span>');
+h=h.replace('<span>DMP Legend</span><span class="count">69</span>','<span>DMP LEGEND</span><span class="count">69</span>');
+h=h.replace('<h2 id="panel-name">Product Standard</h2>','<h2 id="panel-name">Product Standard and Specificat</h2>');
+const oldPanel='<div class="panel-actions"><span class="status editable" id="access-status">Editable references</span><button class="btn primary" id="add-record">＋ Add product</button></div></div>\n<div class="panel-tools">';
+const newPanel='<div class="panel-actions"><span class="status review" id="access-status">Admin · controlled fields</span><button class="btn outline" id="add-record" style="display:none">＋ Add record</button><button class="btn primary" id="open-import">⇧ Import Spreadsheet</button></div></div>\n<div class="source-strip"><div class="source-meta-card"><small>Source workbook</small><strong id="source-workbook">Copy of TFI - Production Monitoring Sheet 1</strong><a id="source-workbook-link" href="https://docs.google.com/spreadsheets/d/1rCbQ16wj7MRjQCFF3tA-WEMkudraJK0RkwcqayUlz7k/edit" target="_blank" rel="noopener">Open official spreadsheet ↗</a></div><div class="source-meta-card"><small>Source worksheet</small><strong id="source-sheet-name">Product Standard and Specificat</strong></div><div class="source-meta-card"><small>Verified sheetId</small><strong id="source-sheet-id">2138697021</strong></div><div class="source-meta-card"><small>Source range</small><strong id="source-range">A1:U110</strong></div></div>\n<div class="panel-tools">';
+if(!h.includes(oldPanel))throw new Error("Master Data panel action insertion marker not found");
+h=h.replace(oldPanel,newPanel);
+h=h.replace('<div class="pagination"><button class="page-btn" disabled>‹</button><button class="page-btn active">1</button><button class="page-btn" disabled>›</button></div>',
+'<div class="pagination" id="pagination"><span class="page-summary">Source rows</span></div>');
+const importModal='<div class="modal-backdrop" id="import-modal"><div class="modal import-modal" role="dialog" aria-modal="true" aria-labelledby="import-title"><div class="modal-head"><h3 id="import-title">Import Spreadsheet</h3><button class="modal-close" id="close-import" aria-label="Close">×</button></div><p class="modal-sub">Admin-only source validation for the selected Master Data category. This preview validates the pasted link format only; it does not read or import data.</p><div class="import-source-meta"><div><small>Selected worksheet</small><strong id="import-sheet-name">Product Standard and Specificat</strong></div><div><small>Verified sheetId</small><strong id="import-sheet-id">2138697021</strong></div><div><small>Source range</small><strong id="import-source-range">A1:U110</strong></div><div><small>Approved workbook</small><strong>Copy of TFI - Production Monitoring Sheet 1</strong></div></div><div class="import-link-row"><div class="field"><label for="spreadsheet-link">Paste Spreadsheet Link</label><input id="spreadsheet-link" type="url" placeholder="https://docs.google.com/spreadsheets/d/..." autocomplete="off"></div><button class="btn outline" id="link-validate" type="button">Validate Link</button></div><div class="link-feedback" id="link-feedback">Paste the approved TFI Google Spreadsheet link, then validate its source ID.</div><div class="modal-note">The source workbook remains unchanged. Import integration, Google access checks, duplicate handling, and backend authorization are not connected in this UI preview.</div><div class="import-actions"><button class="btn outline" id="cancel-import" type="button">Cancel</button><button class="btn primary" id="import-submit" type="button" disabled>IMPORT NOT CONNECTED</button></div></div></div>';
+const start=h.indexOf('<script>const configs={');
+if(start<0)throw new Error("Legacy inline Master Data script start not found");
+const end=h.indexOf("</script>",start);
+if(end<0)throw new Error("Legacy inline Master Data script end not found");
+h=h.slice(0,start)+importModal+'\n<script src="master-data-source-data.js"></script>\n<script src="master-data-ui.js"></script>\n'+h.slice(end+9);
+fs.writeFileSync(p,h,"utf8");
+console.log("Updated Master Data shell, source metadata strip, import modal, exact category labels, and external source/UI scripts.");

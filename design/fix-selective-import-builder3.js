@@ -1,0 +1,10 @@
+const fs=require('fs');
+const p='C:/Users/Rominick/Desktop/TFI_NEW/design/build-selective-import-flow.js';
+let lines=fs.readFileSync(p,'utf8').split(/\r?\n/);
+lines=lines.filter(line=>!line.includes("toast(\\\\'Choose one destination module")&&!line.startsWith('const newNav='));
+const newNavLine="const newNav=\"  const params=new URLSearchParams({sourceType:source.type,sourceName:source.name,sourceSize:String(source.size||''),sourceUrl:source.url||'',targetModule:$('target-module').value,targetLabel:target.label,sourceWorksheet:target.sheet,sourceSheetId:target.sheetId});window.location.href='scan-progress-worksheet-detection-preview.html?'+params.toString();\";";
+const at=lines.findIndex(line=>line.startsWith('if(!h.includes(oldNav))'));
+if(at<0)throw new Error('Could not find import navigation replacement point');
+lines.splice(at,0,newNavLine);
+fs.writeFileSync(p,lines.join('\n'),'utf8');
+console.log('Removed malformed duplicate builder lines and inserted the corrected navigation line.');

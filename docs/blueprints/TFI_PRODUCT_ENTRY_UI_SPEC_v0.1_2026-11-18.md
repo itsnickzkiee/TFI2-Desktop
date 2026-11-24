@@ -1,0 +1,1 @@
+SUPERSEDED: This v0.1 generic prototype specification is no longer current. Use TFI_PRODUCT_ENTRY_UI_SPEC_v0.2_2026-11-18.md and TFI_UI_SOURCE_FIDELITY_STANDARD.md. The earlier assumptions about separate TFI Entries, Historical Records, and Import Inbox views were removed because they do not match the Product Entry source worksheet.

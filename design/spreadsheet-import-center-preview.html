@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TFI | Spreadsheet Import Center</title>
+<style>
+:root{--green:#086333;--deep:#064b29;--red:#ed1c24;--ink:#17251d;--muted:#758279;--line:#e7ede8;--surface:#fff;--canvas:#f4f7f5;--soft:#eaf4ed;--shadow:0 10px 30px rgba(25,55,37,.055);--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font-family:"Segoe UI",Inter,Arial,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}
+.shell{min-height:100vh;display:flex}.sidebar{width:258px;flex:0 0 258px;background:linear-gradient(180deg,var(--green),var(--deep));color:#fff;display:flex;flex-direction:column;min-height:100vh;padding:22px 15px 18px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{background:#fff;border-radius:14px;padding:9px 11px;display:flex;align-items:center;justify-content:center;min-height:76px}.brand img{display:block;width:100%;max-width:208px;height:auto;object-fit:contain}.brand-caption{text-align:center;color:rgba(255,255,255,.72);font-size:9px;font-weight:800;letter-spacing:1.65px;margin:13px 0 26px}
+.nav-group{margin:0 0 18px}.nav-label{font-size:9px;text-transform:uppercase;letter-spacing:1.35px;font-weight:800;color:rgba(255,255,255,.52);padding:0 12px;margin:0 0 8px}.nav-link{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;margin:2px 0;border:0;border-radius:10px;background:transparent;color:rgba(255,255,255,.82);font-size:12px;font-weight:600;text-align:left}.nav-link svg{width:17px;height:17px;flex:0 0 17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.nav-link:hover{background:rgba(255,255,255,.10);color:#fff}.nav-link.active{background:#fff;color:var(--green);box-shadow:0 5px 14px rgba(0,0,0,.10)}.nav-link .new{margin-left:auto;background:rgba(255,255,255,.16);padding:2px 7px;border-radius:20px;font-size:9px}.nav-link.active .new{background:var(--soft);color:var(--green)}.spacer{flex:1;min-height:15px}.user-foot{border-top:1px solid rgba(255,255,255,.15);padding:15px 7px 0;display:flex;align-items:center;gap:10px}.avatar{width:34px;height:34px;border-radius:50%;background:#e5f0e8;color:var(--green);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 34px}.user-foot strong{display:block;font-size:12px}.user-foot small{display:block;font-size:10px;color:rgba(255,255,255,.62);margin-top:3px}
+.main{min-width:0;flex:1}.topbar{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px;position:sticky;top:0;z-index:5}.crumb{display:flex;align-items:center;gap:9px;color:#8a968e;font-size:12px;font-weight:600}.crumb b{color:#314239}.crumb .slash{color:#c1cbc4}.top-actions{display:flex;align-items:center;gap:15px}.search{height:38px;width:235px;border:1px solid #e8eee9;border-radius:10px;background:#fafcfb;display:flex;align-items:center;gap:9px;padding:0 12px;color:#95a199}.search svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}.search input{border:0;outline:0;background:transparent;width:100%;font-size:12px}.profile{display:flex;align-items:center;gap:9px}.profile strong{display:block;font-size:12px}.profile small{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.content{max-width:1600px;margin:0 auto;padding:30px 34px 34px}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:22px}.eyebrow{font-size:10px;letter-spacing:1.6px;color:var(--green);font-weight:900;text-transform:uppercase;margin-bottom:7px}h1{font-size:28px;letter-spacing:-.8px;margin:0;font-weight:760}.subtitle{margin:7px 0 0;color:#78857d;font-size:13px}.heading-actions{display:flex;gap:9px;align-items:center}.btn{border:0;border-radius:10px;padding:10px 15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:750;transition:transform .16s,box-shadow .16s}.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.48;cursor:not-allowed;box-shadow:none;transform:none}.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.primary{background:var(--green);color:#fff;box-shadow:0 5px 12px rgba(8,99,51,.16)}.primary:hover{background:#07572e}.outline{background:#fff;color:#3e5146;border:1px solid #e2eae4}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #e8eee9;background:#fff;border-radius:30px;padding:8px 11px;font-size:10px;color:#758279;font-weight:800}.pill:before{content:"";width:6px;height:6px;background:#9aa69e;border-radius:50%}
+.notice{display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid #e9eee9;border-radius:12px;padding:12px 14px;margin-bottom:20px;color:#718077;font-size:11px;line-height:1.5}.notice svg{width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:1.8;flex:0 0 16px;margin-top:1px}.notice strong{color:#435349}
+.stepper{display:grid;grid-template-columns:repeat(3,1fr);background:#fff;border:1px solid #e8eee9;border-radius:15px;box-shadow:var(--shadow);padding:17px 20px;margin-bottom:19px}.step{display:flex;align-items:center;gap:11px;position:relative;min-width:0}.step:not(:last-child):after{content:"";height:1px;background:#e8eee9;position:absolute;left:42px;right:20px;top:16px;transform:translateX(20px)}.step-number{width:33px;height:33px;border-radius:50%;display:grid;place-items:center;border:1px solid #e1e9e3;background:#f8faf8;color:#839087;font-size:11px;font-weight:850;z-index:1;flex:0 0 33px}.step.active .step-number{background:var(--green);border-color:var(--green);color:#fff}.step.done .step-number{background:#eaf4ed;border-color:#d5e8d9;color:var(--green)}.step strong{display:block;font-size:11px;color:#33443a}.step small{display:block;font-size:9px;color:#89958d;margin-top:3px}
+.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.8fr);gap:18px;align-items:start}.card{background:#fff;border:1px solid #e8eee9;border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}.card-head{padding:20px 21px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.card-title{font-size:14px;font-weight:760;margin:0;color:#203027}.card-sub{font-size:10px;color:#8a968e;margin:5px 0 0;line-height:1.5}.section-body{padding:18px 21px 21px}
+.method-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:17px}.method{border:1px solid #e5ece6;border-radius:13px;background:#fff;padding:15px;text-align:left;transition:border .18s,background .18s,box-shadow .18s;min-height:112px}.method:hover{border-color:#b8d5c0;background:#fbfdfb}.method.selected{border:1.5px solid var(--green);background:#f5faf6;box-shadow:0 0 0 3px rgba(8,99,51,.06)}.method-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}.method-icon{width:34px;height:34px;border-radius:10px;background:#edf5ef;color:var(--green);display:grid;place-items:center}.method-icon.red{background:#fff0f0;color:var(--red)}.method-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.radio{width:16px;height:16px;border:1.5px solid #cbd6ce;border-radius:50%;display:grid;place-items:center}.selected .radio{border-color:var(--green)}.selected .radio:after{content:"";width:8px;height:8px;background:var(--green);border-radius:50%}.method strong{display:block;font-size:11px;color:#304137}.method small{display:block;font-size:9px;color:#859188;margin-top:5px;line-height:1.45}
+.source-panel{border:1px solid #e8eee9;border-radius:13px;background:#fbfdfb;padding:16px}.panel-label{display:block;font-size:10px;font-weight:800;color:#506056;margin-bottom:9px}.dropzone{border:1.5px dashed #cbd9ce;border-radius:11px;background:#fff;padding:23px 14px;text-align:center;transition:background .18s,border .18s}.dropzone.drag{background:#f1f8f3;border-color:var(--green)}.upload-icon{width:42px;height:42px;margin:0 auto 10px;border-radius:12px;background:#eaf4ed;color:var(--green);display:grid;place-items:center}.upload-icon svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.dropzone strong{display:block;font-size:11px;color:#34443a}.dropzone p{font-size:9px;color:#87948b;margin:6px 0 12px}.file-btn{display:inline-flex;align-items:center;justify-content:center;background:#fff;border:1px solid #dfe8e1;border-radius:8px;color:var(--green);font-size:10px;font-weight:800;padding:8px 12px}.file-name{display:none;margin-top:11px;background:#eef6f0;border:1px solid #dbeade;border-radius:8px;padding:9px 10px;color:#285f3d;font-size:10px;text-align:left;overflow-wrap:anywhere}.file-name.show{display:block}.url-wrap{display:none}.url-wrap.show{display:block}.url-input{width:100%;height:41px;border:1px solid #dfe8e1;border-radius:9px;background:#fff;padding:0 12px;outline:0;font-size:11px;color:#314239}.url-input:focus{border-color:#7eaf8b;box-shadow:0 0 0 3px rgba(8,99,51,.07)}.url-hint{font-size:9px;color:#89958d;margin:8px 0 0;line-height:1.5}.source-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}.source-footer small{font-size:9px;color:#89958d;line-height:1.45}.source-footer .btn{min-width:145px}
+.right-stack{display:grid;gap:18px}.readiness{padding:19px 20px}.readiness-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.readiness-icon{width:36px;height:36px;border-radius:11px;background:#f1f5f2;color:#78877d;display:grid;place-items:center}.readiness-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}.readiness-state{display:inline-flex;align-items:center;gap:6px;background:#f3f5f3;color:#758279;border-radius:20px;padding:5px 8px;font-size:9px;font-weight:800}.readiness-state:before{content:"";width:5px;height:5px;background:#9aa69e;border-radius:50%}.readiness h2{font-size:13px;margin:13px 0 5px}.readiness p{font-size:10px;color:#839087;line-height:1.55;margin:0}.readiness-list{display:grid;gap:0;margin-top:15px}.readiness-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #eef2ef}.readiness-row span{font-size:10px;color:#849087}.readiness-row strong{font-size:10px;color:#536259;font-weight:750}
+.process{padding:19px 20px}.process-list{display:grid;gap:15px;margin-top:16px}.process-item{display:flex;gap:10px;align-items:flex-start}.process-num{width:26px;height:26px;border-radius:8px;background:#edf5ef;color:var(--green);display:grid;place-items:center;flex:0 0 26px;font-size:10px;font-weight:900}.process-copy strong{display:block;font-size:10px;color:#394a3f}.process-copy span{display:block;font-size:9px;color:#89958d;margin-top:4px;line-height:1.45}
+.batch-card{margin-top:19px;overflow:hidden}.batch-head{padding:19px 21px 15px;display:flex;align-items:center;justify-content:space-between;gap:12px}.batch-head .btn{padding:8px 11px;font-size:10px}.batch-table{width:100%;border-collapse:collapse}.batch-table th{text-align:left;padding:11px 17px;background:#f8faf8;color:#839087;text-transform:uppercase;letter-spacing:.65px;font-size:9px;font-weight:800;border-top:1px solid #edf1ee;border-bottom:1px solid #edf1ee}.batch-table td{padding:15px 17px;border-bottom:1px solid #f0f3f0;color:#7b887f;font-size:10px}.empty{text-align:center;padding:27px 15px 30px}.empty-icon{width:39px;height:39px;border-radius:12px;background:#f1f6f2;color:#7c9a84;margin:0 auto 10px;display:grid;place-items:center}.empty-icon svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.empty strong{display:block;color:#425349;font-size:11px}.empty span{display:block;color:#89958d;font-size:9px;margin-top:5px}
+.footer{display:flex;justify-content:space-between;gap:12px;color:#9aa59e;font-size:9px;padding:22px 2px 0}.footer strong{color:#708076}
+.toast{position:fixed;right:25px;bottom:24px;z-index:20;background:#173d29;color:#fff;padding:12px 16px;border-radius:11px;box-shadow:0 12px 30px rgba(0,0,0,.2);font-size:11px;opacity:0;transform:translateY(10px);pointer-events:none;transition:all .22s}.toast.show{opacity:1;transform:translateY(0)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(10,28,17,.42);z-index:15;display:none;align-items:center;justify-content:center;padding:20px}.modal-backdrop.open{display:flex}.modal{width:min(450px,100%);background:#fff;border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.22);padding:24px}.modal-head{display:flex;align-items:center;justify-content:space-between}.modal h3{font-size:16px;margin:0}.modal-close{border:0;background:#f2f6f3;border-radius:8px;width:30px;height:30px;color:#66756b;font-size:18px}.modal p{font-size:11px;line-height:1.65;color:#718077;margin:12px 0 18px}.modal-actions{display:flex;justify-content:flex-end;gap:9px}
+@media(max-width:1200px){.sidebar{width:230px;flex-basis:230px}.content{padding:25px 23px}.topbar{padding:0 23px}}
+@media(max-width:900px){.sidebar{width:76px;flex-basis:76px;padding:18px 10px}.brand{padding:7px;min-height:52px}.brand img{width:48px;height:38px;object-fit:cover;object-position:top}.brand-caption,.nav-label,.nav-link span,.user-foot>div:last-child{display:none}.nav-link{justify-content:center;padding:12px 7px}.user-foot{justify-content:center;padding:14px 0 0}.layout{grid-template-columns:1fr}}
+@media(max-width:640px){.topbar{height:62px;padding:0 14px}.search{display:none}.profile>div:last-child{display:none}.content{padding:20px 14px}.heading{align-items:flex-start;flex-direction:column}.heading-actions{flex-wrap:wrap}.stepper{padding:13px 10px}.step{gap:6px}.step-number{width:27px;height:27px;flex-basis:27px}.step:not(:last-child):after{left:30px;right:5px}.step strong{font-size:9px}.step small{font-size:8px}.method-grid{grid-template-columns:1fr}.source-footer{align-items:flex-start;flex-direction:column}.source-footer .btn{width:100%}.batch-head{padding:16px}.footer{flex-direction:column}}
+
+/* Selective single-module import */
+.stepper{grid-template-columns:repeat(6,minmax(0,1fr));gap:9px}
+.step{gap:8px}
+.step:not(:last-child):after{left:34px;right:8px;transform:none}
+.target-panel{border:1px solid #dfeae1;background:linear-gradient(135deg,#f7fbf8,#fff);border-radius:13px;padding:16px;margin-bottom:16px}
+.target-kicker{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:#14713c;font-weight:900;margin-bottom:6px}
+.target-title{font-size:13px;font-weight:800;color:#2c4034;margin-bottom:5px}
+.target-copy{font-size:10px;line-height:1.5;color:#7c8a80;margin-bottom:12px}
+.target-select-row{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:12px;align-items:stretch}
+.target-select-wrap{display:grid;gap:6px;min-width:0}
+.target-select-wrap label{font-size:10px;font-weight:850;color:#506056}
+.target-select-wrap select{width:100%;height:43px;border:1px solid #d7e4d9;border-radius:9px;background:#fff;padding:0 12px;color:#314239;font-size:11px;font-weight:700;outline:0}
+.target-select-wrap select:focus{border-color:#7eaf8b;box-shadow:0 0 0 3px rgba(8,99,51,.07)}
+.target-details{border:1px solid #e5ece6;background:#fff;border-radius:10px;padding:10px 12px;display:grid;align-content:center;gap:5px;min-width:0}
+.target-details small{font-size:8px;color:#91a096;text-transform:uppercase;letter-spacing:.6px;font-weight:850}
+.target-details strong{font-size:10px;color:#34483b;overflow-wrap:anywhere}
+.target-details span{font-size:9px;color:#7e8c82;line-height:1.4}
+.target-rule{display:flex;align-items:center;gap:7px;margin-top:10px;padding-top:9px;border-top:1px solid #e8efe9;color:#63756a;font-size:9px;line-height:1.45}
+.target-rule b{color:#27663d}
+.target-rule .dot{width:6px;height:6px;border-radius:50%;background:#27804b;flex:0 0 6px}
+.stepper .step strong{white-space:nowrap}
+@media(max-width:760px){.target-select-row{grid-template-columns:1fr}.stepper{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:13px}.step:not(:last-child):after{display:none}}
+@media(max-width:420px){.stepper{padding:12px 9px}.step{align-items:flex-start}.step strong{font-size:9px}.step small{font-size:8px}}
+
+
+@media(max-width:1100px){.stepper{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:12px}.step:not(:last-child):after{display:none}}
+</style>
+<link rel="stylesheet" href="tfi-shell-standard.css">
+
+
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+ <div class="brand"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div><div class="brand-caption">PRODUCTION MANAGEMENT</div>
+ <nav>
+  <div class="nav-group"><div class="nav-label">Overview</div>
+   <button class="nav-link" data-page="Dashboard"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link" data-page="Product Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 20V9l8-5 8 5v11"/><path d="M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="5" width="18" height="16" rx="2"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="5" y="4" width="14" height="16"/></svg><span>DMR Production</span></button>
+   <button class="nav-link" data-page="DMR Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+   <button class="nav-link" data-page="Yield Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21c4-2 7-6 7-10A7 7 0 0 0 5 11c0 4 3 8 7 10Z"/></svg><span>Yield Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link" data-page="CO QA"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link active" data-page="Spreadsheet Import" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24" width="17" height="17"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link" data-page="Reports"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Audit Trail"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link" data-page="Settings"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav>
+ <div class="spacer"></div><div class="user-foot"><div class="avatar">AD</div><div><strong>System Administrator</strong><small>Administrator Account</small></div></div>
+</aside>
+<div class="main">
+ <header class="topbar"><div class="crumb"><span>TFI</span><span class="slash">/</span><span>Data &amp; Reports</span><span class="slash">/</span><b>Spreadsheet Import</b></div><div class="top-actions"><label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input placeholder="Search..." aria-label="Search"></label><div class="profile"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div></div></header>
+ <main class="content">
+  <div class="notice"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7h.01"/></svg><div><strong>Selective import only.</strong> Choose one operational destination module per batch. Only its mapped worksheet will be scanned; other worksheets will be skipped. Reports &amp; Reconciliation and Master Data are not import destinations.</div></div>
+  <div class="stepper" aria-label="Import workflow"><div class="step active"><span class="step-number">1</span><div><strong>Choose module</strong><small>Set one destination</small></div></div><div class="step"><span class="step-number">2</span><div><strong>Select source</strong><small>Choose the workbook</small></div></div><div class="step"><span class="step-number">3</span><div><strong>Scan &amp; classify</strong><small>Read selected sheet</small></div></div><div class="step"><span class="step-number">4</span><div><strong>Review records</strong><small>Check detected rows</small></div></div><div class="step"><span class="step-number">5</span><div><strong>Duplicate review</strong><small>Resolve possible matches</small></div></div><div class="step"><span class="step-number">6</span><div><strong>Final import approval</strong><small>Approve eligible new rows</small></div></div></div>
+  <div class="layout">
+   <section class="card">
+    <div class="card-head"><div><h2 class="card-title">Choose import destination &amp; source</h2><p class="card-sub">Select one operational module, then choose its source workbook or Google Sheets link.</p></div></div>
+    <div class="section-body">
+     <div class="target-panel">
+ <div class="target-kicker">Step 1 · Import destination</div>
+ <div class="target-title">Which module do you want to import?</div>
+ <div class="target-copy">Choose one operational module. Only its mapped worksheet will be scanned—not all 35 workbook tabs.</div>
+ <div class="target-select-row">
+  <div class="target-select-wrap"><label for="target-module">Select destination module</label><select id="target-module" required>
+   <option value="">Choose one module...</option>
+   <optgroup label="Production"><option value="product-entry">Product Entry</option><option value="production-entry">Production Entry</option><option value="production-schedule">Production Schedule</option></optgroup>
+   <optgroup label="Monitoring"><option value="dmp-production">DMP Production</option><option value="dmr-production">DMR Production</option><option value="dmr-coding">DMR Coding</option><option value="hourly-meat">Hourly Meat</option><option value="hourly-coding">Hourly Coding</option><option value="hourly-agri">Hourly Agri</option><option value="oee">OEE</option><option value="productivity">Productivity</option></optgroup>
+   <optgroup label="Quality &amp; Control"><option value="coding-dpr">Coding DPR</option><option value="co-qa">CO QA</option><option value="non-prod">NON-PROD</option><option value="pr-monitoring">PR Monitoring</option></optgroup>
+  </select></div>
+  <div class="target-details" aria-live="polite"><small>Mapped source worksheet</small><strong id="target-sheet-name">No module selected</strong><span id="target-sheet-meta">Choose a module to see its verified worksheet and sheetId.</span></div>
+ </div>
+ <div class="target-rule"><span class="dot"></span><span><b>One module per batch.</b> Need another module? Start a separate import. No Import All option.</span></div>
+</div>
+     <div class="method-grid">
+      <button class="method" id="method-file" type="button" aria-pressed="false"><div class="method-top"><span class="method-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></span><span class="radio"></span></div><strong>Upload Excel workbook</strong><small>Backup option: select an authorized .xlsx file.</small></button>
+      <button class="method selected" id="method-link" type="button" aria-pressed="true"><div class="method-top"><span class="method-icon red"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"/></svg></span><span class="radio"></span></div><strong>Google Sheets link</strong><small>Primary method: connect your Google Account and scan one mapped worksheet.</small></button>
+     </div>
+     <div class="source-panel">
+      <div id="file-panel" style="display:none">
+       <span class="panel-label">Workbook file</span>
+       <div class="dropzone" id="dropzone"><div class="upload-icon"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg></div><strong>Drag and drop your Excel file here</strong><p>Supported format: .xlsx</p><label class="file-btn" for="file-input">Browse files</label><input id="file-input" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden></div>
+       <div class="file-name" id="file-name"></div>
+      </div>
+      <div class="url-wrap show" id="link-panel">
+       <label class="panel-label" for="sheet-url">Google Sheets URL</label>
+       <input class="url-input" id="sheet-url" type="url" placeholder="https://docs.google.com/spreadsheets/d/...">
+       <div class="google-connection-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:14px">
+        <div><strong id="google-status" style="display:block;font-size:12px;color:#64748b">Checking Google connection…</strong><small id="google-account" style="display:block;margin-top:4px;color:#94a3b8">Read-only access to the selected workbook</small></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn outline" id="google-connect-button" type="button">Connect Google Account</button><button class="btn outline" id="google-disconnect-button" type="button" style="display:none">Disconnect</button></div>
+       </div>
+       <p class="url-hint">TFI requests read-only access. The link must be accessible to the connected Google Account. Each import is a one-time scan; continuous synchronization is not part of normal operations.</p>
+      </div>
+     </div>
+     <div class="source-footer"><small>Choose one module and one source workbook.<br>Only the mapped worksheet is in scope for this batch.</small><button class="btn primary" id="continue-button">Continue to scan preview <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+    </div>
+   </section>
+   <aside class="right-stack">
+    <section class="card readiness"><div class="readiness-top"><span class="readiness-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg></span><span class="readiness-state">Awaiting source</span></div><h2>Source readiness</h2><p>The scan summary will appear here after a workbook is selected and read successfully.</p><div class="readiness-list"><div class="readiness-row"><span>Destination module</span><strong id="readiness-destination">Not selected</strong></div><div class="readiness-row"><span>Source workbook</span><strong id="readiness-source">Not selected</strong></div><div class="readiness-row"><span>Worksheets detected</span><strong>—</strong></div><div class="readiness-row"><span>Rows classified</span><strong>—</strong></div><div class="readiness-row"><span>Scan status</span><strong>Not started</strong></div></div></section>
+    <section class="card process"><h2 class="card-title">Import workflow</h2><p class="card-sub">A controlled process for one selected destination module per batch.</p><div class="process-list"><div class="process-item"><span class="process-num">1</span><div class="process-copy"><strong>Read the selected worksheet</strong><span>Open only the worksheet mapped to the chosen destination module.</span></div></div><div class="process-item"><span class="process-num">2</span><div class="process-copy"><strong>Classify and validate</strong><span>Review only the selected module’s records, including incomplete and possible duplicate rows.</span></div></div><div class="process-item"><span class="process-num">3</span><div class="process-copy"><strong>Stage and trace</strong><span>Keep source worksheet and row traceability for this module’s import batch.</span></div></div></div></section>
+   </aside>
+  </div>
+  <section class="card batch-card"><div class="batch-head"><div><h2 class="card-title">Recent import batches</h2><p class="card-sub">A record of controlled workbook scans and their results.</p></div><button class="btn outline" id="refresh-button"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.5 9a7 7 0 0 1 12-2L20 12M4 12l2.5 5a7 7 0 0 0 12-2"/></svg>Refresh</button></div><div style="overflow-x:auto"><table class="batch-table"><thead><tr><th>Batch ID</th><th>Source workbook</th><th>Scan date</th><th>Worksheets</th><th>Rows read</th><th>Status</th></tr></thead></table><div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></div><strong>No import batches yet</strong><span>Completed and in-progress scans will be listed here.</span></div></div></section>
+  <footer class="footer"><span><strong>TOSEN FOODS, INC.</strong> · Production Management System</span><span>Admin UI design preview · v0.1</span></footer>
+ </main>
+</div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal-backdrop" id="modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-head"><h3 id="modal-title">Source selected</h3><button class="modal-close" id="close-modal" aria-label="Close">×</button></div><p id="modal-copy">The source selection is ready for the next step. Actual workbook scanning is not connected in this UI preview.</p><div class="modal-actions"><button class="btn outline" id="cancel-modal">Close</button><button class="btn primary" id="confirm-modal">Okay</button></div></div></div>
+<script>
+const moduleMap={"product-entry":{"label":"Product Entry","group":"Production","sheet":"Product Entry","sheetId":"545274882"},"production-entry":{"label":"Production Entry","group":"Production","sheet":"Production Entry","sheetId":"1923467491"},"production-schedule":{"label":"Production Schedule","group":"Production","sheet":"Production Schedule","sheetId":"1538651320"},"dmp-production":{"label":"DMP Production","group":"Monitoring","sheet":"DMP - Production","sheetId":"1312335050"},"dmr-production":{"label":"DMR Production","group":"Monitoring","sheet":"DMR Production","sheetId":"2048043346"},"dmr-coding":{"label":"DMR Coding","group":"Monitoring","sheet":"DMR Coding","sheetId":"675328096"},"hourly-meat":{"label":"Hourly Meat","group":"Monitoring","sheet":"Hourly Meat","sheetId":"428082343"},"hourly-coding":{"label":"Hourly Coding","group":"Monitoring","sheet":"Hourly Coding","sheetId":"1916766220"},"hourly-agri":{"label":"Hourly Agri","group":"Monitoring","sheet":"Hourly Agri","sheetId":"534145404"},"oee":{"label":"OEE","group":"Monitoring","sheet":"OEE","sheetId":"1750442014"},"productivity":{"label":"Productivity","group":"Monitoring","sheet":"Productivity","sheetId":"1688444278"},"coding-dpr":{"label":"Coding DPR","group":"Quality & Control","sheet":"Coding DPR","sheetId":"1266086431"},"co-qa":{"label":"CO QA","group":"Quality & Control","sheet":"co QA","sheetId":"1359678099"},"non-prod":{"label":"NON-PROD","group":"Quality & Control","sheet":"NON-PROD","sheetId":"1381857831"},"pr-monitoring":{"label":"PR Monitoring","group":"Quality & Control","sheet":"PR MONITORING","sheetId":"867256143"}};
+const $=id=>document.getElementById(id);let mode='link';let toastTimer;window.googleSheetsConnected=false;window.googleSheetsConfigured=false;
+function updateContinueState(){const targetReady=Boolean(moduleMap[$('target-module').value]);let sourceReady=false;if(mode==='file')sourceReady=Boolean($('file-input').files&&$('file-input').files[0]);else{const v=$('sheet-url').value.trim();sourceReady=Boolean(window.googleSheetsConnected&&/^https:\/\/docs\.google\.com\/spreadsheets\/(?:u\/\d+\/)?d\//i.test(v))}const disabled=!(targetReady&&sourceReady);$('continue-button').disabled=disabled;$('continue-button').setAttribute('aria-disabled',String(disabled))}
+function updateTarget(){const m=moduleMap[$('target-module').value];if(!m){$('target-sheet-name').textContent='No module selected';$('target-sheet-meta').textContent='Choose a module to see its verified worksheet and sheetId.';$('readiness-destination').textContent='Not selected';updateContinueState();return null}$('target-sheet-name').textContent=m.sheet;$('target-sheet-meta').textContent='Verified sheetId '+m.sheetId+' · '+m.group+' destination';$('readiness-destination').textContent=m.label;updateContinueState();return m} $('target-module').addEventListener('change',updateTarget);
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),2600)}
+function setMode(next){mode=next;const isFile=next==='file';$('method-file').classList.toggle('selected',isFile);$('method-link').classList.toggle('selected',!isFile);$('method-file').setAttribute('aria-pressed',String(isFile));$('method-link').setAttribute('aria-pressed',String(!isFile));$('file-panel').style.display=isFile?'block':'none';$('link-panel').classList.toggle('show',!isFile);$('readiness-source').textContent='Not selected';updateContinueState()}
+$('method-file').addEventListener('click',()=>setMode('file'));$('method-link').addEventListener('click',()=>setMode('link'));
+$('file-input').addEventListener('change',e=>{const f=e.target.files[0];if(!f){updateContinueState();return}if(!f.name.toLowerCase().endsWith('.xlsx')){toast('Please select an .xlsx workbook.');e.target.value='';updateContinueState();return}$('file-name').textContent='Selected file: '+f.name+' · '+(f.size/1024/1024).toFixed(2)+' MB';$('file-name').classList.add('show');$('readiness-source').textContent=f.name;updateContinueState()});$('sheet-url').addEventListener('input',updateContinueState);
+const dz=$('dropzone');dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag')});dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');const f=e.dataTransfer.files[0];if(!f)return;if(!f.name.toLowerCase().endsWith('.xlsx')){toast('Please drop an .xlsx workbook.');return}const dt=new DataTransfer();dt.items.add(f);$('file-input').files=dt.files;$('file-input').dispatchEvent(new Event('change'))});
+function openModal(title,copy){$('modal-title').textContent=title;$('modal-copy').textContent=copy;$('modal').classList.add('open')}function closeModal(){$('modal').classList.remove('open')}
+$('continue-button').addEventListener('click',()=>{
+  const target=updateTarget();if(!target){toast('Choose one destination module before continuing.');$('target-module').focus();return}
+  let source;
+  if(mode==='file'){
+    const f=$('file-input').files[0];
+    if(!f){toast('Select an Excel workbook first.');return}
+    source={type:'xlsx',name:f.name,size:f.size,lastModified:f.lastModified,selectedAt:new Date().toISOString()};
+  }else{
+    const v=$('sheet-url').value.trim();
+    if(!v){toast('Enter an authorized Google Sheets URL first.');return}
+    if(!/^https:\/\/docs\.google\.com\/spreadsheets\//i.test(v)){toast('Enter a valid Google Sheets URL.');return}
+    source={type:'google_sheets',name:'Google Sheets workbook',url:v,selectedAt:new Date().toISOString()};
+  }
+  const params=new URLSearchParams({from:'import-center',sourceType:source.type,sourceName:source.name,sourceSize:String(source.size||''),sourceUrl:source.url||'',targetModule:$('target-module').value,targetLabel:target.label,sourceWorksheet:target.sheet,sourceSheetId:target.sheetId});window.location.href='scan-progress-worksheet-detection-preview.html?'+params.toString();
+});
+$('close-modal').addEventListener('click',closeModal);$('cancel-modal').addEventListener('click',closeModal);$('confirm-modal').addEventListener('click',closeModal);$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeModal()});
+if($('history-button'))$('history-button').addEventListener('click',()=>{window.location.href='import-history-preview.html'});$('refresh-button').addEventListener('click',()=>toast('No import batches to refresh yet.'));
+document.querySelectorAll('.nav-link').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.page==='Product Entry'){location.href='product-entry-preview.html';return}if(b.dataset.page==='Spreadsheet Import')return;if(b.dataset.page==='Import History'){window.location.href='import-history-preview.html';return}if(b.dataset.page==='Settings'){window.location.href='system-settings-preview.html';return}if(b.dataset.page==='Users & Access'){window.location.href='users-access-preview.html';return}if(b.dataset.page==='Master Data'){window.location.href='master-data-preview.html';return}if(b.dataset.page==='Audit Trail'){window.location.href='audit-trail-preview.html';return}toast(b.dataset.page+' screen is included in the Admin UI plan.')}));
+updateContinueState();
+window.addEventListener('pageshow',()=>{updateTarget();updateContinueState()});
+const resumeParams=new URLSearchParams(window.location.search);
+if(resumeParams.get('targetModule')&&moduleMap[resumeParams.get('targetModule')]){
+ $('target-module').value=resumeParams.get('targetModule');
+ updateTarget();
+}
+if(resumeParams.get('sourceType')==='google_sheets'&&resumeParams.get('sourceUrl')){
+ setMode('link');
+ $('sheet-url').value=resumeParams.get('sourceUrl');
+ $('readiness-source').textContent='Google Sheets link restored';
+ updateContinueState();
+}else if(resumeParams.get('sourceType')==='xlsx'&&resumeParams.get('sourceName')){
+ $('file-name').textContent='Previously selected: '+resumeParams.get('sourceName')+' · Select the file again to resume.';
+ $('file-name').classList.add('show');
+ $('readiness-source').textContent='Re-select workbook';
+ updateContinueState();
+}
+</script>
+<script src="tfi-import-center-live.js"></script>
+<script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+</body>
+</html>

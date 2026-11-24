@@ -1,0 +1,17 @@
+/* Schedule Summary report view — inherits shared Reports & Reconciliation styling */
+.rr-report-tabs{display:flex;align-items:center;gap:5px;width:max-content;max-width:100%;margin:13px 0 14px;padding:5px;border:1px solid #dfe8e1;border-radius:10px;background:#fff;box-shadow:0 2px 8px rgba(25,55,37,.025);overflow-x:auto}
+.rr-report-tab{min-height:32px;padding:7px 13px;border:1px solid transparent;border-radius:7px;background:transparent;color:#728278;font:inherit;font-size:9px;font-weight:850;white-space:nowrap;cursor:pointer;transition:background .14s,border-color .14s,color .14s}
+.rr-report-tab:hover{background:#f4f8f5;color:#315d47}
+.rr-report-tab.active,.rr-report-tab[aria-current="page"]{border-color:#d4e7da;background:#eaf4ed;color:#075b38}
+.rr-report-tab:focus-visible{outline:3px solid #0b785033;outline-offset:2px}
+.ss-table{min-width:2550px}
+.ss-table thead tr.rr-column-row th{top:0;height:60px}
+.ss-table thead tr.rr-column-row th.rr-trace-head{background:#eaf0f2;color:#4b6570}
+.ss-filter-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+.ss-search-field{grid-column:span 2}
+@media(max-width:1300px){.ss-filter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.ss-search-field{grid-column:span 3}}
+@media(max-width:900px){.ss-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ss-search-field{grid-column:span 2}}
+@media(max-width:620px){.rr-report-tabs{width:100%}.rr-report-tab{flex:1;text-align:center;padding-left:8px;padding-right:8px}.ss-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ss-search-field{grid-column:span 2}}
+
+/* Four report views, including Removed Rows. */
+@media(max-width:620px){.rr-report-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;overflow:visible}.rr-report-tab{min-width:0;flex:none;padding:7px 4px;font-size:8px;line-height:1.2;white-space:normal;text-align:center}}

@@ -1,0 +1,25 @@
+const puppeteer=require("C:/Users/Rominick/AppData/Local/npm-cache/_npx/4b4c857f6efdfb61/node_modules/puppeteer");const path=require("path");const{pathToFileURL}=require("url");const dir="C:/Users/Rominick/Desktop/TFI_NEW/design";
+(async()=>{
+ const b=await puppeteer.launch({headless:true,args:["--no-sandbox","--disable-setuid-sandbox","--allow-file-access-from-files"]});
+ const p=await b.newPage();await p.setViewport({width:1440,height:1000});const errors=[];p.on("pageerror",e=>errors.push(e.message));p.on("console",m=>{if(m.type()==="error")errors.push(m.text())});
+ const base={targetLabel:"DMR Production",sourceWorksheet:"DMR Production",sourceSheetId:"2048043346",sourceName:"Sample workbook",sourceType:"google_sheets",batchId:"UI-TEST"};
+ const inboxUrl=pathToFileURL(path.join(dir,"central-import-inbox-preview.html")).href+"?"+new URLSearchParams(base);
+ await p.goto(inboxUrl,{waitUntil:"load"});
+ const inboxInitial=await p.evaluate(()=>({button:!!document.querySelector("#open-duplicate-review"),module:document.querySelector("#inbox-target-module")?.textContent,reportAndMasterExcluded:!Array.from(document.querySelectorAll("#module-filter option")).some(o=>/Master Data|Reports/i.test(o.textContent))}));
+ await p.click("#open-duplicate-review");await p.waitForFunction(()=>location.pathname.endsWith("duplicate-review-resolution-preview.html"));
+ const duplicateContext=await p.evaluate(()=>({module:document.querySelector("#target-module").textContent,sheet:document.querySelector("#target-sheet").textContent,rows:document.querySelectorAll("#candidate-rows tr").length,steps:document.querySelectorAll(".flow-step").length}));
+ await p.click('[data-review="1"]');await p.click("#choose-duplicate");
+ await p.click("#back-inbox");await p.waitForFunction(()=>location.pathname.endsWith("central-import-inbox-preview.html"));
+ const returnedSummary=await p.evaluate(()=>({visible:!document.querySelector("#duplicate-return-summary").hidden,text:document.querySelector("#duplicate-return-copy").textContent,module:document.querySelector("#inbox-target-module").textContent}));
+ const q=new URLSearchParams({...base,duplicateReviewComplete:"1",confirmedDuplicates:"1",approvedNew:"2",onHold:"0",pending:"0"});
+ await p.goto(pathToFileURL(path.join(dir,"import-confirmation-results-preview.html")).href+"?"+q,{waitUntil:"load"});
+ const approval=await p.evaluate(()=>({summaryVisible:document.querySelector("#duplicate-approval-context").classList.contains("show"),duplicates:document.querySelector("#approval-duplicates").textContent,newRows:document.querySelector("#approval-new").textContent,hold:document.querySelector("#approval-hold").textContent,pending:document.querySelector("#approval-pending").textContent,destination:document.querySelector("#approval-destination").textContent,steps:document.querySelectorAll("#confirm-view .steps .step").length,importDisabled:document.querySelector("#confirm-import").disabled}));
+ await p.screenshot({path:path.join(dir,"duplicate-review-final-approval-desktop.png"),fullPage:true});
+ const mobile=await b.newPage();await mobile.setViewport({width:390,height:844});await mobile.goto(pathToFileURL(path.join(dir,"duplicate-review-resolution-preview.html")).href+"?"+new URLSearchParams(base),{waitUntil:"load"});
+ const mobileLayout=await mobile.evaluate(()=>({viewport:innerWidth,docWidth:document.documentElement.scrollWidth,noOverflow:document.documentElement.scrollWidth<=innerWidth,steps:document.querySelectorAll(".flow-step").length}));
+ await mobile.click('[data-review="2"]');const mobileModal=await mobile.evaluate(()=>({open:document.querySelector("#review-modal").classList.contains("open"),modalWidth:document.querySelector(".review-modal").getBoundingClientRect().width,viewport:innerWidth}));
+ await mobile.screenshot({path:path.join(dir,"duplicate-review-mobile.png"),fullPage:true});
+ const checks={inboxEntry:inboxInitial.button&&inboxInitial.module==="DMR Production"&&inboxInitial.reportAndMasterExcluded,duplicateContext:duplicateContext.module==="DMR Production"&&duplicateContext.sheet==="DMR Production"&&duplicateContext.rows===3&&duplicateContext.steps===5,returnSummary:returnedSummary.visible&&returnedSummary.text.includes("1 confirmed duplicates excluded")&&returnedSummary.module==="DMR Production",approvalSummary:approval.summaryVisible&&approval.duplicates==="1"&&approval.newRows==="2"&&approval.hold==="0"&&approval.pending==="0"&&approval.destination==="DMR Production"&&approval.steps===5&&approval.importDisabled,mobileNoOverflow:mobileLayout.noOverflow&&mobileLayout.steps===5,mobileModalFits:mobileModal.open&&mobileModal.modalWidth<=mobileModal.viewport,noBrowserErrors:errors.length===0};
+ console.log(JSON.stringify({inboxInitial,duplicateContext,returnedSummary,approval,mobileLayout,mobileModal,errors,checks,pass:Object.values(checks).every(Boolean)},null,2));
+ await b.close();if(!Object.values(checks).every(Boolean))process.exitCode=1;
+})().catch(e=>{console.error(e);process.exitCode=1;});

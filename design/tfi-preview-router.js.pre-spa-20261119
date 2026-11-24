@@ -1,0 +1,63 @@
+/* TFI preview navigation: one route map shared by every module preview. */
+(function(){
+  const routes={
+    "dashboard":"dashboard-preview.html",
+    "product entry":"product-entry-preview.html",
+    "production entry":"production-entry-preview.html",
+    "production schedule":"production-schedule-preview.html",
+    "dmp production":"dmp-production-preview.html",
+    "dmr production":"dmr-production-preview.html",
+    "dmr coding":"dmr-coding-preview.html",
+    "hourly meat":"hourly-meat-preview.html",
+    "hourly coding":"hourly-coding-preview.html",
+    "hourly agri":"hourly-agri-preview.html",
+    "oee":"oee-preview.html",
+    "productivity":"productivity-preview.html",
+    "yield monitoring":"yield-monitoring-preview.html",
+    "coding dpr":"coding-dpr-preview.html",
+    "spreadsheet import":"spreadsheet-import-center-preview.html",
+    "import history":"import-history-preview.html",
+    "master data":"master-data-preview.html",
+    "users & access":"users-access-preview.html",
+    "audit trail":"audit-trail-preview.html",
+    "settings":"system-settings-preview.html"
+  };
+  const navScrollKey="tfi-preview-nav-scroll-top";
+
+  function preserveNavigationScroll(){
+    const sidebar=document.querySelector(".sidebar");
+    const nav=sidebar?.querySelector("nav");
+    if(!nav)return;
+    const state={navScrollTop:nav.scrollTop};
+    try{sessionStorage.setItem(navScrollKey,JSON.stringify(state));}catch(_){}
+  }
+
+  function navigate(page){
+    const key=String(page||"").trim().toLowerCase();
+    if(!key)return;
+    preserveNavigationScroll();
+    const sidebarState=document.body.classList.contains("tfi-sidebar-collapsed")?"collapsed":"expanded";
+    const target=routes[key];
+    if(target){window.location.assign(target+"?sidebar="+sidebarState);return;}
+    const params=new URLSearchParams({module:String(page).trim(),sidebar:sidebarState});
+    window.location.assign("module-placeholder-preview.html?"+params.toString());
+  }
+
+  document.addEventListener("click",function(event){
+    const button=event.target.closest(".nav-link[data-page]");
+    if(!button)return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const nav=button.closest("nav");
+    const current=nav?.querySelector(".nav-link.active");
+    if(current===button)return;
+    nav?.querySelectorAll(".nav-link.active").forEach(link=>{
+      link.classList.remove("active");
+      link.removeAttribute("aria-current");
+    });
+    button.classList.add("active");
+    button.setAttribute("aria-current","page");
+    navigate(button.dataset.page);
+  },true);
+  window.TFINavigatePreview=navigate;
+})();

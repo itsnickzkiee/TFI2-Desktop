@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TFI | DMR Coding</title>
+<link rel="stylesheet" href="tfi-shell-base.css">
+<link rel="stylesheet" href="tfi-shell-standard.css">
+<link rel="stylesheet" href="dmr-coding.css">
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+ <div class="brand"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div>
+ <div class="brand-caption">PRODUCTION MANAGEMENT</div>
+ <nav>
+  <div class="nav-group"><div class="nav-label">Overview</div>
+   <button class="nav-link" data-page="Dashboard"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link" data-page="Product Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 20V9l8-5 8 5v11"/><path d="M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="5" width="18" height="16" rx="2"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="5" y="4" width="14" height="16"/></svg><span>DMR Production</span></button>
+   <button class="nav-link active" data-page="DMR Coding" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+   <button class="nav-link" data-page="Yield Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21c4-2 7-6 7-10A7 7 0 0 0 5 11c0 4 3 8 7 10Z"/></svg><span>Yield Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link" data-page="CO QA"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link" data-page="Spreadsheet Import"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24" width="17" height="17"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link" data-page="Reports"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Audit Trail"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link" data-page="Settings"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav>
+ <div class="spacer"></div><div class="user-foot"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div>
+</aside>
+<div class="main">
+ <header class="topbar"><div class="crumb"><span>TFI</span><span>/</span><span>Monitoring</span><span>/</span><b>DMR Coding</b></div><div class="profile"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div></header>
+ <main class="content dmc-content">
+  <section class="dmc-banner">
+    <div><h1>DMR CODING</h1><div class="dmc-subtitle">Downtime monitoring record - coding operations</div></div>
+    <span class="banner-note">DOWNTIME MONITORING &nbsp;|&nbsp; CODING RECORD</span>
+  </section>
+  <section class="dmc-saved-section" aria-label="DMR Coding records">
+    <div class="dmc-saved-heading">
+      <div><span class="dmc-eyebrow">TFI2 OPERATIONAL RECORDS</span><h2>DMR Coding Records</h2><button type="button" id="dmc-new-entry" class="dmc-btn dmc-btn-primary">+ NEW ENTRY</button><p>Partial entries remain unassessed until the business owner approves completeness rules. Exact repeats are skipped without overwriting saved records.</p></div>
+      <button id="dmc-refresh" class="dmc-btn dmc-btn-light" type="button">REFRESH RECORDS</button>
+    </div>
+    <div class="dmc-filters">
+      <label>From<input id="dmc-filter-from" type="date"></label>
+      <label>To<input id="dmc-filter-to" type="date"></label>
+      <label>Product Code<input id="dmc-filter-code" type="text" list="dmc-product-codes" placeholder="All product codes"></label>
+      <label>Line<input id="dmc-filter-line" type="text" list="dmc-lines" placeholder="All lines"></label>
+      <label>Category<select id="dmc-filter-category"><option value="">All categories</option></select></label>
+      <label>Factor<select id="dmc-filter-factor"><option value="">All factors</option></select></label>
+      <button id="dmc-filter-apply" class="dmc-btn dmc-btn-primary" type="button">APPLY FILTERS</button>
+      <button id="dmc-filter-reset" class="dmc-btn dmc-btn-light" type="button">RESET</button>
+    </div>
+    <div id="dmc-saved-status" class="dmc-saved-status" role="status">Connecting to TFI2?</div>
+    
+    <div class="dmc-saved-pagination"><span id="dmc-page-label">Page 1</span><div><button id="dmc-prev" class="dmc-btn dmc-btn-light" type="button" disabled>PREVIOUS</button><button id="dmc-next" class="dmc-btn dmc-btn-light" type="button" disabled>NEXT</button></div></div>
+  </section><section class="dmc-toolbar" hidden>
+    <div class="dmc-toolbar-copy">
+      <span class="dmc-eyebrow">MONITORING</span>
+      <h2>Downtime Coding Entry</h2>
+      <p>Record the production date, product code, line, stop and resume times, downtime category, factor, and reason.</p>
+    </div>
+    <div class="dmc-actions">
+      <button id="dmc-add-rows" class="dmc-btn dmc-btn-light" type="button">ADD 12 ROWS</button>
+      <button type="button" id="dmc-back-live" class="dmc-btn dmc-btn-light">BACK TO RECORDS</button><button id="dmc-reset" class="dmc-btn dmc-btn-light" type="button">CLEAR FORM</button>
+      <button id="dmc-save" class="dmc-btn dmc-btn-primary" type="button">SAVE DMR CODING</button>
+    </div>
+  </section>
+  <section hidden class="dmc-summary" aria-label="Current DMR Coding form summary">
+    <div class="dmc-summary-card"><span class="dmc-summary-label">ENTRY ROWS</span><strong id="dmc-entry-rows">12</strong><small>Blank source-template rows</small></div>
+    <div class="dmc-summary-card"><span class="dmc-summary-label">ROWS WITH DATA</span><strong id="dmc-filled-rows">0</strong><small>Current form only</small></div>
+    <div class="dmc-summary-card"><span class="dmc-summary-label">TOTAL DOWNTIME (MIN)</span><strong id="dmc-total-min">0</strong><small>Calculated from Stop and Resume</small></div>
+    <div class="dmc-summary-card"><span class="dmc-summary-label">TOTAL DOWNTIME (HRS)</span><strong id="dmc-total-hrs">0.0000</strong><small>Calculated duration</small></div>
+  </section>
+  <section class="dmc-table-heading">
+    <div><strong>DMR CODING RECORD</strong><span>Source columns A:K | scroll horizontally to view all fields</span></div>
+    <span class="dmc-empty-tag"><i></i> NO HISTORICAL TRANSACTIONS LOADED</span>
+  </section>
+  <div class="dmc-table-scroll" id="dmc-table-scroll">
+    <table class="dmc-table" id="dmc-table" aria-label="DMR Coding downtime entry table">
+      <colgroup id="dmc-entry-cols">
+        <col style="width:44px"><col style="width:132px"><col style="width:158px"><col style="width:126px">
+        <col style="width:100px"><col style="width:100px"><col style="width:120px"><col style="width:120px">
+        <col style="width:120px"><col style="width:170px"><col style="width:280px"><col style="width:180px">
+      </colgroup>
+      <thead id="dmc-entry-head">
+        <tr class="dmc-group-row">
+          <th class="dmc-rownum" rowspan="2"></th><th colspan="5">DETAILS</th><th colspan="6" class="dmc-group-downtime">DOWNTIME</th>
+        </tr>
+        <tr class="dmc-column-row">
+          <th>Date</th><th>Product Code</th><th>Line</th><th>Stop</th><th>Resume</th>
+          <th>Time in Mins</th><th>Time in Hours</th><th>Category</th><th>Factor</th><th>Reason</th><th>Product Name (auto)</th>
+        </tr>
+      </thead>
+      <thead id="dmc-live-head" hidden><tr><th>#</th><th>Date</th><th>Product Code</th><th>Product Name</th><th>Line</th><th>Stop</th><th>Resume</th><th>Min.</th><th>Hrs.</th><th>Category</th><th>Factor</th><th>Reason</th><th>Code Status</th><th>Completeness</th><th>Actions</th></tr></thead><tbody id="dmc-tbody"></tbody><tbody id="dmc-saved-tbody"><tr><td colspan="14" class="dmc-empty">Loading saved DMR Coding records from TFI2?</td></tr></tbody>
+    </table>
+  </div>
+  <div class="dmc-table-footer">
+    <span id="dmc-table-status">0 of 12 entry rows contain data ? no historical transactions are preloaded</span>
+    <strong>Source mapping preserved ? DMR Coding A:K</strong>
+  </div>
+  <div class="dmc-source-note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7h.01"/></svg>
+    <span>Time in Mins = Time in Hours x 60; Time in Hours = MOD(Resume - Stop, 1) x 24. Product Name (auto) follows Code Map, with "Other" as the source formula fallback. Product Code, Category, and Factor choices use the blank source-template validation ranges. Preview rows map to blank source rows 4775-4786; unmatched Product Codes are preserved as entered and flagged, never replaced.</span>
+  </div>
+  
+
+  <div id="dmc-edit-modal" class="dmc-modal" hidden>
+    <div class="dmc-modal-card" role="dialog" aria-modal="true" aria-labelledby="dmc-edit-title">
+      <div class="dmc-modal-heading"><div><span class="dmc-eyebrow">VERSION-CHECKED UPDATE</span><h2 id="dmc-edit-title">Edit DMR Coding Record</h2></div><button id="dmc-edit-close" type="button" class="dmc-modal-close" aria-label="Close">?</button></div>
+      <form id="dmc-edit-form">
+        <div class="dmc-edit-grid">
+          <label>Date<input id="dmc-edit-date" type="date"></label>
+          <label>Product Code<input id="dmc-edit-code" type="text" list="dmc-product-codes" maxlength="100"></label>
+          <label>Line<input id="dmc-edit-line" type="text" list="dmc-lines" maxlength="80"></label>
+          <label>Stop<input id="dmc-edit-stop" type="time"></label>
+          <label>Resume<input id="dmc-edit-resume" type="time"></label>
+          <label>Category<select id="dmc-edit-category"></select></label>
+          <label>Factor<select id="dmc-edit-factor"></select></label>
+          <label class="wide">Reason<input id="dmc-edit-reason" type="text" maxlength="1000"></label>
+          <label class="wide">Change reason<input id="dmc-edit-change-reason" type="text" maxlength="500" placeholder="Optional explanation for the revision"></label>
+        </div>
+        <div class="dmc-modal-actions"><button id="dmc-edit-cancel" class="dmc-btn dmc-btn-light" type="button">CANCEL</button><button id="dmc-edit-save" class="dmc-btn dmc-btn-primary" type="submit">SAVE CHANGES</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="dmc-history-modal" class="dmc-modal" hidden>
+    <div class="dmc-modal-card" role="dialog" aria-modal="true" aria-labelledby="dmc-history-title">
+      <div class="dmc-modal-heading"><div><span class="dmc-eyebrow">AUDITABLE CHANGE HISTORY</span><h2 id="dmc-history-title">DMR Coding Revision History</h2></div><button id="dmc-history-close" type="button" class="dmc-modal-close" aria-label="Close">?</button></div>
+      <div id="dmc-history-content" class="dmc-history-content">Loading revisions?</div>
+    </div>
+  </div>
+
+  <datalist id="dmc-lines"></datalist>
+  <datalist id="dmc-product-codes"></datalist>
+</main>
+</div>
+</div>
+<div id="dmc-toast" class="dmc-toast" hidden></div>
+<script src="dmr-coding-data.js"></script>
+<script src="dmr-coding-ui.js"></script>
+<script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+<script src="tfi-module-inbox-shortcut.js"></script>
+</body>
+</html>

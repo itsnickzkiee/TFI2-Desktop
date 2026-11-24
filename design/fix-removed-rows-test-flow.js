@@ -1,0 +1,14 @@
+const fs=require("fs");
+const p="C:/Users/Rominick/Desktop/TFI_NEW/design/test-removed-rows-ui.js";
+let s=fs.readFileSync(p,"utf8");
+const start=s.indexOf(' await frame.evaluate(()=>document.querySelector(\'[data-report-page="Reports"]\').click());');
+const end=s.indexOf(' const finalActive=',start);
+if(start<0||end<0)throw new Error("Temporary Reports detour not found");
+const replacement=' await frame.evaluate(()=>document.querySelector(\'[data-report-page="Removed Rows"]\').click());\n frame=await active("removed-rows-preview.html");\n await frame.waitForFunction(()=>document.body.dataset.tfiReady==="true");\n';
+s=s.slice(0,start)+replacement+s.slice(end);
+const marker=' const result={base,modal:';
+const add=' const reportsPage=await browser.newPage({viewport:{width:1440,height:1000}});\n await reportsPage.goto(pathToFileURL(path.join(dir,"dashboard-preview.html")).href+"?module=Reports",{waitUntil:"load"});\n await reportsPage.waitForFunction(()=>{const x=document.querySelector(".tfi-module-frame.is-active");return !!x&&(x.getAttribute("src")||"").includes("reports-reconciliation-preview.html")},{timeout:12000});\n const reportsFrame=await (await reportsPage.$(".tfi-module-frame.is-active")).contentFrame();\n await reportsFrame.waitForFunction(()=>document.body.dataset.tfiReady==="true");\n const productionTabs=await reportsFrame.$$eval("[data-report-page]",xs=>xs.length);\n await reportsPage.close();\n';
+if(!s.includes(marker))throw new Error("Result marker not found");
+s=s.replace(marker,add+marker);
+fs.writeFileSync(p,s,"utf8");
+console.log("Test now checks Production Summary tab count in a separate fresh module load.");

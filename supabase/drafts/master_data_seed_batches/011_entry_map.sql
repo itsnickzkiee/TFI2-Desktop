@@ -1,0 +1,11 @@
+insert into public.tfi_master_data_rows (category_key,source_row_number,row_kind,source_values,current_values,source_notes,source_fingerprint,row_editable)
+values
+('entry_map',36,'data','["Nata de Coco","BLK_35","NATA DE COCO","34141","1004"]'::jsonb,'["Nata de Coco","BLK_35","NATA DE COCO","34141","1004"]'::jsonb,'[]'::jsonb,'34a9257fffc5d7c319961adf48dd3ea9b5da63f5673b782f053739114fc9487b',false),
+('entry_map',37,'data','["Mayon Kaong","BLK_36","Mayon Kaong","35145","1004"]'::jsonb,'["Mayon Kaong","BLK_36","Mayon Kaong","35145","1004"]'::jsonb,'[]'::jsonb,'ab2b89c02e11e41e9cb40e66c39efe1e3c25158995c5763214cdeceb9a0693d6',false),
+('entry_map',38,'data','["Maharlika RB","BLK_37","Maharlika Roast Beef","36149","1004"]'::jsonb,'["Maharlika RB","BLK_37","Maharlika Roast Beef","36149","1004"]'::jsonb,'[]'::jsonb,'82dd67c2b60ed0104af7ff2024d5df02d768c990600e8aac35ec3fda0aa90c57',false),
+('entry_map',39,'data','["Maharlika LM","BLK_38","Maharlika Luncheon Meat","37153","1004"]'::jsonb,'["Maharlika LM","BLK_38","Maharlika Luncheon Meat","37153","1004"]'::jsonb,'[]'::jsonb,'0a0001000cf1002306fcc8445c4b8499e232427d55da9061d88416528c484a11',false),
+('entry_map',40,'data','["Mayon Laing","BLK_39","Mayon Laing in Coconut Milk","38157","1004"]'::jsonb,'["Mayon Laing","BLK_39","Mayon Laing in Coconut Milk","38157","1004"]'::jsonb,'[]'::jsonb,'78e7330148d2177ee836051c4dcb84b33c7db396984c9fe21fd7f0e57362089f',false),
+('entry_map',41,'blank','[null,null,null,null,null]'::jsonb,'[null,null,null,null,null]'::jsonb,'[]'::jsonb,'f43e19a609a97372c3b8d7a7cb10420c47e9388b9db2b144b7e274d29f39e234',false),
+('entry_map',42,'blank','[null,null,null,null,null]'::jsonb,'[null,null,null,null,null]'::jsonb,'[]'::jsonb,'f43e19a609a97372c3b8d7a7cb10420c47e9388b9db2b144b7e274d29f39e234',false),
+('entry_map',43,'instruction','["Huwag palitan ang Column A/B. Para magdagdag ng bagong product: dagdagan ng row dito at gumawa ng named range na BLK_xx.",null,null,null,null]'::jsonb,'["Huwag palitan ang Column A/B. Para magdagdag ng bagong product: dagdagan ng row dito at gumawa ng named range na BLK_xx.",null,null,null,null]'::jsonb,'[]'::jsonb,'94017737ac9ab0cd3e321cb0c85c4c9a7c73e0be5c7bad5704dce3996722e3c1',false)
+on conflict (category_key,source_row_number) do nothing;

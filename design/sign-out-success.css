@@ -1,0 +1,155 @@
+:root{
+  --green:#086333;
+  --green-dark:#064b29;
+  --green-deep:#043d23;
+  --red:#ed1c24;
+  --ink:#17251d;
+  --muted:#758279;
+  --line:#e4ebe6;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0}
+body{
+  min-height:100vh;min-height:100svh;overflow:hidden;
+  color:var(--ink);background:#f4f7f5;
+  font-family:"Segoe UI",Inter,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.signout-background{
+  position:fixed;inset:0;overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,#0b6338 0%,#064b29 52%,#04351f 100%);
+}
+.background-grid{
+  position:absolute;inset:0;opacity:.12;
+  background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);
+  background-size:46px 46px;
+  mask-image:linear-gradient(to bottom,transparent,#000 30%,#000 80%,transparent);
+}
+.background-orbit{
+  position:absolute;border:1px solid rgba(255,255,255,.12);
+  border-radius:50%;pointer-events:none;
+}
+.orbit-one{width:700px;height:700px;top:-300px;right:-170px;box-shadow:0 0 0 55px rgba(255,255,255,.025),0 0 0 110px rgba(255,255,255,.018)}
+.orbit-two{width:420px;height:420px;bottom:-260px;left:-140px;background:rgba(255,255,255,.025)}
+.signout-stage{
+  position:relative;z-index:1;min-height:100vh;min-height:100svh;
+  display:grid;place-items:center;padding:28px 18px;overflow-y:auto;
+}
+.signout-card{
+  width:min(100%,540px);padding:34px 38px 25px;
+  border:1px solid rgba(255,255,255,.75);border-radius:21px;
+  background:#fff;box-shadow:0 28px 90px rgba(0,0,0,.28);
+}
+.signout-brand{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:29px}
+.brand-logo{
+  width:174px;min-height:57px;padding:8px 12px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid #edf1ed;border-radius:11px;background:#fff;
+}
+.brand-logo img{display:block;width:100%;max-width:148px;height:auto;object-fit:contain}
+.preview-chip{
+  display:inline-flex;align-items:center;gap:7px;padding:7px 10px;
+  border:1px solid #f1d9d9;border-radius:30px;color:#a33c40;
+  background:#fff8f8;font-size:9px;font-weight:850;letter-spacing:1px;white-space:nowrap;
+}
+.preview-chip span{width:6px;height:6px;border-radius:50%;background:var(--red)}
+.success-icon{
+  width:64px;height:64px;margin:0 auto 19px;
+  display:grid;place-items:center;border-radius:19px;
+  color:var(--green);background:#edf7f0;box-shadow:inset 0 0 0 1px #d6e9dc;
+}
+.success-icon svg{
+  width:38px;height:38px;fill:none;stroke:currentColor;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+.signout-eyebrow{
+  margin:0 0 10px;color:var(--green);text-align:center;
+  font-size:10px;font-weight:850;letter-spacing:1.8px;
+}
+.signout-card h1{
+  max-width:440px;margin:0 auto;color:#17251d;text-align:center;
+  font-size:clamp(28px,4vw,35px);font-weight:790;
+  letter-spacing:-1.15px;line-height:1.16;
+}
+.signout-description{
+  max-width:430px;margin:13px auto 22px;
+  color:#748178;text-align:center;font-size:13px;line-height:1.7;
+}
+.signedout-status{
+  min-height:49px;padding:0 15px;display:flex;align-items:center;gap:10px;
+  border:1px solid #dcebe0;border-radius:11px;
+  color:#6e8174;background:#f6fbf7;
+  font-size:9px;font-weight:850;letter-spacing:1.1px;
+}
+.status-dot{
+  width:8px;height:8px;flex:none;border-radius:50%;
+  background:#16834b;box-shadow:0 0 0 4px rgba(22,131,75,.09);
+}
+.signedout-status strong{
+  margin-left:auto;color:#16834b;font-size:11px;letter-spacing:.2px;
+}
+.redirect-panel{
+  margin-top:16px;padding:14px 15px 13px;
+  border:1px solid #e4ebe6;border-radius:11px;background:#fafcfb;
+}
+.redirect-copy{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
+.redirect-label{color:#718077;font-size:9px;font-weight:850;letter-spacing:1.2px}
+.redirect-copy strong{color:#315b3e;font-size:21px;font-weight:800;font-variant-numeric:tabular-nums}
+.redirect-copy small{color:#829087;font-size:10px;font-weight:600}
+.redirect-track{height:5px;overflow:hidden;border-radius:20px;background:#e5ede7}
+.redirect-track span{
+  display:block;width:0;height:100%;border-radius:inherit;
+  background:linear-gradient(90deg,#0b7a43,#2c9b60);
+  transition:width .25s linear;
+}
+.return-button{
+  min-height:51px;margin-top:17px;padding:0 18px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  border:1px solid var(--green);border-radius:10px;
+  color:#fff;text-decoration:none;
+  background:linear-gradient(100deg,#086333,#07552d);
+  box-shadow:0 7px 17px rgba(8,99,51,.15);
+  font-size:12px;font-weight:850;
+  transition:background .15s ease,box-shadow .15s ease;
+}
+.return-button:hover{background:#07542d;box-shadow:0 9px 20px rgba(8,99,51,.2)}
+.return-button svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.return-button:focus-visible{outline:3px solid rgba(8,99,51,.25);outline-offset:3px}
+.preview-disclaimer{
+  display:flex;align-items:flex-start;gap:10px;margin-top:19px;padding:12px 13px;
+  border:1px solid #eee7d7;border-radius:10px;color:#786b50;
+  background:#fffaf0;font-size:10px;line-height:1.6;
+}
+.preview-disclaimer svg{
+  width:16px;height:16px;flex:none;margin-top:1px;
+  fill:none;stroke:#a47724;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+.preview-disclaimer strong{color:#66532e}
+.signout-footer{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-top:19px;padding-top:15px;border-top:1px solid #edf1ed;
+  color:#9aa49d;font-size:8px;font-weight:800;letter-spacing:1px;
+}
+.signout-footer span:last-child{text-align:right}
+@media(max-width:560px){
+  .signout-stage{padding:15px 13px}
+  .signout-card{padding:25px 21px 19px;border-radius:17px}
+  .signout-brand{margin-bottom:24px}
+  .brand-logo{width:148px;min-height:51px;padding:7px 9px}
+  .brand-logo img{max-width:126px}
+  .success-icon{width:56px;height:56px;margin-bottom:16px}
+  .success-icon svg{width:33px;height:33px}
+  .signout-card h1{font-size:29px;letter-spacing:-.85px}
+  .signout-description{font-size:12px;margin:11px auto 19px}
+  .preview-disclaimer{margin-top:16px}
+}
+@media(max-width:360px){
+  .signout-stage{padding:10px}
+  .signout-card{padding:21px 16px 17px}
+  .preview-chip{padding:6px 8px;font-size:8px}
+  .brand-logo{width:135px;min-height:47px}
+  .signout-card h1{font-size:26px}
+  .signout-footer{font-size:7px;letter-spacing:.7px}
+}
+@media(max-height:700px){.signout-stage{align-items:start}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}

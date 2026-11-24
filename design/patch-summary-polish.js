@@ -1,0 +1,11 @@
+const fs=require("fs");
+const dir="C:/Users/Rominick/Desktop/TFI_NEW/design";
+const css=dir+"/reports-reconciliation.css";
+fs.appendFileSync(css,"\n/* Three report views remain visible on narrow screens. */\n@media(max-width:620px){.rr-report-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;overflow:visible}.rr-report-tab{min-width:0;flex:none;padding:7px 4px;font-size:8px;white-space:normal;line-height:1.2}}\n","utf8");
+const test=dir+"/test-summary-and-link-import.js";
+let s=fs.readFileSync(test,"utf8");
+const marker=' const finalActive=await page.evaluate';
+if(!s.includes(marker)) throw new Error("Final active check not found.");
+s=s.replace(marker,' await page.waitForFunction(()=>{const f=document.querySelector(".tfi-module-frame.is-active");return !!f&&f.dataset.loadedModule==="Summary"&&(f.getAttribute("src")||"").includes("summary-preview.html")},{timeout:10000});\n const finalActive=await page.evaluate');
+fs.writeFileSync(test,s,"utf8");
+console.log("Applied mobile report-tab fit and test navigation wait.");

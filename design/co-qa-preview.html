@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TFI | CO QA</title>
+<link rel="stylesheet" href="tfi-shell-base.css">
+<link rel="stylesheet" href="tfi-shell-standard.css">
+<link rel="stylesheet" href="co-qa.css">
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+ <div class="brand"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div>
+ <div class="brand-caption">PRODUCTION MANAGEMENT</div>
+ <nav>
+  <div class="nav-group"><div class="nav-label">Overview</div>
+   <button class="nav-link" data-page="Dashboard"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link" data-page="Product Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 20V9l8-5 8 5v11"/><path d="M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="5" width="18" height="16" rx="2"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="5" y="4" width="14" height="16"/></svg><span>DMR Production</span></button>
+   <button class="nav-link" data-page="DMR Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+   <button class="nav-link" data-page="Yield Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21c4-2 7-6 7-10A7 7 0 0 0 5 11c0 4 3 8 7 10Z"/></svg><span>Yield Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link active" data-page="CO QA" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link" data-page="Spreadsheet Import"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24" width="17" height="17"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link" data-page="Reports"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Audit Trail"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link" data-page="Settings"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav>
+ <div class="spacer"></div><div class="user-foot"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div>
+</aside>
+<div class="main">
+ <header class="topbar"><div class="crumb"><span>TFI</span><span>/</span><span>Quality &amp; Control</span><span>/</span><b>CO QA</b></div><div class="profile"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div></header>
+ <main class="content qa-content">
+  <section class="qa-banner">
+   <div><h1>CO QA</h1><p>Quality assurance monitoring ? finished goods, samples, lids, cans and packaging materials</p></div>
+   <span class="qa-banner-note">QUALITY &amp; CONTROL &nbsp;|&nbsp; RECORD-LINKED COSTS</span>
+  </section>
+  <section class="qa-toolbar">
+   <div class="qa-toolbar-copy">
+    <span class="qa-eyebrow">QUALITY &amp; CONTROL</span>
+    <h2>Quality Assurance Record Monitor</h2>
+    <p>QA observations stay linked to Product Entry. Maintain the six source unit-cost fields against each Product Entry record, with version history and audit tracking.</p>
+   </div>
+   <button class="qa-action" id="qa-open-product-entry" type="button">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3h7v7M10 14 21 3"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg>
+    OPEN PRODUCT ENTRY
+   </button>
+  </section>
+  <section class="qa-source-strip" aria-label="CO QA source structure">
+   <div class="qa-source-stat"><span>QA DATA ORIGIN</span><strong>Product Entry</strong><small>Record-linked QA source fields A:X</small></div>
+   <div class="qa-source-stat"><span>PRODUCT BLOCKS</span><strong id="qa-block-count">31</strong><small>Blocks included in original CO QA formula</small></div>
+   <div class="qa-source-stat"><span>UNIT COST INPUTS</span><strong>6 fields · Y:AD</strong><small>Saved per Product Entry record UUID</small></div>
+   <div class="qa-source-stat"><span>COST HISTORY</span><strong>Versioned</strong><small>Changes recorded in the audit trail</small></div>
+  </section>
+  <section class="qa-filter-bar" aria-label="CO QA filters">
+   <label>Product block<select id="qa-block-filter"><option value="">All Product Entry blocks</option></select></label>
+   <label>Date from<input id="qa-date-from" type="date"></label>
+   <label>Date to<input id="qa-date-to" type="date"></label>
+   <label class="qa-search-label">Search<input id="qa-search" type="search" placeholder="Product code or PR number"></label>
+   <span id="qa-connection-status" class="qa-connection-status">Connecting to TFI2…</span>
+  </section>
+  <section class="qa-section-head">
+   <div><strong>PRODUCT ENTRY QA RECORDS</strong><span>Unit costs are attached to each stable Product Entry record ID</span></div>
+   <span class="qa-readonly">QA OBSERVATIONS · SOURCE-DERIVED</span>
+  </section>
+  <div class="qa-table-scroll" id="qa-table-scroll">
+   <table class="qa-table" id="qa-table" aria-label="CO QA Product Entry records and unit costs">
+    <thead><tr>
+     <th>Date</th><th>Product</th><th>Product block</th><th>Can size</th><th>PR No</th><th>Batches</th>
+     <th>QA fields captured</th><th>Y · Labels</th><th>Z · Box</th><th>AA · Can</th>
+     <th>AB · Lids/Cover</th><th>AC · Labels</th><th>AD · Box</th><th>AE · Total cans</th><th>AF · Cost of cans</th><th>AG · Total lids</th><th>AH · Cost of lids</th><th>Version</th><th>Actions</th>
+    </tr></thead>
+    <tbody id="qa-tbody">
+     <tr><td colspan="19" class="qa-empty-cell"><div class="qa-empty-state"><div class="qa-empty-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg></div><strong id="qa-empty-message">Loading Product Entry records…</strong><span id="qa-empty-detail">CO QA will display Product Entry records and their linked unit costs.</span></div></td></tr>
+    </tbody>
+   </table>
+  </div>
+  <div class="qa-table-footer"><span id="qa-table-status">Loading CO QA records…</span><strong>Y:AD saved by Product Entry record UUID</strong></div>
+  <div class="qa-load-more-wrap" id="qa-load-more-wrap" hidden><button type="button" class="qa-load-more" id="qa-load-more">Load more records</button></div>
+
+  <div class="qa-modal" id="qa-details-modal" hidden>
+   <div class="qa-modal-backdrop" data-close-details-modal></div>
+   <section class="qa-modal-panel qa-details-panel" role="dialog" aria-modal="true" aria-labelledby="qa-details-title">
+    <header><div><span class="qa-eyebrow">CO QA · SOURCE PROJECTION</span><h2 id="qa-details-title">QA observations</h2></div><button type="button" class="qa-modal-close" data-close-details-modal aria-label="Close">×</button></header>
+    <p class="qa-modal-record" id="qa-details-record-label"></p>
+    <div id="qa-details-list" class="qa-details-grid"></div>
+   </section>
+  </div>
+
+  <div class="qa-modal" id="qa-cost-modal" hidden>
+   <div class="qa-modal-backdrop" data-close-cost-modal></div>
+   <section class="qa-modal-panel" role="dialog" aria-modal="true" aria-labelledby="qa-cost-title">
+    <header><div><span class="qa-eyebrow">CO QA · PACKAGING COSTS</span><h2 id="qa-cost-title">Edit unit costs</h2></div><button type="button" class="qa-modal-close" data-close-cost-modal aria-label="Close">×</button></header>
+    <p class="qa-modal-record" id="qa-cost-record-label"></p>
+    <form id="qa-cost-form">
+     <div class="qa-cost-grid">
+      <label>Y · Labels (cost per piece)<input id="qa-cost-y" type="number" min="0" max="99999999.999999" step="0.000001"></label>
+      <label>Z · Box (cost per piece)<input id="qa-cost-z" type="number" min="0" max="99999999.999999" step="0.000001"></label>
+      <label>AA · Can (cost per piece)<input id="qa-cost-aa" type="number" min="0" max="99999999.999999" step="0.000001"></label>
+      <label>AB · Lids/Cover (cost per piece)<input id="qa-cost-ab" type="number" min="0" max="99999999.999999" step="0.000001"></label>
+      <label>AC · Labels (cost per piece)<input id="qa-cost-ac" type="number" min="0" max="99999999.999999" step="0.000001"></label>
+      <label>AD · Box (cost per piece)<input id="qa-cost-ad" type="number" min="0" max="99999999.999999" step="0.000001"></label>
+     </div>
+     <label class="qa-reason-label">Change reason (optional)<input id="qa-change-reason" type="text" maxlength="500" placeholder="Why are these costs being updated?"></label>
+     <div class="qa-modal-actions"><button type="button" class="qa-secondary" data-close-cost-modal>Cancel</button><button type="submit" class="qa-action" id="qa-cost-save">Save unit costs</button></div>
+    </form>
+   </section>
+  </div>
+
+  <div class="qa-modal" id="qa-history-modal" hidden>
+   <div class="qa-modal-backdrop" data-close-history-modal></div>
+   <section class="qa-modal-panel qa-history-panel" role="dialog" aria-modal="true" aria-labelledby="qa-history-title">
+    <header><div><span class="qa-eyebrow">CO QA · AUDIT HISTORY</span><h2 id="qa-history-title">Unit cost revisions</h2></div><button type="button" class="qa-modal-close" data-close-history-modal aria-label="Close">×</button></header>
+    <p class="qa-modal-record" id="qa-history-record-label"></p>
+    <div id="qa-history-list" class="qa-history-list"></div>
+   </section>
+  </div>
+  <div id="qa-toast" class="qa-toast" role="status" aria-live="polite" hidden></div>
+  <section class="qa-source-map-wrap">
+   <div class="qa-source-map-title"><strong>SOURCE FIELD BEHAVIOR</strong><span>Verified against the original co QA worksheet</span></div>
+   <div class="qa-source-map" id="qa-source-map"></div>
+  </section>
+  <div class="qa-source-note">
+   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7h.01"/></svg>
+   <span>A:X remains sourced from Product Entry. Y:AD are saved as six separate unit-cost inputs linked by Product Entry record UUID, never by a sorted worksheet row. AE:AH are preserved as source formula definitions but are not recalculated in this view until their full QA source-field mapping is approved. AI:AL remain unresolved because the source contains labels but no formulas. No historical workbook rows are imported by this screen.</span>
+  </div>
+ </main>
+</div>
+</div>
+</div>
+<script src="co-qa-data.js"></script>
+<script src="co-qa-ui.js"></script>
+<script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+<script src="tfi-module-inbox-shortcut.js"></script>
+</body>
+</html>

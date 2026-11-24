@@ -1,0 +1,35 @@
+const puppeteer=require("C:/Users/Rominick/AppData/Local/npm-cache/_npx/4b4c857f6efdfb61/node_modules/puppeteer");
+const path=require("path");const{pathToFileURL}=require("url");const dir="C:/Users/Rominick/Desktop/TFI_NEW/design";
+(async()=>{
+ const browser=await puppeteer.launch({headless:true,args:["--no-sandbox","--disable-setuid-sandbox","--allow-file-access-from-files"]});
+ const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];
+ page.on("pageerror",e=>errors.push(e.message));page.on("console",m=>{if(m.type()==="error")errors.push(m.text())});
+ await page.goto(pathToFileURL(path.join(dir,"dashboard-preview.html")).href+"?module=Audit%20Trail",{waitUntil:"load"});
+ await page.waitForFunction(()=>{const f=document.querySelector(".tfi-module-frame.is-active");return f&&f.dataset.loadedModule==="Audit Trail"&&(f.src||"").includes("audit-trail-preview.html")},{timeout:12000});
+ const frame=page.frames().find(f=>f.url().includes("audit-trail-preview.html"));
+ const injected=await frame.evaluate(()=>{
+  const now=new Date();
+  events.push({id:"AT-TEST-001",kind:"data",iso:now.toISOString(),time:now.toLocaleTimeString("en-US"),date:now.toLocaleDateString("en-US"),user:"Audit Test User",role:"Administrator",initials:"AT",action:"Updated record",description:"Temporary browser-only test event",module:"Product Entry",record:"PE-TEST-01",summary:"Changed quantity from 10 to 12",source:"Acceptance test",before:"10",after:"12"});
+  renderAudit();
+  return {count:document.querySelector("#audit-count").textContent.trim(),exportDisabled:document.querySelector("#export-audit").disabled,optionCount:document.querySelector("#module-filter").options.length,masterDataOption:[...document.querySelector("#module-filter").options].some(x=>x.value==="Master Data")};
+ });
+ await frame.$eval("#event-search",e=>{e.value="Audit Test";e.dispatchEvent(new Event("input",{bubbles:true}))});
+ await frame.$eval("#global-search",e=>{e.value="Product Entry";e.dispatchEvent(new Event("input",{bubbles:true}))});
+ const multiSearch=await frame.$eval("#audit-count",e=>e.textContent.trim());
+ await frame.select("#module-filter","Product Entry");await frame.select("#date-filter","today");
+ const filtered=await frame.$eval("#audit-count",e=>e.textContent.trim());
+ await frame.click('[data-event="AT-TEST-001"]');
+ const modal=await frame.evaluate(()=>({open:document.querySelector("#event-modal").classList.contains("open"),title:document.querySelector("#event-modal-title").textContent,readOnly:document.querySelector(".detail-banner").innerText.includes("Read-only record"),fields:document.querySelectorAll(".detail-field").length,change:document.querySelector("#event-change-box").innerText,hasEditControls:[...document.querySelectorAll("#event-modal button")].some(x=>/edit|delete|save/i.test(x.textContent))}));
+ await page.keyboard.press("Escape");
+ const modalClosed=await frame.$eval("#event-modal",e=>!e.classList.contains("open"));
+ await frame.$eval("#audit-tab-all",e=>e.focus());await page.keyboard.press("ArrowRight");
+ const tabKeyboard=await frame.evaluate(()=>{const f=document.querySelector(".tfi-module-frame.is-active");return true});
+ const tabState=await frame.evaluate(()=>true);
+ const selectedTab=await frame.$eval(".audit-tab.active",e=>({kind:e.dataset.kind,role:e.getAttribute("role"),selected:e.getAttribute("aria-selected"),tabIndex:e.tabIndex}));
+ const cleanup=await frame.evaluate(()=>{events.splice(0,events.length);renderAudit();return {empty:document.querySelector("#audit-count").textContent.trim(),exportDisabled:document.querySelector("#export-audit").disabled,rows:document.querySelectorAll("#audit-rows tr").length}});
+ await page.setViewport({width:390,height:844});
+ const mobile=await frame.evaluate(()=>({width:document.documentElement.clientWidth,pageWidth:document.documentElement.scrollWidth,noOverflow:document.documentElement.scrollWidth<=document.documentElement.clientWidth,tableScroll:document.querySelector(".audit-table-wrap").scrollWidth>document.querySelector(".audit-table-wrap").clientWidth}));
+ const result={injected,multiSearch,filtered,modal,modalClosed,tabKeyboard,tabState,selectedTab,cleanup,mobile,browserErrors:errors};
+ result.pass=injected.count==="Showing 1 of 1 events"&&!injected.exportDisabled&&injected.masterDataOption&&multiSearch==="Showing 1 of 1 events"&&filtered==="Showing 1 of 1 events"&&modal.open&&modal.readOnly&&modal.fields===8&&!modal.hasEditControls&&modalClosed&&selectedTab.kind==="data"&&selectedTab.role==="tab"&&selectedTab.selected==="true"&&cleanup.empty==="No audit events available"&&cleanup.exportDisabled&&cleanup.rows===1&&mobile.noOverflow&&mobile.tableScroll&&errors.length===0;
+ console.log(JSON.stringify(result,null,2));await browser.close();if(!result.pass)process.exitCode=1;
+})().catch(e=>{console.error(e);process.exitCode=1;});

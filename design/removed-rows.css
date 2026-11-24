@@ -1,0 +1,29 @@
+/* Removed Rows archive view — inherits shared Reports & Reconciliation shell */
+.rm-table{min-width:2450px;table-layout:fixed}
+.rm-table thead tr.rr-column-row th{top:0;height:64px;padding:6px 5px}
+.rm-table thead tr.rr-column-row th.rr-trace-head{background:#eaf0f2;color:#4b6570}
+.rm-table thead tr.rr-column-row th button{min-height:48px}
+.rm-table tbody td{height:42px}
+.rm-table tbody td.rm-reason{white-space:normal;min-width:260px;line-height:1.4;color:#765a2e}
+.rm-table tbody td.rm-old-code{font-weight:800;color:#284e43;letter-spacing:.1px}
+.rm-table tbody td.rr-trace{background:#f2f6f7;color:#627a82}
+.rm-filter-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+.rm-search-field{grid-column:span 1}
+.rm-table-scroll{max-height:650px}
+.rm-content .rr-kpi-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.rm-content .rr-kpi-value{color:#476a56}
+.rm-content .rr-hero{border-color:#dce8df}
+.rm-content .rr-source-meta{row-gap:10px}
+.rm-content .rr-table-state i{background:#b99b62}
+.rm-content .rr-source-note{border-color:#eadfc8;background:#fffdf8}
+.rm-content .rr-note-icon{background:#f5edda;color:#8a6a2e}
+@media(max-width:1300px){.rm-filter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.rm-search-field{grid-column:span 3}}
+@media(max-width:900px){.rm-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.rm-search-field{grid-column:span 2}.rm-content .rr-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){
+  .rr-report-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;overflow:visible}
+  .rr-report-tab{min-width:0;flex:none;padding:7px 4px;font-size:8px;line-height:1.2;white-space:normal;text-align:center}
+  .rm-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rm-search-field{grid-column:span 2}
+  .rm-table-scroll{max-height:560px}
+  .rm-content .rr-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

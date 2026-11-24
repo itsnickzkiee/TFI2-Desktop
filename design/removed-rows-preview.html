@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TFI | Removed Rows</title>
+<link rel="stylesheet" href="tfi-shell-standard.css">
+<link rel="stylesheet" href="reports-reconciliation.css">
+<link rel="stylesheet" href="removed-rows.css">
+<style>
+:root{--green:#086333;--deep:#064b29;--teal:#0b3c45;--teal2:#0f8585;--mint:#d9f2ed;--yellow:#ffc000;--line:#d3dfd8;--canvas:#f4f7f5;--ink:#17251d;--muted:#78857d}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Segoe UI",Inter,Arial,sans-serif;color:var(--ink);background:var(--canvas);font-size:13px}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.shell{min-height:100vh;display:flex}
+.sidebar{background:linear-gradient(180deg,var(--green),var(--deep));color:#fff;display:flex;flex-direction:column}
+.brand{background:#fff;border-radius:14px}
+.brand img{width:100%;max-width:208px;max-height:60px;object-fit:contain}
+.brand-caption{color:#ffffffb8;font-size:9px;font-weight:800;letter-spacing:1.65px;text-align:center}
+.nav-group{margin:0 0 18px}
+.nav-label{font-size:9px;text-transform:uppercase;font-weight:800;color:#ffffff85}
+.nav-link{width:100%;display:flex;align-items:center;border:0;background:transparent;color:#ffffffd1;text-align:left}
+.nav-link svg{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-link:hover{background:#ffffff1a}
+.nav-link.active{background:#fff;color:var(--green)}
+.spacer{flex:1;min-height:12px}
+.avatar{width:34px;height:34px;border-radius:50%;background:#e5f0e8;color:var(--green);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 34px}
+.user-foot{border-top:1px solid #ffffff26;display:flex;align-items:center}
+.user-foot strong{display:block;font-size:12px}
+.user-foot small{display:block;font-size:10px;color:#ffffffa3;margin-top:3px}
+.main{min-width:0;flex:1;display:flex;flex-direction:column}
+.topbar{background:#fff;border-bottom:1px solid #e5ece7;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}
+.crumb{display:flex;align-items:center;gap:9px;color:#89958d;font-size:12px;font-weight:600}
+.crumb b{color:#314239}
+.profile{display:flex;align-items:center;gap:9px}
+.profile strong{display:block;font-size:12px}
+.profile small{display:block;font-size:10px;color:#758279;margin-top:2px}
+.content{width:100%;max-width:1700px;margin:0 auto;padding:18px 22px 28px;min-width:0}
+.entry-banner{min-height:50px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 16px;border-bottom:1px solid #e6c000;border-radius:11px 11px 0 0}
+.entry-banner h1{font-size:22px;letter-spacing:-.45px;margin:0;font-weight:850}
+.entry-banner .banner-note{font-size:10px;font-style:italic;color:#a0e3d9;white-space:nowrap}
+.control-strip{display:grid;grid-template-columns:110px 210px minmax(180px,1fr) auto;align-items:stretch;background:var(--teal);min-height:45px;border-bottom:1px solid #e6c000}
+.control-label{display:flex;align-items:center;padding:0 12px;color:var(--yellow);font-size:11px;font-weight:850;letter-spacing:.25px}
+.date-input{width:100%;min-width:0;border:1px solid #e2b100;border-radius:0;background:var(--yellow);color:var(--teal);font-weight:800;font-size:14px;text-align:center;padding:0 10px;outline:0}
+.date-input:focus{box-shadow:inset 0 0 0 2px #fff4be}
+.report-title{display:flex;align-items:center;padding:0 15px;color:#fff;font-weight:800;font-size:12px;min-width:0}
+.report-actions{display:flex;align-items:center;gap:8px;padding:6px 10px}
+.action-btn{border:1px solid #ffffff45;border-radius:7px;padding:8px 12px;font-size:10px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
+.action-btn.save{background:#ffc000;color:#153b3b;border-color:#ffc000}
+.action-btn.reset{background:#ffffff12;color:#fff}
+.action-btn:hover{filter:brightness(1.05)}
+.snapshot-note{display:flex;align-items:center;justify-content:flex-end;padding:5px 11px;background:#f7faf8;border-left:1px solid var(--line);border-right:1px solid var(--line);color:#87938b;font-size:9px;letter-spacing:.2px}
+.summary-strip{display:grid;grid-template-columns:repeat(5,minmax(125px,1fr));background:var(--mint);border:1px solid #b9ddd4;border-top:0;border-bottom:3px solid #e6c000}
+.summary-item{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:56px;padding:8px 14px;border-right:1px solid #b9ddd4}
+.summary-item:last-child{border-right:0}
+.summary-label{font-size:9px;font-weight:850;letter-spacing:.55px;color:#285d5c}
+.summary-value{font-size:16px;font-weight:850;color:#073d47;font-variant-numeric:tabular-nums}
+.summary-value.small{font-size:14px}
+.report-band{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#e9f2ee;border:1px solid #d3dfd8;border-top:0;padding:8px 12px;color:#315c56}
+.report-band strong{font-size:10px;letter-spacing:.7px}
+.report-band span{font-size:9px;color:#71827a}
+.table-scroll{width:100%;overflow-x:auto!important;overflow-y:clip!important;background:#fff;border:1px solid #c7d0cd;border-top:0;border-radius:0 0 9px 9px;box-shadow:0 10px 24px rgba(25,55,37,.075);scrollbar-width:thin;scrollbar-color:#aebdb4 #eef2ef}
+.entry-table{border-collapse:separate;border-spacing:0;table-layout:fixed;width:max-content;min-width:100%;font-size:10px}
+.entry-table th,.entry-table td{border-right:1px solid #202b2a;border-bottom:1px solid #202b2a;padding:0;overflow:hidden}
+.entry-table thead th{white-space:normal;text-align:center;font-weight:800;line-height:1.15}
+.group-row th{height:32px;color:#fff;font-size:10px;padding:4px 7px;background:var(--teal)}
+.group-row th.teal{background:var(--teal2)}
+.group-row th.rownum{background:#e7eeea;color:#65746c}
+.column-row th{height:48px;background:var(--mint);color:#003e49;font-size:9px;padding:5px 5px;border-bottom:2px solid #70aaa1}
+.column-row th.rownum{background:#e7eeea;color:#65746c}
+.entry-table th.rownum{width:42px;min-width:42px;max-width:42px;position:sticky;left:0;z-index:12;background:#f3f5f4;color:#61716a;font-size:9px;font-weight:600;border-right:1px solid #aab5b0;text-align:center}
+.entry-table thead th.rownum{z-index:18}
+.entry-table tbody td{height:38px;background:#fff}
+.entry-table tbody tr:nth-child(even) td{background:#fbfdfb}
+.entry-table tbody tr:hover td{background:#f4faf6}
+.entry-table td.date-cell{background:#f3f7f4!important;color:#4d665a;font-weight:700;text-align:center}
+.entry-table td.line-cell{background:#f4f7f5!important;font-weight:800;text-align:center;white-space:nowrap}
+.line-agri{color:#14744b}
+.line-meat{color:#9a5a13}
+.line-finishing{color:#246b91}
+.entry-table td.calc-cell{background:#eaf5f1!important;color:#205a4c;text-align:center;font-weight:750}
+.entry-table td.trace-cell{background:#f7f9f7!important;color:#89958d;text-align:center}
+.cell-input,.cell-select{width:100%;height:36px;min-width:0;border:0;border-radius:0;background:transparent;color:#14251c;font-size:10px;padding:3px 6px;outline:0}
+.cell-input:focus,.cell-select:focus{background:#fff8d9;outline:2px solid #e1ad00;outline-offset:-2px;position:relative;z-index:3}
+.cell-input[type=number]{text-align:right;padding-right:8px}
+.cell-input[type=time]{font-variant-numeric:tabular-nums}
+.cell-select{padding-right:2px}
+.cell-select:disabled{color:#a3ada6;background:#f5f7f5}
+.cell-input[readonly]{color:#587368;background:#f3f7f4}
+.cell-input::placeholder{color:#aab4ae}
+.has-data{font-size:10px;font-weight:850;color:#829188}
+.has-data.yes{color:#087548}
+.table-status{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 11px;background:#fff;border:1px solid #d8e1dc;border-top:0;border-radius:0 0 9px 9px;color:#77857c;font-size:9px}
+.table-status strong{color:#34463b}
+.floating-sheet-head{position:fixed;display:none;overflow:hidden;z-index:19;pointer-events:none;background:#fff;box-shadow:0 5px 12px rgba(15,45,35,.14);border-bottom:1px solid #70aaa1}
+.floating-sheet-head .entry-table{min-width:0;margin:0;transform-origin:top left}
+.floating-sheet-head .entry-table thead th{position:relative;top:auto}
+.floating-sheet-head .entry-table thead th.rownum{position:sticky;left:0;z-index:25}
+.toast{position:fixed;right:20px;bottom:20px;z-index:50;max-width:340px;background:#173d29;color:#fff;padding:11px 14px;border-radius:9px;box-shadow:0 10px 25px #0003;font-size:11px;line-height:1.5}
+@media(max-width:1100px){.content{padding:14px 14px 24px}.control-strip{grid-template-columns:90px 190px minmax(150px,1fr)}.report-actions{grid-column:1/-1;justify-content:flex-end;border-top:1px solid #ffffff22}.summary-strip{grid-template-columns:repeat(3,minmax(120px,1fr))}.summary-item:nth-child(3){border-right:0}.summary-item:nth-child(n+4){border-top:1px solid #b9ddd4}}
+@media(max-width:650px){.content{padding:10px 8px 20px}.entry-banner{align-items:flex-start;flex-direction:column;gap:4px}.entry-banner h1{font-size:18px}.entry-banner .banner-note{font-size:9px;white-space:normal}.control-strip{grid-template-columns:76px minmax(130px,1fr)}.report-title{grid-column:1/-1;min-height:34px;border-top:1px solid #ffffff20}.report-actions{grid-column:1/-1;justify-content:flex-start}.summary-strip{grid-template-columns:repeat(2,minmax(120px,1fr))}.summary-item:nth-child(odd){border-right:1px solid #b9ddd4}.summary-item:nth-child(even){border-right:0}.summary-item:nth-child(n+3){border-top:1px solid #b9ddd4}.summary-item:last-child{grid-column:1/-1}.report-band{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body class="rr-page">
+<div class="shell">
+<aside class="sidebar">
+ <div class="brand"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div>
+ <div class="brand-caption">PRODUCTION MANAGEMENT</div>
+ <nav>
+  <div class="nav-group"><div class="nav-label">Overview</div>
+   <button class="nav-link" data-page="Dashboard"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link" data-page="Product Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 20V9l8-5 8 5v11"/><path d="M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="5" width="18" height="16" rx="2"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="5" y="4" width="14" height="16"/></svg><span>DMR Production</span></button>
+   <button class="nav-link" data-page="DMR Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+   <button class="nav-link" data-page="Yield Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21c4-2 7-6 7-10A7 7 0 0 0 5 11c0 4 3 8 7 10Z"/></svg><span>Yield Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link" data-page="CO QA"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link" data-page="Spreadsheet Import"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24" width="17" height="17"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link active" data-page="Reports" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports &amp; Reconciliation</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Audit Trail"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link" data-page="Settings"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav>
+ <div class="spacer"></div><div class="user-foot"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div>
+</aside>
+<div class="main">
+ <header class="topbar"><div class="crumb"><span>TFI</span><span>/</span><span>Data &amp; Reports</span><span>/</span><b>Reports &amp; Reconciliation</b><span>/</span><b>Removed Rows</b></div><div class="profile"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div></header>
+<main class="content rr-content rm-content">
+  <section class="rr-hero">
+    <div class="rr-hero-copy">
+      <span class="rr-eyebrow">REPORTS &amp; RECONCILIATION · ARCHIVE / EXCEPTION REGISTER</span>
+      <h1>Removed Rows</h1>
+      <p>Review records removed from the production-summary flow and retained for reference. These archived rows are not counted in Summary and must not be automatically restored to active production records.</p>
+    </div>
+    <div class="rr-hero-actions">
+      <span class="rr-admin-tag"><i></i> READ-ONLY ARCHIVE</span>
+      <button class="rr-btn rr-btn-primary" id="rm-import-open" type="button" aria-haspopup="dialog" aria-controls="rm-import-modal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M4 15v5h16v-5"/></svg>
+        SOURCE WORKBOOK
+      </button>
+    </div>
+  </section>
+  <nav class="rr-report-tabs" aria-label="Reports and reconciliation views">
+    <button class="rr-report-tab" type="button" data-report-page="Reports">Production Summary</button>
+    <button class="rr-report-tab" type="button" data-report-page="Schedule Summary">Schedule Summary</button>
+    <button class="rr-report-tab" type="button" data-report-page="Summary">Summary</button>
+    <button class="rr-report-tab active" type="button" data-report-page="Removed Rows" aria-current="page">Removed Rows</button>
+  </nav>
+  <div class="rr-source-meta" aria-label="Verified Removed Rows source details">
+    <span><strong>OFFICIAL WORKBOOK</strong> <b id="rm-source-workbook">Copy of TFI - Production Monitoring Sheet</b></span>
+    <span><strong>WORKSHEET</strong> <b id="rm-source-sheet">Removed Rows · sheetId 1842536867</b></span>
+    <span><strong>STRUCTURE</strong> 18 SOURCE FIELDS · A:R</span>
+    <span><strong>HEADER ROW</strong> ROW 3</span>
+    <span id="rm-snapshot">Archive snapshot</span>
+  </div>
+  <section class="rr-kpi-grid" aria-label="Removed Rows archive metrics">
+    <article class="rr-kpi"><div class="rr-kpi-top"><span class="rr-kpi-label">Archived rows</span><span class="rr-kpi-icon"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM3 4h18v3H3zM9 11h6"/></svg></span></div><div class="rr-kpi-value">—</div><div class="rr-kpi-note">Matching archive rows</div></article>
+    <article class="rr-kpi"><div class="rr-kpi-top"><span class="rr-kpi-label">Removal reasons</span><span class="rr-kpi-icon"><svg viewBox="0 0 24 24"><path d="M12 3 22 20H2zM12 9v5M12 17h.01"/></svg></span></div><div class="rr-kpi-value">—</div><div class="rr-kpi-note">Preserved from Removed because</div></article>
+    <article class="rr-kpi"><div class="rr-kpi-top"><span class="rr-kpi-label">Old product codes</span><span class="rr-kpi-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/></svg></span></div><div class="rr-kpi-value">—</div><div class="rr-kpi-note">Kept as text; no code normalization</div></article>
+    <article class="rr-kpi"><div class="rr-kpi-top"><span class="rr-kpi-label">Source references</span><span class="rr-kpi-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg></span></div><div class="rr-kpi-value">—</div><div class="rr-kpi-note">Matching rows with a source reference</div></article>
+  </section>
+  <section class="rr-panel rr-filter-panel" aria-label="Removed Rows archive filters">
+    <div class="rr-panel-head">
+      <div><span class="rr-panel-kicker">ARCHIVE CONTROLS</span><h2>Find archived rows</h2><p>Search the removal reason, original product code, source tab, and preserved row details.</p></div>
+      <div class="rr-filter-actions">
+        <button class="rr-btn rr-btn-light" id="rm-reset" type="button">RESET FILTERS</button>
+        <button class="rr-btn rr-btn-light" id="rm-export" type="button" disabled title="Available after approved archive records are connected"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12m-5-5 5 5 5-5M4 20h16"/></svg>EXPORT CSV</button>
+      </div>
+    </div>
+    <div class="rr-filter-grid rm-filter-grid">
+      <label class="rr-field"><span>From date</span><input id="rm-from" type="date"></label>
+      <label class="rr-field"><span>To date</span><input id="rm-to" type="date"></label>
+      <label class="rr-field"><span>Removed because</span><input id="rm-reason" type="search" placeholder="Search removal reason" autocomplete="off"></label>
+      <label class="rr-field"><span>Old product code</span><input id="rm-code" type="search" placeholder="Search old code" autocomplete="off"></label>
+      <label class="rr-field"><span>Source tab</span><input id="rm-source-tab" type="search" placeholder="Search source tab" autocomplete="off"></label>
+      <label class="rr-field rm-search-field"><span>Search all fields</span><input id="rm-search" type="search" placeholder="Search archived row details" autocomplete="off"></label>
+    </div>
+    <div class="rr-filter-foot"><span id="rm-filter-summary"></span><span><strong>READ ONLY</strong> · ARCHIVE / EXCEPTION DATA</span></div>
+  </section>
+  <section class="rr-panel rr-table-panel" aria-label="Removed Rows archive register">
+    <div class="rr-table-head">
+      <div class="rr-table-head-copy"><strong>REMOVED ROWS ARCHIVE REGISTER</strong><span>Exact source column order A:R · Header row 3 · Data begins at row 4 · Scroll horizontally to view all 18 fields</span></div>
+      <span class="rr-table-state"><i></i><b id="rm-record-state">LOADING</b></span>
+    </div>
+    <div class="rr-table-scroll rm-table-scroll" role="region" aria-label="Removed Rows source columns A through R" tabindex="0">
+      <table class="rr-table rm-table" id="rm-table">
+        <colgroup>
+          <col style="width:112px"><col style="width:260px"><col style="width:170px"><col style="width:105px"><col style="width:100px"><col style="width:105px"><col style="width:85px"><col style="width:110px"><col style="width:110px"><col style="width:105px"><col style="width:135px"><col style="width:155px"><col style="width:110px"><col style="width:90px"><col style="width:90px"><col style="width:330px"><col style="width:125px"><col style="width:105px">
+        </colgroup>
+        <thead><tr class="rr-column-row">
+          <th><button type="button" data-rm-sort="date">Date <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="removedBecause">Removed because <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="oldProductCode">Old Product Code (text) <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="batches">No. of Batches <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="target">Target <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="produced">Produced <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="uom">UOM <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="planStart">Plan Start <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="actualStart">Actual Start <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="planEnd">Plan End <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="actualEndProd">Actual End (Prod) <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="actualEndCleaning">Actual End (Cleaning) <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="manReqmt">Man Reqmt <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="present">Present <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="otHrs">OT Hrs <span>↕</span></button></th>
+          <th><button type="button" data-rm-sort="remarks">Remarks <span>↕</span></button></th>
+          <th class="rr-trace-head"><button type="button" data-rm-sort="sourceTab">Source Tab <span>↕</span></button></th>
+          <th class="rr-trace-head"><button type="button" data-rm-sort="check">Check <span>↕</span></button></th>
+        </tr></thead>
+        <tbody id="rm-tbody"></tbody>
+      </table>
+    </div>
+    <div class="rr-table-footer"><span id="rm-table-count">Loading archive…</span><div class="rr-pagination"><button id="rm-prev" type="button" aria-label="Previous page" disabled>‹</button><span id="rm-page">—</span><button id="rm-next" type="button" aria-label="Next page" disabled>›</button></div></div>
+  </section>
+  <section class="rr-source-note"><span class="rr-note-icon">i</span><span><strong>Archive treatment:</strong> The source title identifies these rows as Pandayan / Others / Finishing overflow records kept for reference and not counted in Summary. Preserve the exact <strong>Removed because</strong> reason, <strong>Old Product Code (text)</strong>, <strong>Source Tab</strong>, and <strong>Check</strong> fields. Keep this archive separate from active production history. Do not automatically restore, delete, normalize, or merge archived rows into Production Summary.</span></section>
+</main>
+
+<div class="rr-modal-backdrop" id="rm-import-modal" role="dialog" aria-modal="true" aria-labelledby="rm-modal-title" aria-hidden="true">
+  <div class="rr-modal">
+    <div class="rr-modal-head"><div><span class="rr-panel-kicker">READ-ONLY ARCHIVE</span><h3 id="rm-modal-title">Removed Rows Source</h3></div><button class="rr-modal-close" id="rm-modal-close" type="button" aria-label="Close import dialog">×</button></div>
+    <p>This snapshot preserves the worksheet values at the time of capture. Open the source sheet to review the current workbook.</p>
+    <div class="rr-source-card"><strong>Copy of TFI - Production Monitoring Sheet</strong><span>Worksheet: Removed Rows · sheetId: 1842536867<br>Title row: 1 · Header row: 3 · First data row: 4<br>Source fields: A:R (18 fields) · Frozen rows: 3<br>Grid: 1,000 rows × 26 columns<br>Archive scope: Pandayan / Others / Finishing overflow · kept for reference, not counted in Summary<br>Spreadsheet ID: 1hWOI55iRBSltQnRY4S7eObnMBLstFYCPxiAp-l1UUfc</span></div>
+    <div class="rr-modal-actions"><button class="rr-btn rr-btn-light" id="rm-modal-dismiss" type="button">CLOSE</button><a class="rr-btn rr-btn-primary" id="rm-workbook-link" target="_blank" rel="noopener noreferrer">OPEN SOURCE SHEET</a></div>
+  </div>
+</div>
+<div id="rm-toast" class="toast" hidden></div>
+
+
+
+
+</div>
+</div>
+<div id="toast" class="toast" hidden></div>
+<script src="removed-rows-ui.js"></script>
+<script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+</body>
+</html>
+

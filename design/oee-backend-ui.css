@@ -1,0 +1,43 @@
+.oee-saved-section{margin-top:18px;background:#fff;border:1px solid #dce6df;border-radius:11px;overflow:hidden;box-shadow:0 8px 24px rgba(18,50,32,.06)}
+.oee-saved-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:#f3f8f5;border-bottom:1px solid #e2eae4}
+.oee-saved-heading strong{display:block;color:#164d31;font-size:12px;letter-spacing:.55px}
+.oee-saved-heading span{display:block;color:#718077;font-size:10px;margin-top:4px}
+.oee-saved-filters{display:grid;grid-template-columns:repeat(3,minmax(130px,1fr)) minmax(180px,1.3fr) auto;gap:10px;padding:12px 14px;background:#fbfdfb;align-items:end}
+.oee-saved-filters label,.oee-edit-field,.oee-edit-reason{display:flex;flex-direction:column;gap:5px;color:#64736a;font-size:10px;font-weight:800}
+.oee-saved-filters input,.oee-saved-filters select,.oee-edit-field input,.oee-edit-field select,.oee-edit-reason input{width:100%;min-height:36px;border:1px solid #d5e0d8;border-radius:7px;padding:7px 9px;background:#fff;color:#1c2b21}
+.oee-saved-status{padding:9px 14px;color:#61766a;font-size:11px;border-top:1px solid #edf1ee}
+.oee-saved-scroll{overflow:auto;max-width:100%;max-height:520px}
+.oee-saved-table{width:100%;min-width:1600px;border-collapse:collapse;font-size:10px}
+.oee-saved-table th,.oee-saved-table td{padding:8px 7px;border-bottom:1px solid #e7ede9;text-align:left;white-space:nowrap}
+.oee-saved-table th{background:#eaf4ef;color:#24563b;font-weight:800;position:sticky;top:0;z-index:1}
+.oee-saved-table td strong{color:#0b6b3b}
+.oee-saved-table td button{border:1px solid #cbdacf;background:#fff;color:#24563b;border-radius:5px;padding:5px 7px;margin:1px;font-size:9px;font-weight:800;cursor:pointer}
+.oee-saved-table td button:hover{background:#edf7f0}
+.oee-row-actions{white-space:nowrap}
+.oee-empty{text-align:center!important;padding:22px!important;color:#7a8980}
+.oee-saved-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;color:#718077;font-size:11px}
+.oee-saved-footer>div{display:flex;align-items:center;gap:10px}
+.oee-saved-footer button{border:1px solid #d3dfd7;border-radius:6px;background:#fff;padding:7px 10px;color:#315640;font-size:10px;font-weight:800}
+.oee-saved-footer button:disabled{opacity:.45;cursor:not-allowed}
+.oee-modal{position:fixed;inset:0;z-index:9999;background:rgba(12,29,19,.58);display:flex;align-items:center;justify-content:center;padding:18px}
+.oee-modal[hidden]{display:none}
+.oee-modal-card{width:min(850px,100%);max-height:min(92vh,950px);overflow:auto;background:#fff;border-radius:12px;box-shadow:0 20px 70px #0004}
+.oee-modal-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#0c5430;color:#fff}
+.oee-modal-head strong{font-size:12px;letter-spacing:.55px}
+.oee-modal-head button{border:0;background:transparent;color:#fff;font-size:25px;line-height:1;cursor:pointer}
+.oee-modal-body{padding:18px}
+.oee-edit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.oee-edit-field{margin-bottom:4px}
+.oee-edit-reason{margin-top:14px}
+.oee-modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}
+.oee-modal-actions button{min-height:36px}
+.oee-history-list{display:grid;gap:10px}
+.oee-revision{padding:12px;border:1px solid #e0e8e2;border-radius:8px;background:#fafcfb}
+.oee-revision strong,.oee-revision small{display:block}
+.oee-revision small{margin-top:5px;color:#738078;font-size:10px}
+.oee-revision p{font-size:11px;color:#4d5d53}
+.oee-revision pre{max-height:320px;overflow:auto;padding:10px;background:#f0f5f1;border-radius:6px;font-size:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.oee-modal-loading,.oee-modal-empty,.oee-modal-error{padding:14px;color:#63746a;font-size:12px}
+.oee-modal-error{color:#a52c2c}
+@media(max-width:1000px){.oee-saved-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.oee-saved-filters button{min-height:36px}}
+@media(max-width:600px){.oee-saved-heading{align-items:flex-start;flex-direction:column}.oee-saved-filters,.oee-edit-grid{grid-template-columns:1fr}.oee-modal{padding:8px}.oee-modal-body{padding:12px}}

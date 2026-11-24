@@ -1,0 +1,62 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+*.sqlite3
+.DS_Store
+
+# TFI2 Security
+.env
+.env.*
+.venv/
+__pycache__/
+*.py[cod]
+*.log
+logs/
+release/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+node_modules/
+dist/
+build/
+coverage/
+*.pem
+*.key
+secrets/
+credentials/
+
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials/
+secrets/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Logs and temporary files
+logs/
+*.log
+*.bak
+
+# Frontend build files
+node_modules/
+dist/
+build/
+coverage/
+

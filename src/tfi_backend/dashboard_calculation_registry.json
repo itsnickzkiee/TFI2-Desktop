@@ -1,0 +1,222 @@
+{
+  "registry_version": "2026-11-23.4",
+  "source_workbook": {
+    "spreadsheet_id": "1rCbQ16wj7MRjQCFF3tA-WEMkudraJK0RkwcqayUlz7k",
+    "read_mode": "read-only formula audit",
+    "audited_tabs": [
+      "KPI Dashboard",
+      "KPI Calc",
+      "Dash Calc",
+      "Hourly Calc",
+      "Yield Map",
+      "Yield Log",
+      "KPI Setup",
+      "Summary"
+    ]
+  },
+  "filter_contract": {
+    "date_from": "inclusive YYYY-MM-DD",
+    "date_to": "inclusive YYYY-MM-DD",
+    "product_code": "exact Code Map product code; All/blank means all",
+    "product_name": "exact Code Map product name; All/blank means all",
+    "machine": "exact OEE machine; All/blank means all",
+    "oee_include_rule": "When Machine is All, include only Include in Overall = Y. When a specific machine is selected, include all matching machine records, matching the workbook KPI Calc criteria."
+  },
+  "verified_calculations": {
+    "productivity": {
+      "source": "tfi_productivity_record_view; DMP-linked manpower hours",
+      "total_output_tins": "SUM(actual_output_tins)",
+      "target_output_tins": "SUM(target_output_12h_tins)",
+      "output_attainment": "SUM(actual_output_tins where target_output_12h_tins > 0) / SUM(target_output_12h_tins)",
+      "productivity_tins_per_mhr": "SUM(actual_output_tins where manpower_hours_dmp > 0) / SUM(manpower_hours_dmp)",
+      "standard_productivity_tins_per_mhr": "SUM(standard_output_actual_mhr) / SUM(manpower_hours_dmp where standard_output_actual_mhr > 0)",
+      "productivity_vs_standard": "SUM(actual_output_tins where standard_output_actual_mhr > 0) / SUM(standard_output_actual_mhr)",
+      "fg_reject_pct": "SUM(total_fg_rejects) / (SUM(actual_output_tins) + SUM(total_fg_rejects))",
+      "reject_fields": [
+        "dented",
+        "false_seam",
+        "flipper",
+        "bulged",
+        "panel",
+        "buckling"
+      ]
+    },
+    "downtime": {
+      "dmr_production_total_hours": "SUM(DMR Production downtime minutes) / 60",
+      "dmr_coding_total_hours": "SUM(DMR Coding downtime_hours); separate from DMR Production total",
+      "breakdown_count": "COUNT(DMR Production rows where category = BD)",
+      "mttr_hours": "BD downtime hours / BD count",
+      "mtbf_hours": "(Productivity planned run hours - DMR Production downtime hours) / BD count",
+      "downtime_pct": "DMR Production downtime hours / Productivity planned run hours",
+      "group_source": "KPI Setup columns O:P",
+      "group_names": [
+        "Machine",
+        "Manpower",
+        "Material",
+        "Quality",
+        "Process / Other"
+      ],
+      "known_reason_codes": [
+        "BD",
+        "MS",
+        "QA",
+        "SET-UP",
+        "MN",
+        "CLN",
+        "CO",
+        "RND"
+      ],
+      "unknown_reason_rule": "Process / Other"
+    },
+    "oee": {
+      "source": "tfi_oee_record_view",
+      "availability": "SUM(run_time_hours) / SUM(planned_hours)",
+      "performance": "SUM(capped_count) / SUM(ideal_output)",
+      "quality": "SUM(good_count) / SUM(total_count)",
+      "overall_oee": "Availability * Performance * Quality"
+    },
+    "hourly_production": {
+      "source": "tfi_hourly_production_record_view",
+      "variance_tins": "actual_tins - target_tins",
+      "hour_attainment": "actual_tins / target_tins; null when target is zero or blank",
+      "cumulative_target": "sum target_tins for same date, module and product code through the current hour",
+      "cumulative_actual": "sum actual_tins for same date, module and product code through the current hour; source contract keeps blank current actual blank"
+    },
+    "production_summary": {
+      "source": "tfi_production_entry_records",
+      "days_logged": "COUNT(DISTINCT production_date) where day_has_data is true",
+      "saved_rows": "COUNT where has_data is true",
+      "average_attainment": "AVG(attainment) for saved rows",
+      "average_attendance": "AVG(attendance) for saved rows",
+      "overtime_hours": "SUM(ot_hours) for saved rows",
+      "rows_below_95_percent": "COUNT saved rows where attainment < 0.95, matching the source dashboard formula"
+    },
+    "schedule_summary": {
+      "source": "existing permission-checked Production Schedule summary function",
+      "metrics": [
+        "saved_rows",
+        "days_saved",
+        "target_total",
+        "quantity_tins_total",
+        "quantity_box_total",
+        "revised_target_total",
+        "required_manpower_total"
+      ]
+    }
+  },
+  "pending_calculations": {
+    "yield_log": {
+      "status": "implemented_read_only_projection_pending_live_data_acceptance",
+      "api_route": "GET /api/yield/log",
+      "source": "TFI2 Product Entry records + Yield Map Master Data + KPI Setup M2 + DMR Production for the source-mapped SUMIFS formula",
+      "product_mappings": 39,
+      "formula_dependency_cells_audited": 955,
+      "supported_source_functions": ["IF", "IFERROR", "SUM", "SUMIFS"],
+      "calculation": "Recalculate the source-mapped formula dependencies on read; never persist formula outputs into operational Product Entry records.",
+      "permissions": ["dashboard.view", "product_entry.view", "master_data.view"],
+      "yield_target_note": "The source Yield Map marks the non-DPGP 95% targets as placeholders; the source instruction is returned to clients.",
+      "database_migration_required": true,
+      "live_data_acceptance": "Pending; Product Entry and DMR Production currently have zero active source rows.",
+      "do_not_display_as_verified": true
+    },
+    "yield_dashboard_ui": {
+      "status": "implemented",
+      "panel": "KPI Dashboard > Yield %",
+      "metrics": ["average main yield", "average Stage 2 yield", "average Stage 3 yield", "average bloom rate", "average lid reject", "average can reject", "average box reject", "average label reject"],
+      "views": ["product scorecard grouped by product", "source-aligned 12-column Yield Log details"],
+      "filters": ["date_from", "date_to", "product_name", "product_code"],
+      "pagination": "100 records per page; averages and scorecards are explicitly based on loaded rows until additional pages are loaded",
+      "refresh": ["initial dashboard load", "manual filter apply", "module save", "focus", "visibility return", "15-second fallback"],
+      "responsive": "desktop and mobile; detail tables scroll within their own containers",
+      "sample_values": false
+    },
+    "product_entry_summary": {
+      "status": "pending_formula_projection",
+      "reason": "The Summary worksheet is a formula projection from Product Entry. Reproduce the exact formula columns and their dependencies before publishing report totals."
+    },
+    "removed_rows": {
+      "status": "archive_only",
+      "reason": "No canonical TFI2 Removed Rows archive relation is registered. Do not treat source archive content as live operational records."
+    },
+    "period_comparisons": {
+      "status": "pending",
+      "reason": "Current-period source calculations are implemented first. Previous-period and trend-series parity must be verified against the KPI Calc and Dash Calc source ranges before enabling comparisons."
+    }
+  },
+  "implementation": {
+    "database_function": "public.tfi_get_dashboard_analytics",
+    "api_route": "GET /api/dashboard/analytics",
+    "security": "dashboard.view required; module-level permissions checked before reading each source; no write operations",
+    "dashboard_filter_catalog": {
+      "api_route": "GET /api/dashboard/filter-catalog",
+      "permissions": ["dashboard.view", "master_data.view"],
+      "source": "TFI2 Master Data snapshots: kpi_setup and code_map",
+      "source_ranges": {
+        "view": "KPI Setup A2:A4",
+        "month": "KPI Setup B2:B13",
+        "week": "KPI Setup D2:D54",
+        "product_code": "KPI Setup E2:E129",
+        "machine": "KPI Setup F3:F54",
+        "product_name": "KPI Setup R2:R129",
+        "year": "KPI Setup S2:S5",
+        "product_code_name_pairing": "Code Map A:B"
+      },
+      "period_mapping": {
+        "Daily": "selected date to same date",
+        "Weekly": "ISO week Monday through Sunday",
+        "Monthly": "first through last calendar day of selected month"
+      },
+      "analytics_parameters": ["date_from", "date_to", "product_name", "product_code", "machine"],
+      "database_migration_required": false,
+      "catalog_refresh": ["initial_load", "module_save", "window_focus", "visibility_return"],
+      "static_catalog_refetch_on_15_second_poll": false
+    },
+    "yield_log": {
+      "api_route": "GET /api/yield/log",
+      "source": "TFI2 Product Entry records and Yield Map Master Data; KPI Setup M2 supplies the source workbook year for month/day text dates.",
+      "dmr_source": "DMR Production date, product code, category and downtime minutes for the source-mapped Mayon Kaong SUMIFS formula.",
+      "permissions": ["dashboard.view", "product_entry.view", "master_data.view"],
+      "conditional_permission": "dmr_production.view is required when a returned Mayon Kaong record invokes the DMR Production formula.",
+      "product_blocks": 39,
+      "formula_dependency_cells_audited": 955,
+      "supported_functions": ["IF", "IFERROR", "SUM", "SUMIFS"],
+      "calculation_mode": "read-time formula projection; no calculated values are written back",
+      "database_migration_required": false,
+      "yield_target_placeholders_preserved": true,
+      "ui_and_average_yield_kpi": "pending",
+      "live_data_acceptance": "pending source records"
+    },
+    "live_refresh": {
+      "write_detection": "same-origin Fetch wrapper in the lazy-loaded module iframe router",
+      "successful_methods": ["POST", "PUT", "PATCH", "DELETE"],
+      "event": "TFI_DATA_SAVED",
+      "dashboard_behavior": "refresh coverage and analytics immediately after a successful module write",
+      "reports_behavior": "broadcast save event to cached module frames and refresh cross-module reconciliation snapshot; Production Entry writes also refresh report rows and summary",
+      "fallback_poll_seconds": 15,
+      "refresh_on_focus": true,
+      "refresh_on_visibility_return": true,
+      "full_page_reload": false
+    },
+    "verification": {
+      "backend_regression_suite": "354 passed",
+      "yield_contract_and_api_tests": "12 passed",
+      "yield_formula_synthetic_projection": "39 of 39 product blocks; zero failures",
+      "yield_formula_dependency_audit": "955 formula dependency cells; IF, IFERROR, SUM and SUMIFS",
+      "yield_dmr_sumifs_and_permission_gate": "PASS",
+      "yield_dashboard_ui_browser_test": "PASS",
+      "dashboard_yield_filter_integration": "PASS",
+      "reports_yield_readiness_snapshot": "PASS",
+      "dashboard_analytics_rpc_readiness": "implemented_read_only_projection; Yield Log removed from pending KPI groups",
+      "dashboard_filter_catalog_api_tests": "PASS",
+      "dashboard_filter_browser_test": "PASS",
+      "daily_weekly_monthly_period_calculation_test": "PASS",
+      "dashboard_browser_test": "PASS",
+      "reports_snapshot_browser_test": "PASS",
+      "module_save_to_dashboard_refresh_test": "PASS",
+      "module_save_to_reports_refresh_test": "PASS",
+      "javascript_syntax": "PASS"
+    },
+    "source_workbook_modified": false,
+    "historical_rows_imported": false
+  }
+}

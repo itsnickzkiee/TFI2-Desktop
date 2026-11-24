@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TFI | KPI Dashboard</title>
+<style>
+:root{
+  --green:#086333;
+  --green-dark:#064b29;
+  --green-deep:#043d23;
+  --green-soft:#eaf4ed;
+  --green-pale:#f3f8f4;
+  --red:#ed1c24;
+  --red-soft:#fff0f0;
+  --ink:#17251d;
+  --muted:#758279;
+  --line:#e7ede8;
+  --surface:#ffffff;
+  --canvas:#f4f7f5;
+  --amber:#b7791f;
+  --amber-soft:#fff7e8;
+  --shadow:0 10px 30px rgba(25,55,37,.055);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:"Segoe UI",Inter,Arial,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app-shell{min-height:100vh;display:flex}
+.sidebar{width:258px;flex:0 0 258px;background:linear-gradient(180deg,var(--green) 0%,var(--green-dark) 100%);color:#fff;display:flex;flex-direction:column;min-height:100vh;padding:22px 15px 18px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand-panel{background:#fff;border-radius:14px;padding:9px 11px;display:flex;align-items:center;justify-content:center;min-height:76px;box-shadow:0 5px 16px rgba(0,0,0,.10)}
+.brand-panel img{display:block;width:100%;max-width:208px;height:auto;object-fit:contain}
+.brand-caption{text-align:center;color:rgba(255,255,255,.72);font-size:9px;font-weight:800;letter-spacing:1.65px;margin:13px 0 26px}
+.nav-section{margin:0 0 19px}
+.nav-label{font-size:9px;text-transform:uppercase;letter-spacing:1.35px;font-weight:800;color:rgba(255,255,255,.52);padding:0 12px;margin:0 0 8px}
+.nav-link{width:100%;display:flex;align-items:center;gap:12px;padding:11px 12px;margin:2px 0;border:0;border-radius:10px;background:transparent;color:rgba(255,255,255,.82);font-size:13px;font-weight:600;text-align:left;transition:background .18s,color .18s}
+.nav-link svg{width:18px;height:18px;flex:0 0 18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-link:hover{background:rgba(255,255,255,.10);color:#fff}
+.nav-link.active{background:#fff;color:var(--green);box-shadow:0 5px 14px rgba(0,0,0,.10)}
+.nav-link .nav-count{margin-left:auto;background:rgba(255,255,255,.16);padding:2px 7px;border-radius:20px;font-size:10px;font-weight:800}
+.nav-link.active .nav-count{background:var(--green-soft);color:var(--green)}
+.sidebar-spacer{flex:1;min-height:20px}
+.sidebar-bottom{border-top:1px solid rgba(255,255,255,.15);padding:16px 7px 0;display:flex;align-items:center;gap:10px}
+.avatar{width:34px;height:34px;border-radius:50%;background:#e5f0e8;color:var(--green);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 34px}
+.sidebar-user{min-width:0}
+.sidebar-user strong{display:block;font-size:12px;color:#fff;white-space:nowrap}
+.sidebar-user span{display:block;font-size:10px;color:rgba(255,255,255,.62);margin-top:3px}
+.main-shell{min-width:0;flex:1}
+.topbar{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px;position:sticky;top:0;z-index:5}
+.breadcrumb{display:flex;align-items:center;gap:9px;color:#8a968e;font-size:12px;font-weight:600}
+.breadcrumb strong{color:#314239;font-weight:700}
+.breadcrumb .slash{color:#c1cbc4}
+.top-actions{display:flex;align-items:center;gap:15px}
+.search-box{height:38px;width:245px;border:1px solid #e8eee9;border-radius:10px;background:#fafcfb;display:flex;align-items:center;gap:9px;padding:0 12px;color:#95a199}
+.search-box svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.search-box input{border:0;outline:0;background:transparent;width:100%;color:var(--ink);font-size:12px}
+.search-box input::placeholder{color:#9aa69e}
+.icon-button{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:#fff;color:#617067;display:grid;place-items:center;position:relative}
+.icon-button svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.notification-dot{position:absolute;width:7px;height:7px;background:var(--red);border:1.5px solid #fff;border-radius:50%;top:8px;right:8px}
+.top-profile{display:flex;align-items:center;gap:9px;padding-left:3px}
+.top-profile .avatar{width:35px;height:35px}
+.top-profile-text strong{display:block;font-size:12px}
+.top-profile-text span{display:block;font-size:10px;color:var(--muted);margin-top:2px}
+.content{max-width:1660px;margin:0 auto;padding:30px 34px 34px}
+.page-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:20px}
+.eyebrow{font-size:10px;letter-spacing:1.6px;color:var(--green);font-weight:900;text-transform:uppercase;margin-bottom:7px}
+h1{font-size:29px;letter-spacing:-.8px;margin:0;font-weight:750;color:#15241b}
+.page-subtitle{margin:7px 0 0;color:#78857d;font-size:13px}
+.heading-actions{display:flex;align-items:center;gap:10px}
+.preview-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #f2d8d8;background:#fff8f8;color:#a73a3f;border-radius:30px;padding:8px 11px;font-size:10px;font-weight:800;letter-spacing:.35px}
+.preview-pill:before{content:"";width:6px;height:6px;background:var(--red);border-radius:50%}
+.btn{border:0;border-radius:10px;padding:10px 15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:750;transition:transform .16s,box-shadow .16s,background .16s}
+.btn:hover{transform:translateY(-1px)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 5px 12px rgba(8,99,51,.16)}
+.btn-primary:hover{background:#07572e;box-shadow:0 7px 17px rgba(8,99,51,.22)}
+.btn-outline{background:#fff;color:#3e5146;border:1px solid #e2eae4}
+.btn-outline:hover{background:#f9fcfa}
+.preview-note{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e9eee9;border-radius:12px;padding:11px 14px;margin-bottom:19px;color:#718077;font-size:11px}
+.preview-note svg{width:16px;height:16px;stroke:var(--green);fill:none;stroke-width:1.8;flex:0 0 16px}
+.preview-note strong{color:#435349}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}
+.kpi-card{background:var(--surface);border:1px solid #e9eee9;border-radius:var(--radius);padding:19px 19px 17px;box-shadow:var(--shadow);min-width:0;position:relative;overflow:hidden}
+.kpi-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.kpi-label{font-size:11px;color:#77847b;font-weight:650}
+.kpi-icon{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--green-soft);color:var(--green)}
+.kpi-icon.red{background:var(--red-soft);color:var(--red)}
+.kpi-icon.amber{background:var(--amber-soft);color:var(--amber)}
+.kpi-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.kpi-value{font-size:27px;letter-spacing:-.7px;font-weight:780;margin:13px 0 7px;color:#18271e;white-space:nowrap}
+.kpi-value small{font-size:13px;font-weight:650;color:#758279;letter-spacing:0}
+.kpi-foot{display:flex;align-items:center;gap:7px;color:#8a968e;font-size:10px}
+.trend{display:inline-flex;align-items:center;gap:3px;color:#16834b;font-weight:800}
+.trend svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2}
+.main-grid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(290px,.9fr);gap:18px;margin-bottom:18px}
+.card{background:#fff;border:1px solid #e8eee9;border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:20px 21px 0}
+.card-title{font-size:14px;font-weight:760;margin:0;color:#203027;letter-spacing:-.15px}
+.card-subtitle{font-size:10px;color:#8a968e;margin:5px 0 0}
+.period-select{border:1px solid #e6ece7;background:#fff;color:#5f6e64;border-radius:8px;padding:7px 27px 7px 10px;font-size:10px;font-weight:700;outline:0}
+.chart-summary{display:flex;align-items:baseline;gap:9px;padding:17px 21px 0}
+.chart-summary strong{font-size:24px;letter-spacing:-.5px}
+.chart-summary span{font-size:10px;color:#849087}
+.chart-legend{display:flex;gap:15px;padding:10px 21px 0;color:#7b887f;font-size:10px}
+.legend-key{display:flex;align-items:center;gap:6px}
+.legend-line{width:15px;height:3px;border-radius:3px;background:var(--green)}
+.legend-line.red{background:var(--red);opacity:.7}
+.chart-area{padding:5px 15px 12px 8px}
+.chart-area svg{width:100%;height:auto;display:block;overflow:visible}
+.chart-grid{stroke:#edf1ee;stroke-width:1}
+.chart-label{font-size:10px;fill:#8b978f;font-family:inherit}
+.chart-line-main{fill:none;stroke:var(--green);stroke-width:3.3;stroke-linecap:round;stroke-linejoin:round}
+.chart-line-prev{fill:none;stroke:var(--red);stroke-width:2;stroke-dasharray:5 6;opacity:.58;stroke-linecap:round}
+.chart-point{fill:#fff;stroke:var(--green);stroke-width:2.5}
+.mix-content{padding:17px 21px 20px}
+.donut-wrap{display:flex;align-items:center;justify-content:center;padding:8px 0 15px}
+.donut{width:158px;height:158px;border-radius:50%;background:conic-gradient(var(--green) 0 54%,var(--red) 54% 82%,#a7cbb4 82% 100%);display:grid;place-items:center;position:relative}
+.donut:after{content:"";position:absolute;inset:17px;background:#fff;border-radius:50%}
+.donut-center{position:relative;z-index:1;text-align:center}
+.donut-center strong{display:block;font-size:24px;letter-spacing:-.8px}
+.donut-center span{display:block;font-size:9px;color:#859188;margin-top:3px}
+.mix-legend{display:grid;gap:12px}
+.mix-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mix-name{display:flex;align-items:center;gap:9px;color:#66746b;font-size:11px;font-weight:650}
+.mix-dot{width:9px;height:9px;border-radius:3px;background:var(--green)}
+.mix-dot.red{background:var(--red)}
+.mix-dot.light{background:#a7cbb4}
+.mix-row strong{font-size:11px;color:#2d3c32}
+.bottom-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(290px,.9fr);gap:18px}
+.table-card{overflow:hidden}
+.table-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 21px 15px}
+.table-toolbar .btn{padding:8px 11px;font-size:10px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;white-space:nowrap}
+thead th{text-align:left;padding:11px 17px;background:#f8faf8;color:#839087;text-transform:uppercase;letter-spacing:.65px;font-size:9px;font-weight:800;border-top:1px solid #edf1ee;border-bottom:1px solid #edf1ee}
+tbody td{padding:13px 17px;border-bottom:1px solid #f0f3f0;color:#5c6a61;font-size:11px}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#fbfdfb}
+.module-cell{display:flex;align-items:center;gap:9px;color:#26372c;font-weight:700}
+.module-mark{width:27px;height:27px;border-radius:8px;background:#edf5ef;color:var(--green);display:grid;place-items:center;font-size:9px;font-weight:900}
+.module-mark.red{background:#fff0f0;color:var(--red)}
+.module-mark.gold{background:#fff7e8;color:#b7791f}
+.progress-cell{display:flex;align-items:center;gap:8px}
+.progress-track{width:64px;height:5px;background:#edf1ee;border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:10px}
+.progress-fill.warn{background:#d89a38}
+.progress-cell span{font-size:10px;color:#69776e;font-weight:700}
+.status{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:800}
+.status:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.status.ok{background:#edf7f0;color:#18834b}
+.status.review{background:#fff7e8;color:#ad741d}
+.status.attention{background:#fff0f0;color:#cb4146}
+.right-stack{display:grid;gap:18px;align-content:start}
+.import-card{padding:19px 20px 18px}
+.import-top{display:flex;align-items:center;justify-content:space-between}
+.import-icon{width:36px;height:36px;background:var(--green-soft);color:var(--green);border-radius:11px;display:grid;place-items:center}
+.import-icon svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.import-status{display:inline-flex;align-items:center;gap:6px;background:#edf7f0;color:#18834b;padding:5px 8px;border-radius:20px;font-size:9px;font-weight:800}
+.import-status:before{content:"";width:5px;height:5px;background:currentColor;border-radius:50%}
+.import-card h2{font-size:14px;margin:14px 0 5px}
+.import-card p{font-size:10px;line-height:1.55;color:#839087;margin:0}
+.import-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.import-meta div{padding:10px 11px;background:#f8faf8;border:1px solid #edf1ee;border-radius:10px}
+.import-meta span{display:block;font-size:9px;color:#89958d}
+.import-meta strong{display:block;margin-top:5px;font-size:12px;color:#314137}
+.import-card .btn{width:100%;padding:10px}
+.activity-card{padding:19px 20px}
+.activity-list{display:grid;gap:15px;margin-top:16px}
+.activity-item{display:flex;gap:10px;align-items:flex-start}
+.activity-icon{width:28px;height:28px;border-radius:9px;background:#f0f5f1;color:var(--green);display:grid;place-items:center;flex:0 0 28px}
+.activity-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}
+.activity-copy strong{display:block;font-size:10px;color:#394a3f}
+.activity-copy span{display:block;font-size:9px;color:#89958d;margin-top:4px;line-height:1.4}
+.empty-activity{padding:14px 10px;text-align:center;color:#87948b;font-size:10px;line-height:1.5;background:#fafcfb;border:1px dashed #e4ebe5;border-radius:10px;margin-top:15px}
+.footer{display:flex;justify-content:space-between;gap:12px;color:#9aa59e;font-size:9px;padding:23px 2px 0}
+.footer strong{color:#708076;font-weight:700}
+.toast{position:fixed;right:25px;bottom:24px;z-index:20;background:#173d29;color:#fff;padding:12px 16px;border-radius:11px;box-shadow:0 12px 30px rgba(0,0,0,.2);font-size:11px;opacity:0;transform:translateY(10px);pointer-events:none;transition:all .22s}
+.toast.show{opacity:1;transform:translateY(0)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(10,28,17,.42);z-index:15;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal{width:min(440px,100%);background:#fff;border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.22);padding:24px}
+.modal-head{display:flex;align-items:center;justify-content:space-between}
+.modal h3{font-size:17px;margin:0}
+.modal-close{border:0;background:#f2f6f3;border-radius:8px;width:30px;height:30px;color:#66756b;font-size:18px}
+.modal p{font-size:12px;line-height:1.6;color:#718077;margin:12px 0 18px}
+.modal-actions{display:flex;justify-content:flex-end;gap:9px}
+@media(max-width:1200px){
+  .sidebar{width:230px;flex-basis:230px}
+  .content{padding:26px 24px}
+  .topbar{padding:0 24px}
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:900px){
+  .sidebar{width:76px;flex-basis:76px;padding:18px 10px}
+  .brand-panel{padding:7px;min-height:52px}
+  .brand-panel img{width:48px;height:38px;object-fit:cover;object-position:top}
+  .brand-caption,.nav-label,.nav-link span,.nav-count,.sidebar-user{display:none}
+  .nav-link{justify-content:center;padding:12px 7px}
+  .sidebar-bottom{justify-content:center;padding:14px 0 0}
+  .main-grid,.bottom-grid{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .topbar{height:62px;padding:0 14px}
+  .breadcrumb{font-size:11px}
+  .search-box{display:none}
+  .top-profile-text{display:none}
+  .content{padding:22px 14px}
+  .page-heading{align-items:flex-start;flex-direction:column}
+  .heading-actions{width:100%;flex-wrap:wrap}
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .kpi-card{padding:14px}
+  .kpi-value{font-size:22px}
+  .card-header,.table-toolbar{padding-left:15px;padding-right:15px}
+  .chart-summary{padding-left:15px}
+  .chart-legend{padding-left:15px}
+  .footer{flex-direction:column}
+}
+@media print{
+  .sidebar,.topbar,.heading-actions,.preview-note,.btn{display:none!important}
+  body{background:#fff}
+  .content{padding:0}
+  .card,.kpi-card{box-shadow:none;break-inside:avoid}
+}
+
+.dashboard-empty-state{margin:14px 18px 18px;padding:34px 20px;text-align:center;border:1px dashed #dfe8e1;border-radius:12px;background:#fafcfb;color:#87948b;font-size:11px;line-height:1.6}.dashboard-empty-state.compact{margin:12px;padding:24px 16px}.import-status.preview-only{background:#f1f4f2;color:#758279}
+
+</style>
+<link rel="stylesheet" href="tfi-shell-standard.css">
+<link rel="stylesheet" href="dashboard-kpi.css">
+
+
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand-panel"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div>
+    <div class="brand-caption">PRODUCTION MANAGEMENT</div>
+
+    <nav>
+  <div class="nav-group"><div class="nav-label">Overview</div>
+   <button class="nav-link active" data-page="Dashboard" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link" data-page="Product Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 20V9l8-5 8 5v11"/><path d="M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="5" width="18" height="16" rx="2"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="5" y="4" width="14" height="16"/></svg><span>DMR Production</span></button>
+   <button class="nav-link" data-page="DMR Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+   <button class="nav-link" data-page="Yield Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21c4-2 7-6 7-10A7 7 0 0 0 5 11c0 4 3 8 7 10Z"/></svg><span>Yield Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link" data-page="CO QA"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link" data-page="Spreadsheet Import"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24" width="17" height="17"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link" data-page="Reports"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports &amp; Reconciliation</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Security & Activity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/><path d="M12 8v4M12 16h.01"/></svg><span>Security &amp; Activity</span></button><button class="nav-link" data-page="Security Alert Rules & Notifications"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span>Security Alert Rules &amp; Notifications</span></button>
+   <button class="nav-link" data-page="Audit Trail"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link" data-page="Settings"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav>
+
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-bottom">
+      <div class="avatar">AD</div>
+      <div class="sidebar-user"><strong>System Administrator</strong><span>Administrator Account</span></div>
+    </div>
+  </aside>
+
+  <div class="main-shell">
+    <header class="topbar">
+      <div class="breadcrumb"><span>TFI</span><span class="slash">/</span><strong id="breadcrumb-page">Dashboard</strong></div>
+      <div class="top-actions">
+        <label class="search-box">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <input id="module-search" type="search" placeholder="Search modules..." aria-label="Search modules">
+        </label>
+        <button class="icon-button" id="notification-button" aria-label="Notifications">
+          <svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><span class="notification-dot"></span>
+        </button>
+        <div class="top-profile"><div class="avatar">AD</div><div class="top-profile-text"><strong>Administrator</strong><span>System Admin</span></div></div>
+      </div>
+    </header>
+
+    <main class="content kpi-dashboard">
+  <section class="kpi-page-heading">
+    <div>
+      <div class="eyebrow">OPERATIONS PERFORMANCE</div>
+      <h1>KPI Dashboard</h1>
+      <p class="page-subtitle">Production output, productivity, downtime, OEE, yield, and quality in one view.</p>
+    </div>
+    <div class="kpi-heading-actions">
+      <span class="kpi-data-status"><span></span>No verified data</span>
+      <button class="btn btn-primary" id="kpi-open-import" type="button">Open Import Center <span aria-hidden="true">→</span></button>
+    </div>
+  </section>
+
+  <div class="kpi-data-notice" role="status">
+    <span class="kpi-notice-icon">i</span>
+    <div><strong>No verified operational records are available in the dashboard.</strong><span>KPI values, charts, and reports will remain empty until eligible records are available in TFI. Spreadsheet display values are not used as live system data.</span></div>
+  </div>
+
+  <section class="kpi-filter-bar" aria-label="Dashboard filters">
+    <div class="kpi-filter"><label for="kpi-filter-year">YEAR</label><select id="kpi-filter-year" disabled><option>—</option></select></div>
+    <div class="kpi-filter"><label for="kpi-filter-view">VIEW</label><select id="kpi-filter-view" disabled><option>—</option></select></div>
+    <div class="kpi-filter"><label for="kpi-filter-month">MONTH</label><select id="kpi-filter-month" disabled><option>—</option></select></div>
+    <div class="kpi-filter"><label for="kpi-filter-week">WEEK NO.</label><select id="kpi-filter-week" disabled><option>—</option></select></div>
+    <div class="kpi-filter"><label for="kpi-filter-date">DATE</label><select id="kpi-filter-date" disabled><option>—</option></select></div>
+    <div class="kpi-filter"><label for="kpi-filter-product">PRODUCT NAME</label><select id="kpi-filter-product" disabled><option>—</option></select></div>
+    <div class="kpi-filter"><label for="kpi-filter-code">PRODUCT CODE</label><select id="kpi-filter-code" disabled><option>—</option></select></div>
+    <div class="kpi-filter"><label for="kpi-filter-machine">MACHINE (OEE)</label><select id="kpi-filter-machine" disabled><option>—</option></select></div>
+    <div class="kpi-filter-footnote">Filters become available when verified dashboard data is connected.</div>
+  </section>
+
+  <nav class="kpi-section-tabs" role="tablist" aria-label="KPI dashboard sections">
+    <button class="kpi-section-tab active" type="button" role="tab" aria-selected="true" aria-controls="kpi-panel-overview" id="kpi-tab-overview" data-kpi-tab="overview">Overview</button>
+    <button class="kpi-section-tab" type="button" role="tab" aria-selected="false" aria-controls="kpi-panel-hourly" id="kpi-tab-hourly" data-kpi-tab="hourly" tabindex="-1">Hourly Monitoring</button>
+    <button class="kpi-section-tab" type="button" role="tab" aria-selected="false" aria-controls="kpi-panel-productivity" id="kpi-tab-productivity" data-kpi-tab="productivity" tabindex="-1">Productivity</button>
+    <button class="kpi-section-tab" type="button" role="tab" aria-selected="false" aria-controls="kpi-panel-downtime" id="kpi-tab-downtime" data-kpi-tab="downtime" tabindex="-1">Downtime</button>
+    <button class="kpi-section-tab" type="button" role="tab" aria-selected="false" aria-controls="kpi-panel-oee" id="kpi-tab-oee" data-kpi-tab="oee" tabindex="-1">OEE</button>
+    <button class="kpi-section-tab" type="button" role="tab" aria-selected="false" aria-controls="kpi-panel-yield" id="kpi-tab-yield" data-kpi-tab="yield" tabindex="-1">Yield %</button>
+    <button class="kpi-section-tab" type="button" role="tab" aria-selected="false" aria-controls="kpi-panel-quality" id="kpi-tab-quality" data-kpi-tab="quality" tabindex="-1">Quality</button>
+    <button class="kpi-section-tab" type="button" role="tab" aria-selected="false" aria-controls="kpi-panel-production" id="kpi-tab-production" data-kpi-tab="production" tabindex="-1">Production Report</button>
+  </nav>
+
+  <section class="kpi-panel active" id="kpi-panel-overview" role="tabpanel" aria-labelledby="kpi-tab-overview" tabindex="0" data-kpi-panel="overview">
+    <div class="kpi-section-heading">
+      <div><h2>Overview</h2><p>All figures follow the filters above. Comparisons use the previous period when verified records are available.</p></div>
+      <span class="kpi-section-note">▲▼ Period comparison · Not available yet</span>
+    </div>
+
+    <div class="kpi-stat-grid">
+      <article class="kpi-stat-card"><div class="kpi-stat-label">TOTAL OUTPUT <span>(tins)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified production records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">OUTPUT ATTAINMENT</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No comparison data</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">PRODUCTIVITY <span>(tins/MHR)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified manpower hours</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">OEE</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified OEE records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">AVG % YIELD <span>(main)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified yield records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">FG REJECT %</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified quality records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">DOWNTIME <span>(hrs)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified downtime records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">% DOWNTIME</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No comparison data</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">MACHINE-RELATED DT <span>(hrs)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified downtime records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">MANPOWER-RELATED DT <span>(hrs)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified downtime records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">MTBF <span>(hrs)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified breakdown records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">MANPOWER HOURS <span>(MHR)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified manpower records</div></article>
+    </div>
+
+    <div class="kpi-content-grid">
+      <article class="kpi-section-card">
+        <div class="kpi-card-heading"><div><h3>Productivity &amp; Output</h3><p>Output and productivity across the selected period</p></div><span class="kpi-card-tag">Trend</span></div>
+        <div class="kpi-empty"><span class="kpi-empty-icon">⌁</span><strong>No verified production data</strong><span>The performance trend will appear here when eligible production and manpower records are available.</span></div>
+      </article>
+      <article class="kpi-section-card">
+        <div class="kpi-card-heading"><div><h3>Machine vs Manpower</h3><p>Downtime contribution and operational comparison</p></div><span class="kpi-card-tag">Breakdown</span></div>
+        <div class="kpi-empty"><span class="kpi-empty-icon">◷</span><strong>No verified downtime data</strong><span>Machine-related and manpower-related downtime will be compared here.</span></div>
+      </article>
+      <article class="kpi-section-card">
+        <div class="kpi-card-heading"><div><h3>Downtime Reason Summary per Line</h3><p>Agri, Meat, and Coding line breakdown</p></div><span class="kpi-card-tag">By line</span></div>
+        <div class="kpi-empty"><span class="kpi-empty-icon">▤</span><strong>No verified downtime reasons</strong><span>Reason groups, hours, share, and cumulative percentage will appear here.</span></div>
+      </article>
+      <article class="kpi-section-card">
+        <div class="kpi-card-heading"><div><h3>OEE Snapshot</h3><p>Availability × Performance × Quality</p></div><span class="kpi-card-tag">Equipment</span></div>
+        <div class="kpi-empty"><span class="kpi-empty-icon">◉</span><strong>No verified OEE records</strong><span>OEE factors and machine-level performance will appear after source data is verified.</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="kpi-panel" id="kpi-panel-hourly" role="tabpanel" aria-labelledby="kpi-tab-hourly" tabindex="0" data-kpi-panel="hourly" hidden>
+    <div class="kpi-section-heading"><div><h2>Hourly Monitoring — Daily Target Tracker</h2><p>Day target, actual output, attainment, and projected end-of-day performance by line.</p></div></div>
+    <div class="kpi-line-grid">
+      <article class="kpi-section-card kpi-line-card"><div class="kpi-card-heading"><div><h3>Agri Line</h3><p>Hourly target and actual output</p></div><span class="kpi-card-tag">Agri</span></div><div class="kpi-mini-metrics"><div><span>Day target (tins)</span><strong>—</strong></div><div><span>Actual so far (tins)</span><strong>—</strong></div><div><span>Attainment vs day target</span><strong>—</strong></div><div><span>Projected end of day</span><strong>—</strong></div></div><div class="kpi-empty compact"><strong>No verified hourly records</strong><span>Hourly trend will appear here.</span></div></article>
+      <article class="kpi-section-card kpi-line-card"><div class="kpi-card-heading"><div><h3>Meat Line</h3><p>Hourly target and actual output</p></div><span class="kpi-card-tag">Meat</span></div><div class="kpi-mini-metrics"><div><span>Day target (tins)</span><strong>—</strong></div><div><span>Actual so far (tins)</span><strong>—</strong></div><div><span>Attainment vs day target</span><strong>—</strong></div><div><span>Projected end of day</span><strong>—</strong></div></div><div class="kpi-empty compact"><strong>No verified hourly records</strong><span>Hourly trend will appear here.</span></div></article>
+      <article class="kpi-section-card kpi-line-card"><div class="kpi-card-heading"><div><h3>Coding Line</h3><p>Hourly target and actual output</p></div><span class="kpi-card-tag">Coding</span></div><div class="kpi-mini-metrics"><div><span>Day target (tins)</span><strong>—</strong></div><div><span>Actual so far (tins)</span><strong>—</strong></div><div><span>Attainment vs day target</span><strong>—</strong></div><div><span>Projected end of day</span><strong>—</strong></div></div><div class="kpi-empty compact"><strong>No verified hourly records</strong><span>Hourly trend will appear here.</span></div></article>
+    </div>
+    <article class="kpi-section-card kpi-table-card"><div class="kpi-card-heading"><div><h3>By Product Code</h3><p>Codes running on the selected date</p></div></div><div class="kpi-empty"><span class="kpi-empty-icon">▤</span><strong>No verified product-code activity</strong><span>Target, actual, attainment, and status will appear here.</span></div></article>
+  </section>
+
+  <section class="kpi-panel" id="kpi-panel-productivity" role="tabpanel" aria-labelledby="kpi-tab-productivity" tabindex="0" data-kpi-panel="productivity" hidden>
+    <div class="kpi-section-heading"><div><h2>Productivity &amp; Output</h2><p>Production output, manpower hours, and productivity against standard.</p></div></div>
+    <div class="kpi-stat-grid kpi-stat-grid-four">
+      <article class="kpi-stat-card"><div class="kpi-stat-label">TOTAL OUTPUT <span>(tins)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">PRODUCTIVITY <span>(tins/MHR)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">PRODUCTIVITY VS STANDARD</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified standard comparison</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">MANPOWER HOURS <span>(MHR)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified manpower records</div></article>
+    </div>
+    <article class="kpi-section-card"><div class="kpi-card-heading"><div><h3>Productivity Trend</h3><p>Output and tins per manpower hour over time</p></div></div><div class="kpi-empty"><span class="kpi-empty-icon">⌁</span><strong>No verified productivity data</strong><span>The trend chart will appear when eligible production and manpower records are available.</span></div></article>
+    <article class="kpi-section-card kpi-table-card"><div class="kpi-card-heading"><div><h3>Productivity by Line</h3><p>Current period compared with the previous period</p></div></div><div class="kpi-empty"><span class="kpi-empty-icon">▤</span><strong>No verified productivity records</strong><span>Line-level output, MHR, productivity, and comparison will appear here.</span></div></article>
+  </section>
+
+  <section class="kpi-panel" id="kpi-panel-downtime" role="tabpanel" aria-labelledby="kpi-tab-downtime" tabindex="0" data-kpi-panel="downtime" hidden>
+    <div class="kpi-section-heading"><div><h2>Downtime</h2><p>Production downtime, reason groups, and line-level Pareto breakdown.</p></div></div>
+    <div class="kpi-stat-grid kpi-stat-grid-five">
+      <article class="kpi-stat-card"><div class="kpi-stat-label">TOTAL DOWNTIME <span>(hrs)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">MACHINE-RELATED <span>(hrs)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">MANPOWER-RELATED <span>(hrs)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">MTBF <span>(hrs)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified breakdown records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">MTTR <span>(min/breakdown)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified breakdown records</div></article>
+    </div>
+    <div class="kpi-line-grid">
+      <article class="kpi-section-card"><div class="kpi-card-heading"><div><h3>Agri Line</h3><p>Downtime reason Pareto</p></div></div><div class="kpi-empty compact"><strong>No verified downtime reasons</strong><span>Reason, hours, share, and cumulative percentage will appear here.</span></div></article>
+      <article class="kpi-section-card"><div class="kpi-card-heading"><div><h3>Meat Line</h3><p>Downtime reason Pareto</p></div></div><div class="kpi-empty compact"><strong>No verified downtime reasons</strong><span>Reason, hours, share, and cumulative percentage will appear here.</span></div></article>
+      <article class="kpi-section-card"><div class="kpi-card-heading"><div><h3>Coding — Agri + Meat</h3><p>Downtime reason Pareto</p></div></div><div class="kpi-empty compact"><strong>No verified downtime reasons</strong><span>Reason, hours, share, and cumulative percentage will appear here.</span></div></article>
+    </div>
+  </section>
+
+  <section class="kpi-panel" id="kpi-panel-oee" role="tabpanel" aria-labelledby="kpi-tab-oee" tabindex="0" data-kpi-panel="oee" hidden>
+    <div class="kpi-section-heading"><div><h2>OEE — Overall Equipment Effectiveness</h2><p>Availability × Performance × Quality. Only verified machine readings will be included.</p></div></div>
+    <div class="kpi-stat-grid kpi-stat-grid-four">
+      <article class="kpi-stat-card"><div class="kpi-stat-label">AVAILABILITY</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified OEE readings</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">PERFORMANCE</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified OEE readings</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">QUALITY</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified OEE readings</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">OEE</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified OEE readings</div></article>
+    </div>
+    <article class="kpi-section-card kpi-table-card"><div class="kpi-card-heading"><div><h3>OEE by Machine</h3><p>Selected period · machine-level performance and status</p></div></div><div class="kpi-empty"><span class="kpi-empty-icon">◉</span><strong>No verified machine OEE records</strong><span>Planned hours, run hours, availability, performance, quality, OEE, and status will appear here.</span></div></article>
+  </section>
+
+  <section class="kpi-panel" id="kpi-panel-yield" role="tabpanel" aria-labelledby="kpi-tab-yield" tabindex="0" data-kpi-panel="yield" hidden>
+    <div class="kpi-section-heading"><div><h2>Yield %</h2><p>Yield performance per product and reject rates across production stages.</p></div></div>
+    <div class="kpi-stat-grid kpi-stat-grid-four">
+      <article class="kpi-stat-card"><div class="kpi-stat-label">AVG % YIELD <span>(main)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified yield records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">STAGE 2 % YIELD</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified yield records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">STAGE 3 % YIELD</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified yield records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">TOTAL REJECT %</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified reject records</div></article>
+    </div>
+    <div class="kpi-line-grid">
+      <article class="kpi-section-card"><div class="kpi-card-heading"><div><h3>Lid / Can-End Reject %</h3><p>Selected period</p></div></div><div class="kpi-empty compact"><strong>No verified reject data</strong><span>No rate is calculated without source records.</span></div></article>
+      <article class="kpi-section-card"><div class="kpi-card-heading"><div><h3>Empty Can Reject %</h3><p>Selected period</p></div></div><div class="kpi-empty compact"><strong>No verified reject data</strong><span>No rate is calculated without source records.</span></div></article>
+      <article class="kpi-section-card"><div class="kpi-card-heading"><div><h3>Box Reject %</h3><p>Selected period</p></div></div><div class="kpi-empty compact"><strong>No verified reject data</strong><span>No rate is calculated without source records.</span></div></article>
+    </div>
+    <article class="kpi-section-card kpi-table-card"><div class="kpi-card-heading"><div><h3>Top Products by FG Output — Yield Scorecard</h3><p>Product-level yield and reject comparison</p></div></div><div class="kpi-empty"><span class="kpi-empty-icon">▤</span><strong>No verified product yield records</strong><span>Main yield, stage yields, reject percentage, and trend will appear here.</span></div></article>
+  </section>
+
+  <section class="kpi-panel" id="kpi-panel-quality" role="tabpanel" aria-labelledby="kpi-tab-quality" tabindex="0" data-kpi-panel="quality" hidden>
+    <div class="kpi-section-heading"><div><h2>Quality — FG Rejects</h2><p>Finished-goods rejects, coding and labelling rejects, and data-driven quality trends.</p></div></div>
+    <div class="kpi-stat-grid kpi-stat-grid-four">
+      <article class="kpi-stat-card"><div class="kpi-stat-label">FG REJECTS <span>(tins)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified quality records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">FG REJECT %</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified quality records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">CODING &amp; LABELLING REJECTS</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified reject records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">QUALITY TREND</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified comparison data</div></article>
+    </div>
+    <div class="kpi-content-grid">
+      <article class="kpi-section-card"><div class="kpi-card-heading"><div><h3>Auto Insights</h3><p>Findings generated from verified quality and production data</p></div></div><div class="kpi-empty"><span class="kpi-empty-icon">✧</span><strong>No insights available</strong><span>Insights will be generated only when the underlying data is available and validated.</span></div></article>
+      <article class="kpi-section-card"><div class="kpi-card-heading"><div><h3>Trend Scoreboard</h3><p>Last 12 periods</p></div></div><div class="kpi-empty"><span class="kpi-empty-icon">⌁</span><strong>No verified trend data</strong><span>Trend direction and performance verdicts will appear here.</span></div></article>
+    </div>
+  </section>
+
+  <section class="kpi-panel" id="kpi-panel-production" role="tabpanel" aria-labelledby="kpi-tab-production" tabindex="0" data-kpi-panel="production" hidden>
+    <div class="kpi-section-heading"><div><h2>Production Report</h2><p>Supervisor opening and closing records, attainment, attendance, and overtime by production line.</p></div></div>
+    <div class="kpi-stat-grid kpi-stat-grid-six">
+      <article class="kpi-stat-card"><div class="kpi-stat-label">DAYS LOGGED</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">OUTPUT ATTAINMENT <span>(avg %)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">ATTENDANCE <span>(avg %)</span></div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">OT HOURS</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">ROWS BELOW 95%</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+      <article class="kpi-stat-card"><div class="kpi-stat-label">PRODUCT ROWS LOGGED</div><div class="kpi-stat-value">—</div><div class="kpi-stat-foot">No verified records</div></article>
+    </div>
+    <article class="kpi-section-card kpi-table-card"><div class="kpi-card-heading"><div><h3>By Production Line</h3><p>Agri, Meat, Finishing, and all-line reporting</p></div></div><div class="kpi-empty"><span class="kpi-empty-icon">▤</span><strong>No verified production report records</strong><span>Rows logged, target, produced, average attainment, attendance, overtime, and absence figures will appear here.</span></div></article>
+  </section>
+
+  <footer class="kpi-dashboard-footer"><span><strong>TOSEN FOODS, INC.</strong> · Production Management System</span><span>KPI Dashboard · Data from verified TFI records only</span></footer>
+</main>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head"><h3 id="modal-title">Spreadsheet Import Center</h3><button class="modal-close" id="modal-close" aria-label="Close">×</button></div>
+    <p>Open the Spreadsheet Import Center to select the latest workbook and begin a controlled scan.</p>
+    <div class="modal-actions"><button class="btn btn-outline" id="modal-dismiss">Close</button><button class="btn btn-primary" id="modal-confirm">Open Import Center</button></div>
+  </div>
+</div>
+
+<script src="dashboard-kpi-ui.js"></script>
+<script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+</body>
+</html>

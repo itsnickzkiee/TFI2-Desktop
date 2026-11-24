@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TFI | Audit Trail</title>
+<style>
+:root{--green:#086333;--deep:#064b29;--ink:#17251d;--line:#e7ede8;--canvas:#f4f7f5;--muted:#7c8981;--shadow:0 10px 30px rgba(25,55,37,.055)}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font-family:"Segoe UI",Inter,Arial,sans-serif;font-size:14px}button,input,select{font:inherit}button{cursor:pointer}
+.shell{min-height:100vh;display:flex}.sidebar{width:258px;flex:0 0 258px;background:linear-gradient(180deg,var(--green),var(--deep));color:#fff;display:flex;flex-direction:column;min-height:100vh;padding:22px 15px 18px;position:sticky;top:0;height:100vh;overflow-y:auto}.brand{background:#fff;border-radius:14px;padding:9px 11px;display:flex;align-items:center;justify-content:center;min-height:76px}.brand img{width:100%;max-width:208px}.brand-caption{text-align:center;color:#ffffffb8;font-size:9px;font-weight:800;letter-spacing:1.65px;margin:13px 0 26px}.nav-group{margin:0 0 18px}.nav-label{font-size:9px;text-transform:uppercase;letter-spacing:1.35px;font-weight:800;color:#ffffff85;padding:0 12px;margin:0 0 8px}.nav-link{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;margin:2px 0;border:0;border-radius:10px;background:transparent;color:#ffffffd1;font-size:12px;font-weight:600;text-align:left}.nav-link svg{width:17px;height:17px;flex:0 0 17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.nav-link:hover{background:#ffffff1a;color:#fff}.nav-link.active{background:#fff;color:var(--green);box-shadow:0 5px 14px #0002}.spacer{flex:1;min-height:15px}.avatar{width:34px;height:34px;border-radius:50%;background:#e5f0e8;color:var(--green);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 34px}.user-foot{border-top:1px solid #ffffff26;padding:15px 7px 0;display:flex;align-items:center;gap:10px}.user-foot strong,.profile strong{display:block;font-size:12px}.user-foot small{display:block;font-size:10px;color:#ffffffa3;margin-top:3px}
+.main{min-width:0;flex:1}.topbar{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px;position:sticky;top:0;z-index:5}.crumb{display:flex;align-items:center;gap:9px;color:#8a968e;font-size:12px;font-weight:600}.crumb b{color:#314239}.slash{color:#c1cbc4}.top-actions{display:flex;align-items:center;gap:15px}.search{height:38px;width:235px;border:1px solid #e8eee9;border-radius:10px;background:#fafcfb;display:flex;align-items:center;gap:9px;padding:0 12px;color:#95a199}.search svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}.search input{border:0;outline:0;background:transparent;width:100%;font-size:12px}.profile{display:flex;align-items:center;gap:9px}.profile small{display:block;font-size:10px;color:#758279;margin-top:2px}
+.content{max-width:1760px;margin:0 auto;padding:27px 30px 34px}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:18px}.eyebrow{font-size:10px;letter-spacing:1.5px;color:var(--green);font-weight:900;text-transform:uppercase;margin-bottom:7px}h1{font-size:27px;letter-spacing:-.8px;margin:0;font-weight:760}.subtitle{margin:7px 0 0;color:#78857d;font-size:12px}.heading-actions{display:flex;gap:9px;align-items:center}.btn{border:0;border-radius:9px;padding:10px 14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:750;transition:transform .16s}.btn:hover{transform:translateY(-1px)}.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.primary{background:var(--green);color:#fff;box-shadow:0 5px 12px #08633329}.outline{background:#fff;color:#3e5146;border:1px solid #e2eae4}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #e8eee9;background:#fff;border-radius:30px;padding:8px 11px;font-size:9px;color:#758279;font-weight:800}.pill:before{content:"";width:6px;height:6px;background:#9aa69e;border-radius:50%}
+.note{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #e8eee9;border-radius:11px;padding:10px 13px;margin-bottom:16px;color:#7a887f;font-size:10px;line-height:1.5}.note strong{color:#405248}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:17px}.metric{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 15px;box-shadow:var(--shadow);min-width:0}.metric-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.metric-label{font-size:9px;color:#87938b;font-weight:800;text-transform:uppercase;letter-spacing:.55px}.metric-icon{width:29px;height:29px;border-radius:8px;background:#f0f5f1;color:var(--green);display:grid;place-items:center;font-size:15px}.metric-value{font-size:23px;font-weight:820;letter-spacing:-.6px;color:#25382c;margin-top:7px}.metric-note{font-size:8px;color:#9aa59e;margin-top:3px}
+.workspace{display:grid;grid-template-columns:238px minmax(0,1fr);gap:15px;align-items:start}.catalog{background:#fff;border:1px solid #e8eee9;border-radius:14px;box-shadow:var(--shadow);padding:13px 10px}.catalog-head{padding:4px 8px 12px}.catalog-head strong{font-size:11px}.catalog-head span{display:block;color:#929e96;font-size:9px;margin-top:4px}.cat-label{font-size:8px;font-weight:900;color:#9aa59e;text-transform:uppercase;letter-spacing:1px;padding:12px 9px 6px}.cat{width:100%;border:0;background:transparent;color:#647269;display:flex;align-items:center;gap:9px;padding:9px;border-radius:8px;text-align:left;font-size:10px;font-weight:700;margin:2px 0}.cat:hover{background:#f5f8f5}.cat.active{background:#edf5ef;color:var(--green)}.cat .ico{width:25px;height:25px;display:grid;place-items:center;background:#f2f6f3;border-radius:7px;color:#5f7666;font-size:12px}.cat.active .ico{background:#dceee1;color:var(--green)}.cat .count{margin-left:auto;color:#99a49c;font-size:8px;font-weight:800}
+.panel{background:#fff;border:1px solid #e8eee9;border-radius:15px;box-shadow:var(--shadow);min-width:0;overflow:hidden}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:17px 18px 14px;border-bottom:1px solid #edf1ee}.panel-title{display:flex;align-items:center;gap:10px}.panel-icon{width:36px;height:36px;border-radius:10px;background:#edf5ef;color:var(--green);display:grid;place-items:center;font-size:17px}.panel-title h2{font-size:14px;margin:0;font-weight:800}.panel-title p{font-size:9px;color:#89958d;margin:5px 0 0}.panel-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.status{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:5px 8px;font-size:8px;font-weight:850;white-space:nowrap}.status:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}.editable{background:#eaf5ed;color:#267344}.readonly{background:#f0f3f1;color:#758279}.review{background:#fff5e7;color:#9b6a1b}.panel-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 17px}.tool-left{font-size:9px;color:#89958d}.tool-right{display:flex;align-items:center;gap:8px}.searchbox{height:34px;width:220px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 10px;outline:0;font-size:9px}.select{height:34px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 9px;color:#536258;font-size:9px;outline:0}
+.table-wrap{overflow:auto}.data-table{width:100%;border-collapse:collapse;min-width:760px}.data-table th{text-align:left;padding:11px 12px;background:#f8faf8;color:#87938b;text-transform:uppercase;letter-spacing:.45px;font-size:8px;font-weight:850;white-space:nowrap;border-bottom:1px solid #edf1ee}.data-table td{padding:12px;border-bottom:1px solid #f0f3f0;color:#68766d;font-size:9px;vertical-align:middle}.data-table tbody tr:hover{background:#fbfdfb}.data-table tbody tr:last-child td{border-bottom:0}.primary-cell{display:block;color:#34463b;font-size:10px;font-weight:800}.secondary{display:block;color:#9aa59e;font-size:8px;margin-top:4px}.code{font-weight:850;color:#086333;font-size:10px}.num{font-weight:800;color:#34463b;font-variant-numeric:tabular-nums}.row-action{border:0;background:transparent;color:var(--green);font-size:9px;font-weight:850;padding:5px}.panel-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid #edf1ee;color:#87938b;font-size:9px}.pagination{display:flex;gap:6px;align-items:center}.page-btn{height:27px;min-width:27px;border:1px solid #e4ebe5;border-radius:7px;background:#fff;color:#607066;font-size:9px}.page-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
+.info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:15px 17px}.info-card{border:1px solid #edf1ee;border-radius:10px;padding:13px}.info-card .k{font-size:8px;text-transform:uppercase;letter-spacing:.6px;color:#89958d;font-weight:850}.info-card strong{display:block;color:#304438;font-size:17px;margin-top:6px}.info-card p{font-size:8px;color:#8b978f;margin:5px 0 0;line-height:1.5}.callout{margin:0 17px 16px;background:#f7faf7;border:1px solid #e9f0ea;border-radius:10px;padding:12px 13px;color:#6f7e74;font-size:9px;line-height:1.6}.callout strong{color:#3b5043}.empty-table{padding:38px 15px;text-align:center;color:#8a978e;font-size:10px}.empty-table .big{font-size:24px;color:#9cad9f;margin-bottom:7px}
+.modal-backdrop{position:fixed;inset:0;background:#0a1c116e;z-index:15;display:none;align-items:center;justify-content:center;padding:20px}.modal-backdrop.open{display:flex}.modal{width:min(780px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:17px;box-shadow:0 24px 80px #0004;padding:22px}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.modal h3{font-size:15px;margin:0}.modal-close{border:0;background:#f2f6f3;border-radius:8px;width:30px;height:30px;color:#66756b;font-size:18px}.modal-sub{font-size:10px;color:#829087;margin:6px 0 17px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;color:#65736a;font-size:9px;font-weight:800;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #e1e9e3;border-radius:8px;padding:10px 11px;outline:0;color:#34463b;background:#fff;font-size:10px}.field input:focus,.field select:focus,.field textarea:focus{border-color:#78a98a;box-shadow:0 0 0 3px #08633312}.field.full{grid-column:1/-1}.field textarea{min-height:68px;resize:vertical}.modal-note{background:#f7faf7;border:1px solid #e9f0ea;border-radius:9px;padding:10px 12px;color:#748278;font-size:9px;line-height:1.5;margin-top:13px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.toast{position:fixed;right:24px;bottom:24px;z-index:30;background:#173d29;color:#fff;padding:12px 15px;border-radius:10px;box-shadow:0 12px 30px #0003;font-size:10px}
+@media(max-width:1250px){.content{padding:23px 20px}.topbar{padding:0 22px}.metrics{grid-template-columns:repeat(2,1fr)}.workspace{grid-template-columns:210px minmax(0,1fr)}}@media(max-width:900px){.sidebar{width:76px;flex-basis:76px;padding:18px 10px}.brand{padding:7px;min-height:52px}.brand img{width:48px;height:38px;object-fit:cover;object-position:top}.brand-caption,.nav-label,.nav-link span,.user-foot>div:last-child{display:none}.nav-link{justify-content:center;padding:12px 7px}.user-foot{justify-content:center;padding:14px 0 0}.workspace{grid-template-columns:1fr}.catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}.catalog-head{grid-column:1/-1}.cat-label{grid-column:1/-1}.cat{font-size:9px}.cat .count{display:none}}@media(max-width:620px){.content{padding:17px 12px}.topbar{height:62px;padding:0 12px}.search{display:none}.profile>div:last-child{display:none}.heading{align-items:flex-start;flex-direction:column}.heading-actions{flex-wrap:wrap}.metrics{grid-template-columns:repeat(2,1fr)}.panel-head,.panel-tools{align-items:flex-start;flex-direction:column}.tool-right{width:100%}.searchbox{width:100%;flex:1}.info-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+
+/* Audit Trail */
+.audit-note{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e8eee9;border-radius:11px;padding:11px 14px;margin-bottom:16px;color:#748278;font-size:10px;line-height:1.55}
+.audit-note .note-icon{width:28px;height:28px;border-radius:8px;background:#f0f5f1;color:var(--green);display:grid;place-items:center;flex:0 0 28px;font-weight:900}
+.audit-note strong{color:#3d5145}
+.audit-metrics .metric-value{font-variant-numeric:tabular-nums}
+.audit-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 13px}
+.audit-tabs{display:flex;gap:5px;flex-wrap:wrap}
+.audit-tab{border:1px solid transparent;background:transparent;border-radius:8px;padding:9px 11px;color:#738077;font-size:9px;font-weight:800}
+.audit-tab:hover{background:#fff}
+.audit-tab.active{background:#fff;border-color:#e4ebe5;color:var(--green);box-shadow:0 3px 10px #183a2410}
+.audit-filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.audit-search{height:35px;width:230px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 11px;outline:0;font-size:9px;color:#34463b}
+.audit-select{height:35px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 9px;color:#536258;font-size:9px;outline:0}
+.audit-card{background:#fff;border:1px solid #e8eee9;border-radius:15px;box-shadow:var(--shadow);overflow:hidden}
+.audit-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 17px;border-bottom:1px solid #edf1ee}
+.audit-card-head strong{font-size:12px;color:#2e4035}
+.audit-card-head span{font-size:9px;color:#8b978f}
+.audit-table-wrap{overflow:auto}
+.audit-table{width:100%;min-width:1050px;border-collapse:collapse}
+.audit-table th{text-align:left;padding:11px 12px;background:#f8faf8;color:#87938b;text-transform:uppercase;letter-spacing:.45px;font-size:8px;font-weight:850;white-space:nowrap;border-bottom:1px solid #edf1ee}
+.audit-table td{padding:12px;border-bottom:1px solid #f0f3f0;color:#68766d;font-size:9px;vertical-align:middle}
+.audit-table tbody tr:hover{background:#fbfdfb}
+.audit-table tbody tr:last-child td{border-bottom:0}
+.event-time{display:block;color:#34463b;font-weight:800;font-size:9px;white-space:nowrap}
+.event-date{display:block;color:#9aa59e;font-size:8px;margin-top:4px}
+.actor{display:flex;align-items:center;gap:8px;min-width:125px}
+.actor-avatar{width:27px;height:27px;display:grid;place-items:center;border-radius:8px;background:#edf5ef;color:var(--green);font-size:8px;font-weight:900;flex:0 0 27px}
+.actor-name{font-size:9px;color:#34463b;font-weight:800;white-space:nowrap}
+.actor-role{display:block;font-size:8px;color:#9aa59e;margin-top:3px}
+.event-action{display:block;color:#34463b;font-size:9px;font-weight:800}
+.event-detail{display:block;color:#929e96;font-size:8px;margin-top:4px;max-width:260px;line-height:1.45}
+.event-ref{font-size:9px;color:#086333;font-weight:800;white-space:nowrap}
+.event-summary{max-width:260px;line-height:1.5;color:#6f7c73}
+.event-type{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:20px;font-size:8px;font-weight:850;white-space:nowrap}
+.event-type:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.type-data{background:#eaf5ed;color:#267344}.type-import{background:#edf3fb;color:#426a9a}.type-access{background:#fff5e7;color:#9b6a1b}.type-system{background:#f0f3f1;color:#758279}
+.audit-view{border:0;background:transparent;color:var(--green);font-size:9px;font-weight:850;padding:5px 2px;white-space:nowrap}
+.audit-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid #edf1ee;color:#87938b;font-size:9px}
+.audit-empty{text-align:center;padding:42px 15px;color:#8a978e;font-size:10px}
+.audit-empty b{display:block;font-size:24px;color:#9cad9f;margin-bottom:7px}
+.detail-banner{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#f7faf7;border:1px solid #e9f0ea;border-radius:9px;color:#526258;font-size:9px;margin:12px 0 15px}
+.detail-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.detail-field{border:1px solid #edf1ee;border-radius:9px;padding:10px;min-width:0}
+.detail-field span{display:block;font-size:8px;text-transform:uppercase;letter-spacing:.55px;color:#8b978f;font-weight:850}
+.detail-field strong{display:block;font-size:10px;color:#3c4d42;margin-top:5px;overflow-wrap:anywhere;line-height:1.45}
+.change-box{border:1px solid #edf1ee;border-radius:9px;padding:12px;margin-top:10px}
+.change-box h4{font-size:9px;color:#718076;text-transform:uppercase;letter-spacing:.5px;margin:0 0 9px}
+.change-pair{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.change-value{border-radius:8px;background:#f7faf7;padding:10px;font-size:9px;color:#526258;overflow-wrap:anywhere}
+.change-value small{display:block;color:#99a49c;font-size:8px;margin-bottom:5px;font-weight:800;text-transform:uppercase}
+@media(max-width:900px){.audit-toolbar{align-items:flex-start;flex-direction:column}.audit-filters{width:100%}.audit-search{flex:1;width:auto}}
+@media(max-width:620px){.audit-filters{width:100%}.audit-search{min-width:100%}.audit-select{flex:1}.detail-fields,.change-pair{grid-template-columns:1fr}.audit-card-head,.audit-foot{align-items:flex-start;flex-direction:column}}
+
+
+#export-audit:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+
+</style>
+<link rel="stylesheet" href="tfi-shell-standard.css">
+
+</head><body><div class="shell">
+<aside class="sidebar"><div class="brand"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div><div class="brand-caption">PRODUCTION MANAGEMENT</div><nav>
+  <div class="nav-group"><div class="nav-label">Overview</div>
+   <button class="nav-link" data-page="Dashboard"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link" data-page="Product Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 20V9l8-5 8 5v11"/><path d="M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="5" width="18" height="16" rx="2"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="5" y="4" width="14" height="16"/></svg><span>DMR Production</span></button>
+   <button class="nav-link" data-page="DMR Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+   <button class="nav-link" data-page="Yield Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21c4-2 7-6 7-10A7 7 0 0 0 5 11c0 4 3 8 7 10Z"/></svg><span>Yield Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link" data-page="CO QA"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link" data-page="Spreadsheet Import"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24" width="17" height="17"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link" data-page="Reports"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Security & Activity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/><path d="M12 8v4M12 16h.01"/></svg><span>Security &amp; Activity</span></button><button class="nav-link" data-page="Security Alert Rules & Notifications"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span>Security Alert Rules &amp; Notifications</span></button>
+   <button class="nav-link active" data-page="Audit Trail" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link" data-page="Settings"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav><div class="spacer"></div><div class="user-foot"><div class="avatar">AD</div><div><strong>System Administrator</strong><small>Administrator Account</small></div></div></aside>
+<div class="main"><header class="topbar"><div class="crumb"><span>TFI</span><span class="slash">/</span><span>Administration</span><span class="slash">/</span><b>Audit Trail</b></div><div class="top-actions"><label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="global-search" placeholder="Search..." aria-label="Search"></label><div class="profile"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div></div></header>
+
+<main class="content">
+<div class="heading">
+ <div><div class="eyebrow">ADMINISTRATION / SYSTEM ACCOUNTABILITY</div><h1>Audit Trail</h1><p class="subtitle">Review user activities, data changes, and important system events in one place.</p></div>
+ <div class="heading-actions"><span class="pill">Read-only activity log</span><button class="btn primary" id="export-audit" disabled><svg viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M4 19h16"/></svg>Export CSV</button></div>
+</div>
+<div class="audit-note"><span class="note-icon">i</span><span><strong>Audit capture is not connected yet.</strong> This page will display verified, immutable events after authenticated activity logging is enabled. No sample events are shown.</span></div>
+<div class="metrics audit-metrics">
+ <div class="metric"><div class="metric-top"><span class="metric-label">Matching events</span><span class="metric-icon">▤</span></div><div class="metric-value" id="metric-events">—</div><div class="metric-note">Matching activity records</div></div>
+ <div class="metric"><div class="metric-top"><span class="metric-label">Data changes</span><span class="metric-icon">✎</span></div><div class="metric-value" id="metric-changes">—</div><div class="metric-note">Create or update actions</div></div>
+ <div class="metric"><div class="metric-top"><span class="metric-label">Import activities</span><span class="metric-icon">⇧</span></div><div class="metric-value" id="metric-imports">—</div><div class="metric-note">Workbook scan and import events</div></div>
+ <div class="metric"><div class="metric-top"><span class="metric-label">Access &amp; security</span><span class="metric-icon">◈</span></div><div class="metric-value" id="metric-access">—</div><div class="metric-note">Account and permission events</div></div>
+</div>
+<div class="audit-toolbar">
+ <div class="audit-tabs" role="tablist" aria-label="Filter audit events" aria-orientation="horizontal">
+  <button class="audit-tab active" id="audit-tab-all" role="tab" aria-selected="true" aria-controls="audit-panel" tabindex="0" data-kind="all">All activity</button>
+  <button class="audit-tab" id="audit-tab-data" role="tab" aria-selected="false" aria-controls="audit-panel" tabindex="-1" data-kind="data">Data changes</button>
+  <button class="audit-tab" id="audit-tab-import" role="tab" aria-selected="false" aria-controls="audit-panel" tabindex="-1" data-kind="import">Imports</button>
+  <button class="audit-tab" id="audit-tab-access" role="tab" aria-selected="false" aria-controls="audit-panel" tabindex="-1" data-kind="access">Access &amp; security</button>
+  <button class="audit-tab" id="audit-tab-system" role="tab" aria-selected="false" aria-controls="audit-panel" tabindex="-1" data-kind="system">System events</button>
+ </div>
+ <div class="audit-filters">
+  <input class="audit-search" id="event-search" placeholder="Search user, action, record, or event ID..." aria-label="Search audit events">
+  <select class="audit-select" id="module-filter" aria-label="Filter by module">
+   <option value="all">All modules</option>
+   <optgroup label="Production"><option>Product Entry</option><option>Production Entry</option><option>Production Schedule</option></optgroup>
+   <optgroup label="Monitoring"><option>DMP Production</option><option>DMR Production</option><option>DMR Coding</option><option>Hourly Meat</option><option>Hourly Coding</option><option>Hourly Agri</option><option>OEE</option><option>Productivity</option><option>Yield Monitoring</option></optgroup>
+   <optgroup label="Quality &amp; Control"><option>Coding DPR</option><option>CO QA</option><option>NON-PROD</option><option>PR Monitoring</option></optgroup>
+   <optgroup label="Data &amp; Reports"><option>Spreadsheet Import</option><option>Module Import Inbox</option><option>Import History</option><option>Reports &amp; Reconciliation</option></optgroup>
+   <optgroup label="Master Data"><option>Master Data</option><option>Product Standard and Specification</option><option>Code Map</option><option>Yield Map</option><option>Entry Map</option><option>KPI Setup</option><option>DPR LEGEND</option><option>DMP LEGEND</option><option>MANPOWER</option><option>Schedule Lists</option></optgroup>
+   <optgroup label="Administration"><option>Users &amp; Access</option><option>Audit Trail</option><option>System Settings</option><option>Authentication</option></optgroup>
+   <optgroup label="Overview"><option>Dashboard</option></optgroup>
+  </select>
+  <select class="audit-select" id="date-filter" aria-label="Filter by date"><option value="all">All dates</option><option value="today">Today</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option></select>
+ </div>
+</div>
+<section class="audit-card" id="audit-panel" role="tabpanel" aria-labelledby="audit-tab-all" tabindex="0">
+ <div class="audit-card-head"><div><strong>Activity records</strong> <span id="audit-count" aria-live="polite">No audit events available</span></div><span>Newest activity first · Audit records are immutable</span></div>
+ <div class="audit-table-wrap"><table class="audit-table"><thead><tr><th>Date &amp; time</th><th>User / actor</th><th>Activity</th><th>Module</th><th>Record reference</th><th>Change summary</th><th>Type</th><th>Details</th></tr></thead><tbody id="audit-rows"></tbody></table></div>
+ <div class="audit-foot"><span id="audit-foot-note">Audit capture is not connected yet.</span><div class="pagination" id="audit-pagination" hidden></div></div>
+</section>
+<footer class="footer"><span><strong>TOSEN FOODS, INC.</strong> · Production Management System</span><span>Admin UI design preview · v0.1</span></footer>
+</main></div></div>
+
+<div class="modal-backdrop" id="event-modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="event-modal-title">
+ <div class="modal-head"><h3 id="event-modal-title">Audit event details</h3><button class="modal-close" id="close-event-modal" aria-label="Close">×</button></div>
+ <p class="modal-sub" id="event-modal-sub">Review the recorded activity and event metadata.</p>
+ <div class="detail-banner"><strong>Read-only record</strong><span>·</span><span>This event cannot be changed from the Audit Trail.</span></div>
+ <div class="detail-fields" id="event-detail-fields"></div>
+ <div id="event-change-box"></div>
+ <div class="modal-actions"><button class="btn outline" id="close-event-modal-bottom">Close</button></div>
+</div></div>
+<script>
+
+const events=[];
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let activeKind='all',visibleEvents=[];
+const kindLabels={data:'Data change',import:'Import',access:'Access & security',system:'System'};
+function matchesDate(e,period){
+ if(period==='all')return true;
+ const d=new Date(e.iso||e.timestamp||e.date);
+ if(Number.isNaN(d.getTime()))return false;
+ const now=new Date();
+ if(period==='today')return d.toDateString()===now.toDateString();
+ const days=Number(period);
+ return now-d>=0&&(now-d)/(1000*60*60*24)<=days;
+}
+function renderAudit(){
+ const terms=($('event-search').value+' '+$('global-search').value).trim().toLowerCase().split(/\s+/).filter(Boolean);
+ const module=$('module-filter').value,period=$('date-filter').value;
+ visibleEvents=events.filter(e=>(activeKind==='all'||e.kind===activeKind)&&(module==='all'||e.module===module)&&matchesDate(e,period)&&terms.every(term=>[e.id,e.user,e.role,e.action,e.module,e.record,e.summary,e.source].join(' ').toLowerCase().includes(term)));
+ $('audit-rows').innerHTML=visibleEvents.length?visibleEvents.map(e=>'<tr><td><span class="event-time">'+esc(e.time)+'</span><span class="event-date">'+esc(e.date)+'</span></td><td><div class="actor"><span class="actor-avatar">'+esc(e.initials)+'</span><span><span class="actor-name">'+esc(e.user)+'</span><span class="actor-role">'+esc(e.role)+'</span></span></div></td><td><span class="event-action">'+esc(e.action)+'</span><span class="event-detail">'+esc(e.description)+'</span></td><td>'+esc(e.module)+'</td><td><span class="event-ref">'+esc(e.record)+'</span><span class="event-date">'+esc(e.id)+'</span></td><td><span class="event-summary">'+esc(e.summary)+'</span></td><td><span class="event-type type-'+e.kind+'">'+esc(kindLabels[e.kind])+'</span></td><td><button class="audit-view" data-event="'+esc(e.id)+'">View details →</button></td></tr>').join(''):'<tr><td colspan="8"><div class="audit-empty"><b>⌕</b>No verified audit events are available yet. Events will appear here after authenticated audit capture is connected.</div></td></tr>';
+ $('audit-count').textContent=events.length?'Showing '+visibleEvents.length+' of '+events.length+' events':'No audit events available';
+ $('audit-foot-note').textContent=events.length?(visibleEvents.length?'Verified audit events are shown in read-only form.':'No events match the selected filters.'):'Audit capture is not connected yet.';
+ $('metric-events').textContent=events.length?visibleEvents.length:'—';
+ $('metric-changes').textContent=events.length?visibleEvents.filter(e=>e.kind==='data').length:'—';
+ $('metric-imports').textContent=events.length?visibleEvents.filter(e=>e.kind==='import').length:'—';
+ $('metric-access').textContent=events.length?visibleEvents.filter(e=>e.kind==='access').length:'—';
+ $('export-audit').disabled=visibleEvents.length===0;
+ $('audit-pagination').hidden=events.length===0;
+ document.querySelectorAll('[data-event]').forEach(b=>b.addEventListener('click',()=>showEvent(b.dataset.event)));
+}
+function showEvent(id){
+ const e=events.find(x=>x.id===id);if(!e)return;
+ $('event-modal-title').textContent=e.action;
+ $('event-modal-sub').textContent=e.id+' · '+e.date+' at '+e.time;
+ const fields=[['Event ID',e.id],['User / actor',e.user+' · '+e.role],['Date & time',e.date+' · '+e.time],['Activity type',kindLabels[e.kind]],['Module',e.module],['Record reference',e.record],['Source',e.source],['Description',e.description]];
+ $('event-detail-fields').innerHTML=fields.map(x=>'<div class="detail-field"><span>'+esc(x[0])+'</span><strong>'+esc(x[1])+'</strong></div>').join('');
+ $('event-change-box').innerHTML='<div class="change-box"><h4>Recorded change / outcome</h4><div class="change-pair"><div class="change-value"><small>Previous state</small>'+esc(e.before)+'</div><div class="change-value"><small>New state / outcome</small>'+esc(e.after)+'</div></div></div>';
+ $('event-modal').classList.add('open');
+}
+function closeEvent(){$('event-modal').classList.remove('open')}
+document.querySelectorAll('.audit-tab').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.audit-tab').forEach(x=>{x.classList.remove('active');x.setAttribute('aria-selected','false');x.tabIndex=-1});b.classList.add('active');b.setAttribute('aria-selected','true');b.tabIndex=0;$('audit-panel').setAttribute('aria-labelledby',b.id);activeKind=b.dataset.kind;renderAudit()});b.addEventListener('keydown',e=>{const tabs=[...document.querySelectorAll('.audit-tab')],i=tabs.indexOf(b);let next=-1;if(e.key==='ArrowRight')next=(i+1)%tabs.length;else if(e.key==='ArrowLeft')next=(i-1+tabs.length)%tabs.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=tabs.length-1;if(next<0)return;e.preventDefault();tabs[next].focus();tabs[next].click()})});
+$('event-search').addEventListener('input',renderAudit);$('global-search').addEventListener('input',renderAudit);$('module-filter').addEventListener('change',renderAudit);$('date-filter').addEventListener('change',renderAudit);
+$('close-event-modal').addEventListener('click',closeEvent);$('close-event-modal-bottom').addEventListener('click',closeEvent);$('event-modal').addEventListener('click',e=>{if(e.target===$('event-modal'))closeEvent()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeEvent()});
+$('export-audit').addEventListener('click',()=>{
+ const cols=['Event ID','Date','Time','User','Role','Activity','Module','Record Reference','Summary','Type','Source'];
+ const rows=visibleEvents.map(e=>[e.id,e.date,e.time,e.user,e.role,e.action,e.module,e.record,e.summary,kindLabels[e.kind],e.source]);
+ const csv=[cols,...rows].map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='TFI-Audit-Trail-preview.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+});
+document.querySelectorAll('.nav-link').forEach(b=>b.addEventListener('click',()=>{
+ const page=b.dataset.page;if(page==='Product Entry'){location.href='product-entry-preview.html';return}
+ if(page==='Audit Trail')return;if(page==='Settings'){location.href='system-settings-preview.html';return}if(page==='Users & Access'){location.href='users-access-preview.html';return}
+ if(page==='Master Data'){location.href='master-data-preview.html';return}
+ if(page==='Dashboard'){location.href='dashboard-preview.html';return}
+ if(page==='Spreadsheet Import'){location.href='spreadsheet-import-center-preview.html';return}
+ if(page==='Import History'){location.href='import-history-preview.html';return}
+ const toast=document.createElement('div');toast.className='toast';toast.textContent=page+' screen is included in the Admin UI plan.';document.body.appendChild(toast);setTimeout(()=>toast.remove(),2300);
+}));
+renderAudit();
+
+</script><script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+</body></html>
+
+[executed on device: DESKTOP-F1NGRI3 (8b895d9b-a075-47fb-bed3-5bc3a72923c9)]

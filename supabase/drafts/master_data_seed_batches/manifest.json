@@ -1,0 +1,112 @@
+{
+  "sourceWorkbook": "Copy of TFI - Production Monitoring Sheet 1",
+  "spreadsheetId": "1rCbQ16wj7MRjQCFF3tA-WEMkudraJK0RkwcqayUlz7k",
+  "auditDate": "2026-11-20",
+  "batchSize": 35,
+  "batches": 37,
+  "categories": [
+    {
+      "category": "product_standard",
+      "rows": 110,
+      "rowKinds": {
+        "header": 1,
+        "group_header": 26,
+        "data": 58,
+        "reserved_slot": 25
+      },
+      "editableRows": 58,
+      "notes": 0
+    },
+    {
+      "category": "code_map",
+      "rows": 72,
+      "rowKinds": {
+        "title": 1,
+        "instruction": 1,
+        "blank": 1,
+        "header": 1,
+        "data": 68
+      },
+      "editableRows": 68,
+      "notes": 0
+    },
+    {
+      "category": "yield_map",
+      "rows": 43,
+      "rowKinds": {
+        "title": 1,
+        "instruction": 1,
+        "blank": 1,
+        "header": 1,
+        "data": 39
+      },
+      "editableRows": 39,
+      "notes": 0
+    },
+    {
+      "category": "entry_map",
+      "rows": 43,
+      "rowKinds": {
+        "header": 1,
+        "data": 39,
+        "blank": 2,
+        "instruction": 1
+      },
+      "editableRows": 0,
+      "notes": 0
+    },
+    {
+      "category": "kpi_setup",
+      "rows": 129,
+      "rowKinds": {
+        "header": 1,
+        "data": 128
+      },
+      "editableRows": 0,
+      "notes": 0
+    },
+    {
+      "category": "dpr_legend",
+      "rows": 119,
+      "rowKinds": {
+        "title": 1,
+        "header": 1,
+        "data": 117
+      },
+      "editableRows": 0,
+      "notes": 0
+    },
+    {
+      "category": "dmp_legend",
+      "rows": 70,
+      "rowKinds": {
+        "header": 1,
+        "data": 69
+      },
+      "editableRows": 59,
+      "notes": 10
+    },
+    {
+      "category": "manpower",
+      "rows": 448,
+      "rowKinds": {
+        "title": 1,
+        "blank": 1,
+        "header": 1,
+        "data": 445
+      },
+      "editableRows": 445,
+      "notes": 0
+    },
+    {
+      "category": "schedule_lists",
+      "rows": 101,
+      "rowKinds": {
+        "header": 1,
+        "data": 100
+      },
+      "editableRows": 0,
+      "notes": 0
+    }
+  ]
+}

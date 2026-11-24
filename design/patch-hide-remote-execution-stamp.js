@@ -1,0 +1,8 @@
+const fs=require("fs"),file="C:/Users/Rominick/Desktop/TFI_NEW/design/tfi-shell-controls.js",backup=file+".pre-hide-execution-stamp-20261120.bak";
+let s=fs.readFileSync(file,"utf8");
+if(s.includes("TFI_HIDE_REMOTE_EXECUTION_STAMPS"))throw Error("Execution-stamp observer already installed; refusing duplicate patch.");
+const marker="  /* TFI_HIDE_REMOTE_EXECUTION_STAMPS: keep remote execution diagnostics out of the rendered preview. */\n  (function(){\n    const token='[executed on device:';\n    const removeFrom=(node)=>{\n      if(node.nodeType===Node.TEXT_NODE){\n        if((node.nodeValue||'').toLowerCase().includes(token))node.remove();\n        return;\n      }\n      if(node.nodeType!==Node.ELEMENT_NODE&&node.nodeType!==Node.DOCUMENT_FRAGMENT_NODE)return;\n      const walker=document.createTreeWalker(node,NodeFilter.SHOW_TEXT);\n      const matches=[];\n      while(walker.nextNode()){\n        const text=walker.currentNode;\n        if((text.nodeValue||'').toLowerCase().includes(token))matches.push(text);\n      }\n      matches.forEach(text=>text.remove());\n    };\n    removeFrom(document.body);\n    const observer=new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(removeFrom)));\n    observer.observe(document.documentElement,{childList:true,subtree:true});\n  })();\n";
+const anchor="})();";
+const i=s.lastIndexOf(anchor);if(i<0)throw Error("IIFE closing anchor missing.");
+fs.copyFileSync(file,backup);s=s.slice(0,i)+marker+s.slice(i);fs.writeFileSync(file,s,"utf8");
+console.log(JSON.stringify({file,backup,patched:true,bytes:Buffer.byteLength(s)}));

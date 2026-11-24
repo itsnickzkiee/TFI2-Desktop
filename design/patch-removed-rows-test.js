@@ -1,0 +1,14 @@
+const fs=require("fs");
+const p="C:/Users/Rominick/Desktop/TFI_NEW/design/test-removed-rows-ui.js";
+let s=fs.readFileSync(p,"utf8");
+const marker=' await frame.click(\'[data-report-page="Removed Rows"]\');\n frame=await active("removed-rows-preview.html");';
+const repl=' await frame.click(\'[data-report-page="Reports"]\');\n frame=await active("reports-reconciliation-preview.html");\n await frame.waitForFunction(()=>document.querySelectorAll("[data-report-page]").length===4);\n const productionTabs=await frame.$$eval("[data-report-page]",xs=>xs.length);\n await frame.click(\'[data-report-page="Removed Rows"]\');\n frame=await active("removed-rows-preview.html");';
+if(!s.includes(marker))throw new Error("Navigation test marker not found");
+s=s.replace(marker,repl);
+s=s.replace('navigation:{scheduleTabs,summaryTabs,finalActive}', 'navigation:{productionTabs,scheduleTabs,summaryTabs,finalActive}');
+s=s.replace('pageWidth:document.documentElement.scrollWidth,\n  noPageOverflow', 'pageWidth:document.documentElement.scrollWidth,\n  tabColumns:getComputedStyle(document.querySelector(".rr-report-tabs")).gridTemplateColumns.split(" ").length,\n  noPageOverflow');
+s=s.replace('&&scheduleTabs===4&&summaryTabs===4&&finalActive.module', '&&productionTabs===4&&scheduleTabs===4&&summaryTabs===4&&finalActive.module');
+s=s.replace('&&mobile.tabCount===4&&mobile.tableScroll&&errors.length===0&&failed.length===0;', '&&mobile.tabCount===4&&mobile.tabColumns===4&&mobile.tableScroll&&errors.length===0&&failed.filter(x=>!x.includes("ERR_ABORTED")).length===0;');
+s=s.replace('failedRequests:failed};', 'failedRequests:failed.filter(x=>!x.includes("ERR_ABORTED"))};');
+fs.writeFileSync(p,s,"utf8");
+console.log("Extended navigation coverage and ignored expected aborted iframe requests.");

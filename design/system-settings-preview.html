@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TFI | System Settings</title>
+<style>
+:root{--green:#086333;--deep:#064b29;--ink:#17251d;--line:#e7ede8;--canvas:#f4f7f5;--muted:#7c8981;--shadow:0 10px 30px rgba(25,55,37,.055)}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font-family:"Segoe UI",Inter,Arial,sans-serif;font-size:14px}button,input,select{font:inherit}button{cursor:pointer}
+.shell{min-height:100vh;display:flex}.sidebar{width:258px;flex:0 0 258px;background:linear-gradient(180deg,var(--green),var(--deep));color:#fff;display:flex;flex-direction:column;min-height:100vh;padding:22px 15px 18px;position:sticky;top:0;height:100vh;overflow-y:auto}.brand{background:#fff;border-radius:14px;padding:9px 11px;display:flex;align-items:center;justify-content:center;min-height:76px}.brand img{width:100%;max-width:208px}.brand-caption{text-align:center;color:#ffffffb8;font-size:9px;font-weight:800;letter-spacing:1.65px;margin:13px 0 26px}.nav-group{margin:0 0 18px}.nav-label{font-size:9px;text-transform:uppercase;letter-spacing:1.35px;font-weight:800;color:#ffffff85;padding:0 12px;margin:0 0 8px}.nav-link{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;margin:2px 0;border:0;border-radius:10px;background:transparent;color:#ffffffd1;font-size:12px;font-weight:600;text-align:left}.nav-link svg{width:17px;height:17px;flex:0 0 17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.nav-link:hover{background:#ffffff1a;color:#fff}.nav-link.active{background:#fff;color:var(--green);box-shadow:0 5px 14px #0002}.spacer{flex:1;min-height:15px}.avatar{width:34px;height:34px;border-radius:50%;background:#e5f0e8;color:var(--green);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 34px}.user-foot{border-top:1px solid #ffffff26;padding:15px 7px 0;display:flex;align-items:center;gap:10px}.user-foot strong,.profile strong{display:block;font-size:12px}.user-foot small{display:block;font-size:10px;color:#ffffffa3;margin-top:3px}
+.main{min-width:0;flex:1}.topbar{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 34px;position:sticky;top:0;z-index:5}.crumb{display:flex;align-items:center;gap:9px;color:#8a968e;font-size:12px;font-weight:600}.crumb b{color:#314239}.slash{color:#c1cbc4}.top-actions{display:flex;align-items:center;gap:15px}.search{height:38px;width:235px;border:1px solid #e8eee9;border-radius:10px;background:#fafcfb;display:flex;align-items:center;gap:9px;padding:0 12px;color:#95a199}.search svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}.search input{border:0;outline:0;background:transparent;width:100%;font-size:12px}.profile{display:flex;align-items:center;gap:9px}.profile small{display:block;font-size:10px;color:#758279;margin-top:2px}
+.content{max-width:1760px;margin:0 auto;padding:27px 30px 34px}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:18px}.eyebrow{font-size:10px;letter-spacing:1.5px;color:var(--green);font-weight:900;text-transform:uppercase;margin-bottom:7px}h1{font-size:27px;letter-spacing:-.8px;margin:0;font-weight:760}.subtitle{margin:7px 0 0;color:#78857d;font-size:12px}.heading-actions{display:flex;gap:9px;align-items:center}.btn{border:0;border-radius:9px;padding:10px 14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:11px;font-weight:750;transition:transform .16s}.btn:hover{transform:translateY(-1px)}.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.primary{background:var(--green);color:#fff;box-shadow:0 5px 12px #08633329}.outline{background:#fff;color:#3e5146;border:1px solid #e2eae4}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #e8eee9;background:#fff;border-radius:30px;padding:8px 11px;font-size:9px;color:#758279;font-weight:800}.pill:before{content:"";width:6px;height:6px;background:#9aa69e;border-radius:50%}
+.note{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #e8eee9;border-radius:11px;padding:10px 13px;margin-bottom:16px;color:#7a887f;font-size:10px;line-height:1.5}.note strong{color:#405248}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:17px}.metric{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 15px;box-shadow:var(--shadow);min-width:0}.metric-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.metric-label{font-size:9px;color:#87938b;font-weight:800;text-transform:uppercase;letter-spacing:.55px}.metric-icon{width:29px;height:29px;border-radius:8px;background:#f0f5f1;color:var(--green);display:grid;place-items:center;font-size:15px}.metric-value{font-size:23px;font-weight:820;letter-spacing:-.6px;color:#25382c;margin-top:7px}.metric-note{font-size:8px;color:#9aa59e;margin-top:3px}
+.workspace{display:grid;grid-template-columns:238px minmax(0,1fr);gap:15px;align-items:start}.catalog{background:#fff;border:1px solid #e8eee9;border-radius:14px;box-shadow:var(--shadow);padding:13px 10px}.catalog-head{padding:4px 8px 12px}.catalog-head strong{font-size:11px}.catalog-head span{display:block;color:#929e96;font-size:9px;margin-top:4px}.cat-label{font-size:8px;font-weight:900;color:#9aa59e;text-transform:uppercase;letter-spacing:1px;padding:12px 9px 6px}.cat{width:100%;border:0;background:transparent;color:#647269;display:flex;align-items:center;gap:9px;padding:9px;border-radius:8px;text-align:left;font-size:10px;font-weight:700;margin:2px 0}.cat:hover{background:#f5f8f5}.cat.active{background:#edf5ef;color:var(--green)}.cat .ico{width:25px;height:25px;display:grid;place-items:center;background:#f2f6f3;border-radius:7px;color:#5f7666;font-size:12px}.cat.active .ico{background:#dceee1;color:var(--green)}.cat .count{margin-left:auto;color:#99a49c;font-size:8px;font-weight:800}
+.panel{background:#fff;border:1px solid #e8eee9;border-radius:15px;box-shadow:var(--shadow);min-width:0;overflow:hidden}.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:17px 18px 14px;border-bottom:1px solid #edf1ee}.panel-title{display:flex;align-items:center;gap:10px}.panel-icon{width:36px;height:36px;border-radius:10px;background:#edf5ef;color:var(--green);display:grid;place-items:center;font-size:17px}.panel-title h2{font-size:14px;margin:0;font-weight:800}.panel-title p{font-size:9px;color:#89958d;margin:5px 0 0}.panel-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.status{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:5px 8px;font-size:8px;font-weight:850;white-space:nowrap}.status:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}.editable{background:#eaf5ed;color:#267344}.readonly{background:#f0f3f1;color:#758279}.review{background:#fff5e7;color:#9b6a1b}.panel-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 17px}.tool-left{font-size:9px;color:#89958d}.tool-right{display:flex;align-items:center;gap:8px}.searchbox{height:34px;width:220px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 10px;outline:0;font-size:9px}.select{height:34px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 9px;color:#536258;font-size:9px;outline:0}
+.table-wrap{overflow:auto}.data-table{width:100%;border-collapse:collapse;min-width:760px}.data-table th{text-align:left;padding:11px 12px;background:#f8faf8;color:#87938b;text-transform:uppercase;letter-spacing:.45px;font-size:8px;font-weight:850;white-space:nowrap;border-bottom:1px solid #edf1ee}.data-table td{padding:12px;border-bottom:1px solid #f0f3f0;color:#68766d;font-size:9px;vertical-align:middle}.data-table tbody tr:hover{background:#fbfdfb}.data-table tbody tr:last-child td{border-bottom:0}.primary-cell{display:block;color:#34463b;font-size:10px;font-weight:800}.secondary{display:block;color:#9aa59e;font-size:8px;margin-top:4px}.code{font-weight:850;color:#086333;font-size:10px}.num{font-weight:800;color:#34463b;font-variant-numeric:tabular-nums}.row-action{border:0;background:transparent;color:var(--green);font-size:9px;font-weight:850;padding:5px}.panel-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid #edf1ee;color:#87938b;font-size:9px}.pagination{display:flex;gap:6px;align-items:center}.page-btn{height:27px;min-width:27px;border:1px solid #e4ebe5;border-radius:7px;background:#fff;color:#607066;font-size:9px}.page-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
+.info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:15px 17px}.info-card{border:1px solid #edf1ee;border-radius:10px;padding:13px}.info-card .k{font-size:8px;text-transform:uppercase;letter-spacing:.6px;color:#89958d;font-weight:850}.info-card strong{display:block;color:#304438;font-size:17px;margin-top:6px}.info-card p{font-size:8px;color:#8b978f;margin:5px 0 0;line-height:1.5}.callout{margin:0 17px 16px;background:#f7faf7;border:1px solid #e9f0ea;border-radius:10px;padding:12px 13px;color:#6f7e74;font-size:9px;line-height:1.6}.callout strong{color:#3b5043}.empty-table{padding:38px 15px;text-align:center;color:#8a978e;font-size:10px}.empty-table .big{font-size:24px;color:#9cad9f;margin-bottom:7px}
+.modal-backdrop{position:fixed;inset:0;background:#0a1c116e;z-index:15;display:none;align-items:center;justify-content:center;padding:20px}.modal-backdrop.open{display:flex}.modal{width:min(780px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:17px;box-shadow:0 24px 80px #0004;padding:22px}.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.modal h3{font-size:15px;margin:0}.modal-close{border:0;background:#f2f6f3;border-radius:8px;width:30px;height:30px;color:#66756b;font-size:18px}.modal-sub{font-size:10px;color:#829087;margin:6px 0 17px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;color:#65736a;font-size:9px;font-weight:800;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #e1e9e3;border-radius:8px;padding:10px 11px;outline:0;color:#34463b;background:#fff;font-size:10px}.field input:focus,.field select:focus,.field textarea:focus{border-color:#78a98a;box-shadow:0 0 0 3px #08633312}.field.full{grid-column:1/-1}.field textarea{min-height:68px;resize:vertical}.modal-note{background:#f7faf7;border:1px solid #e9f0ea;border-radius:9px;padding:10px 12px;color:#748278;font-size:9px;line-height:1.5;margin-top:13px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.toast{position:fixed;right:24px;bottom:24px;z-index:30;background:#173d29;color:#fff;padding:12px 15px;border-radius:10px;box-shadow:0 12px 30px #0003;font-size:10px}
+@media(max-width:1250px){.content{padding:23px 20px}.topbar{padding:0 22px}.metrics{grid-template-columns:repeat(2,1fr)}.workspace{grid-template-columns:210px minmax(0,1fr)}}@media(max-width:900px){.sidebar{width:76px;flex-basis:76px;padding:18px 10px}.brand{padding:7px;min-height:52px}.brand img{width:48px;height:38px;object-fit:cover;object-position:top}.brand-caption,.nav-label,.nav-link span,.user-foot>div:last-child{display:none}.nav-link{justify-content:center;padding:12px 7px}.user-foot{justify-content:center;padding:14px 0 0}.workspace{grid-template-columns:1fr}.catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}.catalog-head{grid-column:1/-1}.cat-label{grid-column:1/-1}.cat{font-size:9px}.cat .count{display:none}}@media(max-width:620px){.content{padding:17px 12px}.topbar{height:62px;padding:0 12px}.search{display:none}.profile>div:last-child{display:none}.heading{align-items:flex-start;flex-direction:column}.heading-actions{flex-wrap:wrap}.metrics{grid-template-columns:repeat(2,1fr)}.panel-head,.panel-tools{align-items:flex-start;flex-direction:column}.tool-right{width:100%}.searchbox{width:100%;flex:1}.info-grid{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+
+/* Audit Trail */
+.audit-note{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e8eee9;border-radius:11px;padding:11px 14px;margin-bottom:16px;color:#748278;font-size:10px;line-height:1.55}
+.audit-note .note-icon{width:28px;height:28px;border-radius:8px;background:#f0f5f1;color:var(--green);display:grid;place-items:center;flex:0 0 28px;font-weight:900}
+.audit-note strong{color:#3d5145}
+.audit-metrics .metric-value{font-variant-numeric:tabular-nums}
+.audit-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 13px}
+.audit-tabs{display:flex;gap:5px;flex-wrap:wrap}
+.audit-tab{border:1px solid transparent;background:transparent;border-radius:8px;padding:9px 11px;color:#738077;font-size:9px;font-weight:800}
+.audit-tab:hover{background:#fff}
+.audit-tab.active{background:#fff;border-color:#e4ebe5;color:var(--green);box-shadow:0 3px 10px #183a2410}
+.audit-filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.audit-search{height:35px;width:230px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 11px;outline:0;font-size:9px;color:#34463b}
+.audit-select{height:35px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 9px;color:#536258;font-size:9px;outline:0}
+.audit-card{background:#fff;border:1px solid #e8eee9;border-radius:15px;box-shadow:var(--shadow);overflow:hidden}
+.audit-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 17px;border-bottom:1px solid #edf1ee}
+.audit-card-head strong{font-size:12px;color:#2e4035}
+.audit-card-head span{font-size:9px;color:#8b978f}
+.audit-table-wrap{overflow:auto}
+.audit-table{width:100%;min-width:1050px;border-collapse:collapse}
+.audit-table th{text-align:left;padding:11px 12px;background:#f8faf8;color:#87938b;text-transform:uppercase;letter-spacing:.45px;font-size:8px;font-weight:850;white-space:nowrap;border-bottom:1px solid #edf1ee}
+.audit-table td{padding:12px;border-bottom:1px solid #f0f3f0;color:#68766d;font-size:9px;vertical-align:middle}
+.audit-table tbody tr:hover{background:#fbfdfb}
+.audit-table tbody tr:last-child td{border-bottom:0}
+.event-time{display:block;color:#34463b;font-weight:800;font-size:9px;white-space:nowrap}
+.event-date{display:block;color:#9aa59e;font-size:8px;margin-top:4px}
+.actor{display:flex;align-items:center;gap:8px;min-width:125px}
+.actor-avatar{width:27px;height:27px;display:grid;place-items:center;border-radius:8px;background:#edf5ef;color:var(--green);font-size:8px;font-weight:900;flex:0 0 27px}
+.actor-name{font-size:9px;color:#34463b;font-weight:800;white-space:nowrap}
+.actor-role{display:block;font-size:8px;color:#9aa59e;margin-top:3px}
+.event-action{display:block;color:#34463b;font-size:9px;font-weight:800}
+.event-detail{display:block;color:#929e96;font-size:8px;margin-top:4px;max-width:260px;line-height:1.45}
+.event-ref{font-size:9px;color:#086333;font-weight:800;white-space:nowrap}
+.event-summary{max-width:260px;line-height:1.5;color:#6f7c73}
+.event-type{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:20px;font-size:8px;font-weight:850;white-space:nowrap}
+.event-type:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.type-data{background:#eaf5ed;color:#267344}.type-import{background:#edf3fb;color:#426a9a}.type-access{background:#fff5e7;color:#9b6a1b}.type-system{background:#f0f3f1;color:#758279}
+.audit-view{border:0;background:transparent;color:var(--green);font-size:9px;font-weight:850;padding:5px 2px;white-space:nowrap}
+.audit-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid #edf1ee;color:#87938b;font-size:9px}
+.audit-empty{text-align:center;padding:42px 15px;color:#8a978e;font-size:10px}
+.audit-empty b{display:block;font-size:24px;color:#9cad9f;margin-bottom:7px}
+.detail-banner{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#f7faf7;border:1px solid #e9f0ea;border-radius:9px;color:#526258;font-size:9px;margin:12px 0 15px}
+.detail-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.detail-field{border:1px solid #edf1ee;border-radius:9px;padding:10px;min-width:0}
+.detail-field span{display:block;font-size:8px;text-transform:uppercase;letter-spacing:.55px;color:#8b978f;font-weight:850}
+.detail-field strong{display:block;font-size:10px;color:#3c4d42;margin-top:5px;overflow-wrap:anywhere;line-height:1.45}
+.change-box{border:1px solid #edf1ee;border-radius:9px;padding:12px;margin-top:10px}
+.change-box h4{font-size:9px;color:#718076;text-transform:uppercase;letter-spacing:.5px;margin:0 0 9px}
+.change-pair{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.change-value{border-radius:8px;background:#f7faf7;padding:10px;font-size:9px;color:#526258;overflow-wrap:anywhere}
+.change-value small{display:block;color:#99a49c;font-size:8px;margin-bottom:5px;font-weight:800;text-transform:uppercase}
+@media(max-width:900px){.audit-toolbar{align-items:flex-start;flex-direction:column}.audit-filters{width:100%}.audit-search{flex:1;width:auto}}
+@media(max-width:620px){.audit-filters{width:100%}.audit-search{min-width:100%}.audit-select{flex:1}.detail-fields,.change-pair{grid-template-columns:1fr}.audit-card-head,.audit-foot{align-items:flex-start;flex-direction:column}}
+
+
+/* Users & Access */
+.ua-note{display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid #e8eee9;border-radius:11px;padding:11px 14px;margin-bottom:16px;color:#748278;font-size:10px;line-height:1.55}
+.ua-note .note-icon{width:28px;height:28px;border-radius:8px;background:#f0f5f1;color:var(--green);display:grid;place-items:center;flex:0 0 28px;font-weight:900}
+.ua-note strong{color:#3d5145}
+.ua-metrics .metric-value{font-variant-numeric:tabular-nums}
+.ua-tabs{display:flex;gap:6px;border-bottom:1px solid #e8eee9;margin:2px 0 14px}
+.ua-tab{border:0;border-bottom:2px solid transparent;background:transparent;color:#7a887f;padding:11px 13px;font-size:10px;font-weight:800;margin-bottom:-1px}
+.ua-tab.active{color:var(--green);border-bottom-color:var(--green)}
+.ua-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 13px}
+.ua-filter-left{display:flex;gap:5px;flex-wrap:wrap}
+.ua-filter-tab{border:1px solid transparent;background:transparent;border-radius:8px;padding:8px 10px;color:#738077;font-size:9px;font-weight:800}
+.ua-filter-tab:hover{background:#fff}
+.ua-filter-tab.active{background:#fff;border-color:#e4ebe5;color:var(--green);box-shadow:0 3px 10px #183a2410}
+.ua-filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ua-search{height:35px;width:245px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 11px;outline:0;font-size:9px;color:#34463b}
+.ua-select{height:35px;border:1px solid #e2eae4;background:#fff;border-radius:8px;padding:0 9px;color:#536258;font-size:9px;outline:0}
+.ua-card{background:#fff;border:1px solid #e8eee9;border-radius:15px;box-shadow:var(--shadow);overflow:hidden}
+.ua-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 17px;border-bottom:1px solid #edf1ee}
+.ua-card-head strong{font-size:12px;color:#2e4035}
+.ua-card-head span{font-size:9px;color:#8b978f}
+.ua-table-wrap{overflow:auto}
+.ua-table{width:100%;min-width:1020px;border-collapse:collapse}
+.ua-table th{text-align:left;padding:11px 12px;background:#f8faf8;color:#87938b;text-transform:uppercase;letter-spacing:.45px;font-size:8px;font-weight:850;white-space:nowrap;border-bottom:1px solid #edf1ee}
+.ua-table td{padding:11px 12px;border-bottom:1px solid #f0f3f0;color:#68766d;font-size:9px;vertical-align:middle}
+.ua-table tbody tr:hover{background:#fbfdfb}
+.ua-table tbody tr:last-child td{border-bottom:0}
+.user-cell{display:flex;align-items:center;gap:9px;min-width:165px}
+.user-avatar{width:31px;height:31px;display:grid;place-items:center;border-radius:9px;background:#edf5ef;color:var(--green);font-size:9px;font-weight:900;flex:0 0 31px}
+.user-name{display:block;color:#34463b;font-size:10px;font-weight:850;white-space:nowrap}
+.user-id{display:block;color:#9aa59e;font-size:8px;margin-top:4px}
+.user-email{color:#65736a;font-size:9px;white-space:nowrap}
+.role-name{display:block;color:#34463b;font-size:9px;font-weight:800}
+.role-sub{display:block;color:#9aa59e;font-size:8px;margin-top:4px}
+.status{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:5px 8px;font-size:8px;font-weight:850;white-space:nowrap}
+.status:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.status-active{background:#eaf5ed;color:#267344}.status-pending{background:#fff5e7;color:#9b6a1b}.status-disabled{background:#f0f3f1;color:#758279}
+.ua-actions{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.ua-action{border:0;background:transparent;color:var(--green);font-size:9px;font-weight:850;padding:5px 2px}
+.ua-action.muted{color:#78857d}
+.ua-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid #edf1ee;color:#87938b;font-size:9px}
+.ua-empty{text-align:center;padding:42px 15px;color:#8a978e;font-size:10px}
+.ua-empty b{display:block;font-size:24px;color:#9cad9f;margin-bottom:7px}
+.ua-role-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:14px;align-items:start}
+.ua-role-list{background:#fff;border:1px solid #e8eee9;border-radius:13px;box-shadow:var(--shadow);padding:12px}
+.ua-role-list h3{font-size:11px;margin:3px 8px 5px;color:#34463b}
+.ua-role-list p{font-size:9px;color:#89958d;margin:0 8px 10px;line-height:1.5}
+.ua-role-card{width:100%;text-align:left;border:1px solid #edf1ee;background:#fff;border-radius:9px;padding:11px;margin:7px 0;display:block}
+.ua-role-card:hover{background:#f8fbf8}
+.ua-role-card.active{border-color:#a8c9b2;background:#f1f7f2}
+.ua-role-card strong{display:block;color:#34463b;font-size:10px}
+.ua-role-card span{display:block;color:#8b978f;font-size:8px;margin-top:5px;line-height:1.45}
+.ua-role-card .role-status{display:inline-flex;margin-top:7px;border-radius:20px;padding:4px 7px;background:#f0f3f1;color:#78857d;font-size:8px;font-weight:800}
+.ua-permission-panel{background:#fff;border:1px solid #e8eee9;border-radius:13px;box-shadow:var(--shadow);overflow:hidden;min-width:0}
+.ua-permission-head{padding:15px 17px;border-bottom:1px solid #edf1ee;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.ua-permission-head h3{font-size:12px;margin:0;color:#34463b}
+.ua-permission-head p{font-size:9px;color:#89958d;margin:5px 0 0;line-height:1.5}
+.ua-permission-wrap{overflow:auto}
+.ua-permission-table{width:100%;border-collapse:collapse;min-width:700px}
+.ua-permission-table th{background:#f8faf8;color:#87938b;font-size:8px;text-transform:uppercase;letter-spacing:.4px;padding:10px 11px;text-align:center;border-bottom:1px solid #edf1ee}
+.ua-permission-table th:first-child{text-align:left;min-width:190px}
+.ua-permission-table td{padding:10px 11px;border-bottom:1px solid #f0f3f0;text-align:center;font-size:9px;color:#647269}
+.ua-permission-table td:first-child{text-align:left;color:#34463b;font-weight:750}
+.ua-permission-table tr:last-child td{border-bottom:0}
+.ua-permission-table input{accent-color:var(--green);width:14px;height:14px;cursor:pointer}
+.ua-permission-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 15px;border-top:1px solid #edf1ee}
+.ua-permission-foot span{font-size:8px;color:#89958d}
+.ua-section-label{font-size:8px;color:#9aa59e;text-transform:uppercase;letter-spacing:.7px;font-weight:900;padding:10px 11px 4px}
+.ua-role-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.ua-role-summary .info-card{background:#fff}
+.ua-inline-warning{background:#fffaf1;border:1px solid #f3e7ca;color:#8c6a2d;border-radius:9px;padding:10px 12px;font-size:9px;line-height:1.55;margin:12px 15px}
+.ua-modal{width:min(720px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:17px;box-shadow:0 24px 80px #0004;padding:22px}
+.ua-modal.wide{width:min(900px,100%)}
+.ua-modal .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.ua-modal .field label{display:block;color:#65736a;font-size:9px;font-weight:800;margin-bottom:6px}
+.ua-modal .field input,.ua-modal .field select,.ua-modal .field textarea{width:100%;border:1px solid #e1e9e3;border-radius:8px;padding:10px 11px;outline:0;color:#34463b;background:#fff;font-size:10px}
+.ua-modal .field.full{grid-column:1/-1}
+.ua-modal .modal-note{background:#f7faf7;border:1px solid #e9f0ea;border-radius:9px;padding:10px 12px;color:#748278;font-size:9px;line-height:1.5;margin-top:13px}
+.ua-modal .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.ua-toast{position:fixed;right:24px;bottom:24px;z-index:30;background:#173d29;color:#fff;padding:12px 15px;border-radius:10px;box-shadow:0 12px 30px #0003;font-size:10px}
+.ua-hidden{display:none!important}
+@media(max-width:1100px){.ua-role-layout{grid-template-columns:1fr}.ua-role-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.ua-role-list h3,.ua-role-list p{grid-column:1/-1}.ua-role-card{margin:0}}
+@media(max-width:900px){.ua-toolbar{align-items:flex-start;flex-direction:column}.ua-filters{width:100%}.ua-search{flex:1;width:auto}}
+@media(max-width:620px){.ua-filters{width:100%}.ua-search{min-width:100%}.ua-select{flex:1}.ua-card-head,.ua-foot,.ua-permission-foot{align-items:flex-start;flex-direction:column}.ua-role-list{grid-template-columns:1fr}.ua-role-summary{grid-template-columns:1fr}.ua-modal .form-grid{grid-template-columns:1fr}.ua-modal .field.full{grid-column:auto}}
+
+
+/* System Settings */
+.ss-note{display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid #e8eee9;border-radius:11px;padding:11px 14px;margin-bottom:16px;color:#748278;font-size:10px;line-height:1.55}
+.ss-note .note-icon{width:28px;height:28px;border-radius:8px;background:#f0f5f1;color:var(--green);display:grid;place-items:center;flex:0 0 28px;font-weight:900}
+.ss-note strong{color:#3d5145}
+.ss-metrics .metric-value{font-variant-numeric:tabular-nums}
+.ss-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:15px;align-items:start}
+.ss-nav{background:#fff;border:1px solid #e8eee9;border-radius:14px;box-shadow:var(--shadow);padding:12px}
+.ss-nav-head{padding:5px 8px 11px}
+.ss-nav-head strong{display:block;font-size:11px;color:#34463b}
+.ss-nav-head span{display:block;color:#929e96;font-size:9px;margin-top:4px}
+.ss-nav-btn{width:100%;display:flex;align-items:center;gap:10px;padding:10px 9px;border:0;border-radius:9px;background:transparent;color:#68766d;text-align:left;font-size:10px;font-weight:750;margin:3px 0}
+.ss-nav-btn:hover{background:#f5f8f5}
+.ss-nav-btn.active{background:#edf5ef;color:var(--green)}
+.ss-nav-ico{width:27px;height:27px;border-radius:8px;background:#f2f6f3;display:grid;place-items:center;color:#5f7666;font-size:13px;flex:0 0 27px}
+.ss-nav-btn.active .ss-nav-ico{background:#dceee1;color:var(--green)}
+.ss-nav-state{margin-left:auto;font-size:8px;color:#9aa59e;font-weight:800}
+.ss-content{min-width:0}
+.ss-section{display:none}
+.ss-section.active{display:block}
+.ss-panel{background:#fff;border:1px solid #e8eee9;border-radius:15px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:13px}
+.ss-panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 18px;border-bottom:1px solid #edf1ee}
+.ss-panel-title{display:flex;align-items:center;gap:10px}
+.ss-panel-icon{width:35px;height:35px;border-radius:10px;background:#edf5ef;color:var(--green);display:grid;place-items:center;font-size:16px}
+.ss-panel-title h2{font-size:13px;margin:0;color:#34463b}
+.ss-panel-title p{font-size:9px;color:#89958d;margin:5px 0 0;line-height:1.5}
+.ss-panel-body{padding:16px 18px}
+.ss-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.ss-field{min-width:0}
+.ss-field.full{grid-column:1/-1}
+.ss-field label{display:block;color:#65736a;font-size:9px;font-weight:850;margin-bottom:6px}
+.ss-field input,.ss-field select,.ss-field textarea{width:100%;height:37px;border:1px solid #e1e9e3;border-radius:8px;padding:0 10px;outline:0;color:#34463b;background:#fff;font-size:10px}
+.ss-field input:focus,.ss-field select:focus,.ss-field textarea:focus{border-color:#78a98a;box-shadow:0 0 0 3px #08633312}
+.ss-field input[readonly],.ss-field select:disabled{background:#f7faf7;color:#78857d}
+.ss-field small{display:block;color:#99a49c;font-size:8px;margin-top:5px;line-height:1.45}
+.ss-field .ss-inline-status{display:inline-flex;margin-left:6px;border-radius:20px;padding:3px 6px;background:#fff5e7;color:#9b6a1b;font-size:7px;font-weight:850;vertical-align:1px}
+.ss-control-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #f0f3f0}
+.ss-control-row:last-child{border-bottom:0;padding-bottom:0}
+.ss-control-row:first-child{padding-top:0}
+.ss-control-copy strong{display:block;font-size:10px;color:#34463b}
+.ss-control-copy span{display:block;font-size:8px;color:#89958d;margin-top:4px;line-height:1.5}
+.ss-switch{position:relative;width:38px;height:21px;flex:0 0 38px}
+.ss-switch input{position:absolute;opacity:0;width:1px;height:1px}
+.ss-switch span{position:absolute;inset:0;background:#d7dfd9;border-radius:20px;transition:.15s;cursor:pointer}
+.ss-switch span:before{content:"";position:absolute;width:15px;height:15px;left:3px;top:3px;background:#fff;border-radius:50%;box-shadow:0 1px 3px #0002;transition:.15s}
+.ss-switch input:checked+span{background:var(--green)}
+.ss-switch input:checked+span:before{transform:translateX(17px)}
+.ss-switch input:focus-visible+span{outline:3px solid #08633333;outline-offset:2px}
+.ss-policy-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ss-policy{border:1px solid #edf1ee;border-radius:10px;padding:12px;min-width:0}
+.ss-policy-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ss-policy strong{font-size:9px;color:#34463b}
+.ss-policy p{font-size:8px;color:#849188;margin:7px 0 0;line-height:1.55}
+.ss-policy .status{margin-top:8px}
+.ss-policy-full{grid-column:1/-1}
+.ss-status{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:5px 8px;font-size:8px;font-weight:850;white-space:nowrap}
+.ss-status:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+.ss-confirmed{background:#eaf5ed;color:#267344}
+.ss-pending{background:#fff5e7;color:#9b6a1b}
+.ss-neutral{background:#f0f3f1;color:#758279}
+.ss-callout{background:#f7faf7;border:1px solid #e9f0ea;border-radius:9px;padding:11px 12px;color:#718076;font-size:9px;line-height:1.6;margin-top:13px}
+.ss-callout strong{color:#3b5043}
+.ss-warning{background:#fffaf1;border-color:#f3e7ca;color:#8c6a2d}
+.ss-footer-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 17px;border-top:1px solid #edf1ee}
+.ss-footer-actions span{font-size:8px;color:#929e96}
+.ss-footer-actions div{display:flex;gap:8px}
+.ss-info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ss-info-card{border:1px solid #edf1ee;border-radius:10px;padding:13px;min-width:0}
+.ss-info-card span{display:block;font-size:8px;text-transform:uppercase;letter-spacing:.55px;color:#89958d;font-weight:850}
+.ss-info-card strong{display:block;color:#304438;font-size:12px;margin-top:7px;overflow-wrap:anywhere}
+.ss-info-card p{font-size:8px;color:#8b978f;margin:5px 0 0;line-height:1.5}
+.ss-save-state{font-size:9px;color:#78857d;font-weight:700}
+.ss-hidden{display:none!important}
+@media(max-width:1050px){.ss-layout{grid-template-columns:1fr}.ss-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}.ss-nav-head{grid-column:1/-1}.ss-nav-btn{margin:0}}
+@media(max-width:900px){.ss-metrics{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.ss-nav{grid-template-columns:repeat(2,minmax(0,1fr))}.ss-form-grid,.ss-policy-grid,.ss-info-grid{grid-template-columns:1fr}.ss-field.full,.ss-policy-full{grid-column:auto}.ss-panel-head,.ss-footer-actions{align-items:flex-start;flex-direction:column}.ss-footer-actions div{width:100%;justify-content:flex-end}}
+
+</style>
+<link rel="stylesheet" href="tfi-shell-standard.css">
+<link rel="stylesheet" href="session-policy.css">
+
+</head><body><div class="shell">
+<aside class="sidebar"><div class="brand"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div><div class="brand-caption">PRODUCTION MANAGEMENT</div><nav>
+  <div class="nav-group"><div class="nav-label">Overview</div>
+   <button class="nav-link" data-page="Dashboard"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link" data-page="Product Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 20V9l8-5 8 5v11"/><path d="M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="3" y="5" width="18" height="16" rx="2"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="5" y="4" width="14" height="16"/></svg><span>DMR Production</span></button>
+   <button class="nav-link" data-page="DMR Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+   <button class="nav-link" data-page="Yield Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 21c4-2 7-6 7-10A7 7 0 0 0 5 11c0 4 3 8 7 10Z"/></svg><span>Yield Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link" data-page="CO QA"><svg viewBox="0 0 24 24" width="17" height="17"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24" width="17" height="17"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link" data-page="Spreadsheet Import"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24" width="17" height="17"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link" data-page="Reports"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Security & Activity"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/><path d="M12 8v4M12 16h.01"/></svg><span>Security &amp; Activity</span></button><button class="nav-link" data-page="Security Alert Rules & Notifications"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg><span>Security Alert Rules &amp; Notifications</span></button>
+   <button class="nav-link" data-page="Audit Trail"><svg viewBox="0 0 24 24" width="17" height="17"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link active" data-page="Settings" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav><div class="spacer"></div><div class="user-foot"><div class="avatar">AD</div><div><strong>System Administrator</strong><small>Administrator Account</small></div></div></aside>
+<div class="main"><header class="topbar"><div class="crumb"><span>TFI</span><span class="slash">/</span><span>Administration</span><span class="slash">/</span><b>System Settings</b></div><div class="top-actions"><label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="global-search" placeholder="Search..." aria-label="Search"></label><div class="profile"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div></div></header>
+
+
+
+<main class="content">
+<div class="heading">
+ <div><div class="eyebrow">ADMINISTRATION / SYSTEM CONFIGURATION</div><h1>System Settings</h1><p class="subtitle">Review application preferences, operational policies, and system configuration status.</p></div>
+ <div class="heading-actions"><span class="pill">Configuration preview</span><button class="btn outline" id="reset-settings">Reset draft</button><button class="btn primary" id="save-settings">Save draft</button></div>
+</div>
+<div class="ss-note"><span class="note-icon">i</span><span><strong>Preview configuration only.</strong> Changes made here stay in this browser session and do not update the live application, database, authentication, backups, or production settings. Policies already confirmed in the TFI Admin blueprint are shown separately from decisions that still need approval.</span></div>
+<div class="metrics ss-metrics">
+ <div class="metric"><div class="metric-top"><span class="metric-label">Settings groups</span><span class="metric-icon">⚙</span></div><div class="metric-value">7</div><div class="metric-note">Configuration areas in this workspace</div></div>
+ <div class="metric"><div class="metric-top"><span class="metric-label">Confirmed data policies</span><span class="metric-icon">✓</span></div><div class="metric-value">5</div><div class="metric-note">Based on the Admin blueprint</div></div>
+ <div class="metric"><div class="metric-top"><span class="metric-label">Decisions pending</span><span class="metric-icon">◷</span></div><div class="metric-value">Open</div><div class="metric-note">Require review or owner approval</div></div>
+ <div class="metric"><div class="metric-top"><span class="metric-label">Live connections</span><span class="metric-icon">◌</span></div><div class="metric-value">0</div><div class="metric-note">This page is not connected to live services</div></div>
+</div>
+<div class="ss-layout">
+ <aside class="ss-nav">
+  <div class="ss-nav-head"><strong>Configuration areas</strong><span>Select a section to review its settings.</span></div>
+  <button class="ss-nav-btn active" data-section="general"><span class="ss-nav-ico">⚙</span>General</button>
+  <button class="ss-nav-btn" data-section="appearance"><span class="ss-nav-ico">◐</span>Appearance</button>
+  <button class="ss-nav-btn" data-section="data"><span class="ss-nav-ico">▤</span>Data &amp; Import</button>
+  <button class="ss-nav-btn" data-section="security"><span class="ss-nav-ico">◇</span>Security &amp; Access</button>
+  <button class="ss-nav-btn ss-nav-sub" data-section="session"><span class="ss-nav-ico">◷</span>Session Policy</button>
+  <button class="ss-nav-btn" data-section="backup"><span class="ss-nav-ico">◴</span>Backup &amp; Recovery</button>
+  <button class="ss-nav-btn" data-section="system"><span class="ss-nav-ico">ⓘ</span>System Information</button>
+ </aside>
+ <div class="ss-content">
+  <section class="ss-section active" id="section-general">
+   <div class="ss-panel">
+    <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">⚙</span><div><h2>General preferences</h2><p>Application identity, regional display, and default navigation preferences.</p></div></div><span class="ss-status ss-pending">Draft preferences</span></div>
+    <div class="ss-panel-body"><div class="ss-form-grid">
+     <div class="ss-field"><label for="app-name">Application name</label><input id="app-name" value="TFI Production Management System" readonly><small>Application display name for this preview.</small></div>
+     <div class="ss-field"><label for="company-name">Organization</label><input id="company-name" value="Tosen Foods, Inc." readonly><small>Based on the current TFI branding.</small></div>
+     <div class="ss-field"><label for="timezone">Time zone <span class="ss-inline-status">Confirm</span></label><select id="timezone"><option value="Asia/Manila">Asia/Manila (proposed)</option><option value="UTC">UTC</option><option value="Asia/Singapore">Asia/Singapore</option></select><small>Proposed display time zone; confirm the official operating time zone before implementation.</small></div>
+     <div class="ss-field"><label for="date-format">Date format</label><select id="date-format"><option value="DD MMM YYYY">18 Nov 2026</option><option value="YYYY-MM-DD">2026-11-18</option><option value="MM/DD/YYYY">11/18/2026</option></select><small>Display preference only; it does not change stored dates.</small></div>
+     <div class="ss-field"><label for="number-format">Number format</label><select id="number-format"><option value="1,234.56">1,234.56</option><option value="1.234,56">1.234,56</option><option value="1 234,56">1 234,56</option></select><small>Display preference for numeric values.</small></div>
+     <div class="ss-field"><label for="landing-page">Default landing page</label><select id="landing-page"><option value="Dashboard">Dashboard</option><option value="Spreadsheet Import">Spreadsheet Import Center</option><option value="Import History">Import History</option></select><small>Proposed starting page after successful sign-in.</small></div>
+    </div></div>
+    <div class="ss-footer-actions"><span>Application identity fields are read-only in this preview.</span><div><button class="btn outline" data-reset-section="general">Reset section</button><button class="btn primary" data-save-section="general">Save section draft</button></div></div>
+   </div>
+  </section>
+  <section class="ss-section" id="section-appearance">
+   <div class="ss-panel">
+    <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">◐</span><div><h2>Appearance &amp; workspace</h2><p>Proposed visual preferences for the Windows desktop application.</p></div></div><span class="ss-status ss-pending">Preview only</span></div>
+    <div class="ss-panel-body">
+     <div class="ss-form-grid">
+      <div class="ss-field"><label for="theme">Color theme</label><select id="theme"><option value="Light">Light</option><option value="Dark">Dark</option><option value="System">Follow system preference</option></select><small>The current design preview uses the light theme.</small></div>
+      <div class="ss-field"><label for="density">Table density</label><select id="density"><option value="Comfortable">Comfortable</option><option value="Compact">Compact</option></select><small>Proposed row spacing for data tables.</small></div>
+     </div>
+     <div style="margin-top:17px">
+      <div class="ss-control-row"><div class="ss-control-copy"><strong>Keep sidebar expanded</strong><span>Show navigation labels and icons in the desktop workspace.</span></div><label class="ss-switch"><input type="checkbox" id="sidebar-expanded" checked aria-label="Keep sidebar expanded"><span></span></label></div>
+      <div class="ss-control-row"><div class="ss-control-copy"><strong>Show confirmation before leaving unsaved forms</strong><span>Prompt the user when navigating away from a form with unsaved changes.</span></div><label class="ss-switch"><input type="checkbox" id="unsaved-warning" checked aria-label="Show confirmation before leaving unsaved forms"><span></span></label></div>
+      <div class="ss-control-row"><div class="ss-control-copy"><strong>Use reduced motion</strong><span>Limit non-essential interface transitions and animations.</span></div><label class="ss-switch"><input type="checkbox" id="reduced-motion" aria-label="Use reduced motion"><span></span></label></div>
+     </div>
+    </div>
+    <div class="ss-footer-actions"><span>These controls do not alter the current application shell.</span><div><button class="btn outline" data-reset-section="appearance">Reset section</button><button class="btn primary" data-save-section="appearance">Save section draft</button></div></div>
+   </div>
+  </section>
+  <section class="ss-section" id="section-data">
+   <div class="ss-panel">
+    <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">▤</span><div><h2>Data &amp; import policies</h2><p>Operational rules confirmed in the TFI Admin Module blueprint.</p></div></div><span class="ss-status ss-confirmed">Blueprint confirmed</span></div>
+    <div class="ss-panel-body">
+     <div class="ss-policy-grid">
+      <div class="ss-policy"><div class="ss-policy-top"><strong>New mapped records with incomplete fields</strong><span class="ss-status ss-confirmed">Confirmed</span></div><p>Insert into the correct module table and mark the record Incomplete. Missing information must not be invented.</p></div>
+      <div class="ss-policy"><div class="ss-policy-top"><strong>Exact duplicates</strong><span class="ss-status ss-confirmed">Confirmed</span></div><p>Do not create a second module record when an existing duplicate is verified. Preserve the link to the existing record where identified.</p></div>
+      <div class="ss-policy"><div class="ss-policy-top"><strong>Possible duplicates</strong><span class="ss-status ss-confirmed">Confirmed</span></div><p>Hold for Admin review. Do not automatically insert or delete a record while the match is uncertain.</p></div>
+      <div class="ss-policy"><div class="ss-policy-top"><strong>Unmapped or unparseable rows</strong><span class="ss-status ss-confirmed">Confirmed</span></div><p>Keep the source row in the Central Import Inbox until its destination or parsing issue is resolved.</p></div>
+      <div class="ss-policy ss-policy-full"><div class="ss-policy-top"><strong>Derived, report, and helper rows</strong><span class="ss-status ss-confirmed">Confirmed</span></div><p>Do not treat formula-only, report, or helper rows as independent operational transactions. Record the exclusion reason for traceability.</p></div>
+     </div>
+     <div class="ss-callout"><strong>Source method still needs a decision.</strong> The Admin blueprint leaves open whether the Admin will upload an XLSX file or provide an authorized Google Sheets link for a one-time controlled scan. Continuous Google Sheets synchronization is not part of normal operations.</div>
+    </div>
+   </div>
+   <div class="ss-panel">
+    <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">⇧</span><div><h2>Import source configuration</h2><p>Items to be confirmed before the live import service is connected.</p></div></div><span class="ss-status ss-pending">Decision pending</span></div>
+    <div class="ss-panel-body"><div class="ss-form-grid">
+     <div class="ss-field"><label for="source-method">Authorized source method</label><select id="source-method"><option value="Undecided">Not decided</option><option value="XLSX upload">XLSX upload</option><option value="One-time authorized Google Sheets link">One-time authorized Google Sheets link</option></select><small>Do not use this preview selection as an approved production decision.</small></div>
+     <div class="ss-field"><label for="source-authority">Authoritative workbook version</label><input id="source-authority" value="To be confirmed" readonly><small>Latest approved source workbook identity and version.</small></div>
+    </div></div>
+    <div class="ss-footer-actions"><span>Source connection is not active.</span><div><button class="btn primary" data-save-section="data">Save review note</button></div></div>
+   </div>
+  </section>
+  <section class="ss-section" id="section-security">
+   <div class="ss-panel">
+    <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">◇</span><div><h2>Security &amp; access</h2><p>Account protection and authorization requirements for the future live system.</p></div></div><span class="ss-status ss-pending">Policy approval required</span></div>
+    <div class="ss-panel-body">
+     <div class="ss-policy-grid">
+      <div class="ss-policy"><div class="ss-policy-top"><strong>Initial development access</strong><span class="ss-status ss-confirmed">Confirmed</span></div><p>Admin remains the primary user during the first development stage. Other user roles are not finalized.</p></div>
+      <div class="ss-policy"><div class="ss-policy-top"><strong>Server-side authorization</strong><span class="ss-status ss-confirmed">Required</span></div><p>Access must be enforced by trusted server-side services and database policies, not by hiding menu items alone.</p></div>
+      <div class="ss-policy"><div class="ss-policy-top"><strong>Audit history</strong><span class="ss-status ss-confirmed">Required</span></div><p>Important account and permission changes must be recorded. Audit records must not contain passwords or access tokens.</p></div>
+      <div class="ss-policy"><div class="ss-policy-top"><strong>Unassigned roles</strong><span class="ss-status ss-confirmed">Required</span></div><p>Do not grant elevated access by default when an account has no approved role.</p></div>
+     </div>
+     <div class="ss-callout ss-warning"><strong>Not yet approved:</strong> password rules, multi-factor authentication, session timeout, account recovery, invitation method, and final administrator responsibilities. These must not be treated as configured security controls.</div>
+    </div>
+   </div>
+   <div class="ss-panel">
+    <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">⌑</span><div><h2>Security configuration decisions</h2><p>Current state of settings that need owner approval.</p></div></div></div>
+    <div class="ss-panel-body"><div class="ss-form-grid">
+     <div class="ss-field"><label>Session policy</label><div class="sp-security-link"><span><strong>Dedicated session controls</strong><small>Idle timeout, warning window, maximum lifetime, and concurrent sessions.</small></span><button class="btn outline" type="button" id="open-session-policy">Manage policy →</button></div><small>Draft configuration only. No session policy is enforced by this preview.</small></div>
+     <div class="ss-field"><label for="mfa-policy">Multi-factor authentication</label><select id="mfa-policy"><option value="Pending approval">Pending approval</option><option value="Required">Required</option><option value="Optional">Optional</option></select><small>Requires a separate security decision and implementation.</small></div>
+    </div></div>
+    <div class="ss-footer-actions"><span>Selections are discussion notes only.</span><div><button class="btn primary" data-save-section="security">Save review note</button></div></div>
+   </div>
+  </section>
+  <section class="ss-section" id="section-session">
+   <div class="sp-page-head">
+    <div class="sp-page-copy">
+     <div class="sp-kicker">SECURITY &amp; ACCESS / SESSION GOVERNANCE</div>
+     <h2>Session Policy</h2>
+     <p>Define how administrator sessions are monitored, warned, limited, and ended.</p>
+    </div>
+    <span class="ss-status ss-pending" id="session-policy-status">Draft · pending approval</span>
+   </div>
+
+   <div class="sp-intro-note">
+    <span class="sp-intro-icon">i</span>
+    <div><strong>Policy design preview.</strong> The values below are proposed starting points for client review. They are not approved security rules and will not control an actual login session.</div>
+   </div>
+
+   <div class="sp-layout">
+    <div class="sp-main">
+     <div class="ss-panel">
+      <div class="ss-panel-head">
+       <div class="ss-panel-title"><span class="ss-panel-icon">◷</span><div><h2>Session duration &amp; limits</h2><p>Draft thresholds for inactivity, warnings, and maximum session age.</p></div></div>
+       <span class="ss-status ss-pending">Draft proposal</span>
+      </div>
+      <div class="ss-panel-body">
+       <div class="sp-section-label"><strong>Time limits</strong><span>Illustrative defaults · subject to approval</span></div>
+       <div class="ss-form-grid">
+        <div class="ss-field"><label for="idle-timeout">Inactivity timeout</label><select id="idle-timeout"><option value="15 minutes">15 minutes</option><option value="30 minutes" selected>30 minutes · proposed</option><option value="45 minutes">45 minutes</option><option value="60 minutes">60 minutes</option></select><small>End the session after this period without qualifying activity in the TFI portal.</small></div>
+        <div class="ss-field"><label for="warning-window">Warning before expiry</label><select id="warning-window"><option value="1 minute">1 minute</option><option value="2 minutes" selected>2 minutes · proposed</option><option value="3 minutes">3 minutes</option><option value="5 minutes">5 minutes</option></select><small>Display the warning and countdown before the inactivity limit is reached.</small></div>
+        <div class="ss-field"><label for="absolute-lifetime">Maximum session lifetime</label><select id="absolute-lifetime"><option value="4 hours">4 hours</option><option value="8 hours" selected>8 hours · proposed</option><option value="12 hours">12 hours</option><option value="No fixed maximum">No fixed maximum · review required</option></select><small>Require re-authentication after the maximum lifetime, even if activity continues.</small></div>
+        <div class="ss-field"><label for="concurrent-sessions">Concurrent sessions per account</label><select id="concurrent-sessions"><option value="1 session" selected>1 active session · proposed</option><option value="2 sessions">2 active sessions</option><option value="3 sessions">3 active sessions</option></select><small>Decide how many active browser sessions one administrator account may hold.</small></div>
+       </div>
+
+       <div class="sp-divider"></div>
+       <div class="sp-section-label"><strong>Session behavior</strong><span>Toggle to include in the draft policy</span></div>
+       <div class="ss-control-row"><div class="ss-control-copy"><strong>Allow one-time extension from timeout warning</strong><span>Let the administrator request one extension before the session expires.</span></div><label class="ss-switch"><input type="checkbox" id="allow-extension" checked aria-label="Allow one-time extension from timeout warning"><span></span></label></div>
+       <div class="ss-control-row"><div class="ss-control-copy"><strong>Require sign-in after browser restart</strong><span>Do not restore an administrator session automatically when the browser is reopened.</span></div><label class="ss-switch"><input type="checkbox" id="require-browser-restart" checked aria-label="Require sign-in after browser restart"><span></span></label></div>
+       <div class="ss-control-row"><div class="ss-control-copy"><strong>Revoke other sessions after password change</strong><span>End existing sessions after an administrator password is changed or reset.</span></div><label class="ss-switch"><input type="checkbox" id="revoke-on-password-change" checked aria-label="Revoke other sessions after password change"><span></span></label></div>
+       <div class="ss-control-row"><div class="ss-control-copy"><strong>Record session events in Audit Trail</strong><span>Record sign-in, sign-out, timeout, expiry, and session revocation events.</span></div><label class="ss-switch"><input type="checkbox" id="log-session-events" checked aria-label="Record session events in Audit Trail"><span></span></label></div>
+      </div>
+      <div class="ss-footer-actions"><span>Draft values remain local to this preview session.</span><div><button class="btn outline" type="button" data-reset-section="session">Reset draft</button><button class="btn primary" type="button" data-save-section="session">Save policy draft</button></div></div>
+     </div>
+
+     <div class="ss-panel">
+      <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">⇄</span><div><h2>Session lifecycle</h2><p>Expected behavior once the approved policy is implemented.</p></div></div><span class="ss-status ss-neutral">Design reference</span></div>
+      <div class="ss-panel-body">
+       <div class="sp-lifecycle">
+        <div class="sp-lifecycle-step"><span>01</span><div><strong>Sign in</strong><small>Administrator completes authentication and receives a secure session.</small></div></div>
+        <div class="sp-lifecycle-step"><span>02</span><div><strong>Monitor activity</strong><small>The server evaluates the configured inactivity and maximum-lifetime limits.</small></div></div>
+        <div class="sp-lifecycle-step"><span>03</span><div><strong>Show warning</strong><small>TFI displays the selected warning window and countdown before expiry.</small></div></div>
+        <div class="sp-lifecycle-step"><span>04</span><div><strong>Extend or expire</strong><small>An approved extension is validated, or the session is revoked and the user returns to sign in.</small></div></div>
+        <div class="sp-lifecycle-step"><span>05</span><div><strong>Record the event</strong><small>Security-relevant session activity is recorded in the Audit Trail without storing credentials or tokens.</small></div></div>
+       </div>
+      </div>
+     </div>
+
+     <div class="sp-security-callout">
+      <span class="sp-security-icon">!</span>
+      <div><strong>Implementation requirement</strong><p>Final session expiry must be enforced by the trusted backend, not by a browser countdown alone. The server must validate session age, revoke expired sessions, and protect session credentials using the approved authentication design.</p></div>
+     </div>
+    </div>
+
+    <aside class="sp-side">
+     <div class="sp-summary-card">
+      <div class="sp-summary-head"><div><span>LIVE DRAFT SUMMARY</span><h3>Policy snapshot</h3></div><span class="sp-summary-mark">◷</span></div>
+      <div class="sp-summary-list">
+       <div><span>Inactivity timeout</span><strong id="summary-idle">30 minutes</strong></div>
+       <div><span>Warning window</span><strong id="summary-warning">2 minutes</strong></div>
+       <div><span>Maximum lifetime</span><strong id="summary-lifetime">8 hours</strong></div>
+       <div><span>Concurrent sessions</span><strong id="summary-concurrent">1 session</strong></div>
+       <div><span>Browser restart</span><strong id="summary-browser-restart">Required</strong></div>
+       <div><span>Warning extension</span><strong id="summary-extension">Allowed once</strong></div>
+       <div><span>Password change</span><strong id="summary-password-revoke">Revoke on change</strong></div>
+       <div><span>Audit events</span><strong id="summary-audit-events">Enabled</strong></div>
+      </div>
+      <div class="sp-not-active"><span></span><div><strong>Not active</strong><small>Approval and backend enforcement are still required.</small></div></div>
+      <div class="sp-preview-actions">
+       <button class="btn outline" type="button" id="preview-timeout-warning">Preview timeout warning <span>↗</span></button>
+       <button class="btn outline" type="button" id="preview-session-expired">Preview expired screen <span>↗</span></button>
+      </div>
+     </div>
+
+     <div class="sp-summary-card sp-approval-card">
+      <div class="sp-summary-head"><div><span>BEFORE GO-LIVE</span><h3>Approval checklist</h3></div><span class="sp-check-icon">✓</span></div>
+      <ul class="sp-checklist">
+       <li><span></span><div><strong>Client policy approval</strong><small>Confirm timeout and warning thresholds.</small></div></li>
+       <li><span></span><div><strong>Authentication implementation</strong><small>Connect trusted server-side session controls.</small></div></li>
+       <li><span></span><div><strong>Audit event verification</strong><small>Test sign-in, extension, expiry, and revocation logs.</small></div></li>
+       <li><span></span><div><strong>Security testing</strong><small>Verify inactivity, browser restart, and concurrent sessions.</small></div></li>
+      </ul>
+     </div>
+     <button class="sp-back-security" type="button" id="back-to-security">← Back to Security &amp; Access</button>
+    </aside>
+   </div>
+  </section>
+  <section class="ss-section" id="section-backup">
+   <div class="ss-panel">
+    <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">◴</span><div><h2>Backup &amp; recovery</h2><p>Review the backup and recovery decisions required before production release.</p></div></div><span class="ss-status ss-pending">Not configured</span></div>
+    <div class="ss-panel-body">
+     <div class="ss-info-grid">
+      <div class="ss-info-card"><span>Backup schedule</span><strong>Not configured</strong><p>Frequency and execution window require approval.</p></div>
+      <div class="ss-info-card"><span>Backup destination</span><strong>Not confirmed</strong><p>Storage location and access ownership are undecided.</p></div>
+      <div class="ss-info-card"><span>Recovery test</span><strong>Not recorded</strong><p>No restore test has been performed by this preview.</p></div>
+     </div>
+     <div class="ss-callout ss-warning"><strong>Production safety:</strong> Do not assume that a backup exists because this screen is visible. Backup frequency, retention, encryption, restore procedures, and recovery objectives must be agreed and tested before live use.</div>
+    </div>
+   </div>
+   <div class="ss-panel">
+    <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">▣</span><div><h2>Recovery policy review</h2><p>Proposed decisions for the production backup plan.</p></div></div></div>
+    <div class="ss-panel-body"><div class="ss-form-grid">
+     <div class="ss-field"><label for="backup-frequency">Backup frequency</label><select id="backup-frequency"><option value="Pending approval">Pending approval</option><option value="Daily">Daily</option><option value="Weekly">Weekly</option></select><small>Draft preference only; no backup job is created.</small></div>
+     <div class="ss-field"><label for="backup-retention">Retention period</label><select id="backup-retention"><option value="Pending approval">Pending approval</option><option value="30 days">30 days</option><option value="90 days">90 days</option><option value="365 days">365 days</option></select><small>Draft preference only; no retention policy is enforced.</small></div>
+     <div class="ss-field"><label for="restore-test">Restore testing</label><select id="restore-test"><option value="Pending approval">Pending approval</option><option value="Monthly">Monthly</option><option value="Quarterly">Quarterly</option></select><small>Schedule and evidence requirements need approval.</small></div>
+     <div class="ss-field"><label for="backup-owner">Backup owner</label><input id="backup-owner" value="To be assigned" readonly><small>Responsible role or designated administrator.</small></div>
+    </div></div>
+    <div class="ss-footer-actions"><span>Draft recovery decisions only; no service is connected.</span><div><button class="btn primary" data-save-section="backup">Save review note</button></div></div>
+   </div>
+  </section>
+  <section class="ss-section" id="section-system">
+   <div class="ss-panel">
+    <div class="ss-panel-head"><div class="ss-panel-title"><span class="ss-panel-icon">ⓘ</span><div><h2>System information</h2><p>Current project and preview environment details.</p></div></div><span class="ss-status ss-neutral">Design preview</span></div>
+    <div class="ss-panel-body"><div class="ss-info-grid">
+     <div class="ss-info-card"><span>Application</span><strong>TFI Production Management System</strong><p>New TFI application project.</p></div>
+     <div class="ss-info-card"><span>Preview version</span><strong>Admin UI v0.1</strong><p>Initial System Settings screen.</p></div>
+     <div class="ss-info-card"><span>Environment</span><strong>Local design preview</strong><p>Not a production deployment.</p></div>
+     <div class="ss-info-card"><span>Central database</span><strong>Not connected</strong><p>Supabase is the planned central database.</p></div>
+     <div class="ss-info-card"><span>Operational source</span><strong>Not connected</strong><p>Google Sheets is not used as a live operational database.</p></div>
+     <div class="ss-info-card"><span>Build status</span><strong>UI prototype</strong><p>Live health and service metrics are not available here.</p></div>
+    </div>
+    <div class="ss-callout"><strong>Project boundary:</strong> The new TFI is being developed separately from the old system. Do not run production migrations or modify the old TFI database during this stage.</div>
+   </div>
+   </div>
+  </section>
+ </div>
+</div>
+<footer class="footer"><span><strong>TOSEN FOODS, INC.</strong> · Production Management System</span><span>Admin UI design preview · v0.1</span></footer>
+</main></div></div>
+
+
+<script>
+
+const $=id=>document.getElementById(id);
+const defaultValues={
+ timezone:'Asia/Manila','date-format':'DD MMM YYYY','number-format':'1,234.56','landing-page':'Dashboard',
+ theme:'Light',density:'Comfortable','sidebar-expanded':true,'unsaved-warning':true,'reduced-motion':false,
+ 'source-method':'Undecided','mfa-policy':'Pending approval',
+ 'idle-timeout':'30 minutes','warning-window':'2 minutes','absolute-lifetime':'8 hours','concurrent-sessions':'1 session',
+ 'allow-extension':true,'require-browser-restart':true,'revoke-on-password-change':true,'log-session-events':true,
+ 'backup-frequency':'Pending approval','backup-retention':'Pending approval','restore-test':'Pending approval'
+};
+const settingIds=Object.keys(defaultValues);
+const sectionLabels={general:'General',appearance:'Appearance','data':'Data & Import',security:'Security & Access',session:'Session Policy',backup:'Backup & Recovery',system:'System Information'};
+const requestedSection=new URLSearchParams(window.location.search).get('section');
+const validSections=['general','appearance','data','security','session','backup','system'];
+let activeSection=validSections.includes(requestedSection)?requestedSection:'general',savedDraft={...defaultValues};
+let sessionDraftState='Draft proposal · not active';
+function toast(message){
+ const t=document.createElement('div');t.className='ua-toast';t.textContent=message;
+ document.body.appendChild(t);setTimeout(()=>t.remove(),2600);
+}
+function readValue(id){
+ const el=$(id);if(!el)return null;
+ return el.type==='checkbox'?el.checked:el.value;
+}
+function updateSessionPreview(){
+ const value=id=>readValue(id);
+ const text=(id,val)=>{const el=$(id);if(el)el.textContent=val};
+ text('summary-idle',value('idle-timeout')||'—');
+ text('summary-warning',value('warning-window')||'—');
+ text('summary-lifetime',value('absolute-lifetime')||'—');
+ text('summary-concurrent',value('concurrent-sessions')||'—');
+ text('summary-browser-restart',value('require-browser-restart')?'Required':'Not required');
+ text('summary-extension',value('allow-extension')?'Allowed once':'Disabled');
+ text('summary-password-revoke',value('revoke-on-password-change')?'Revoke on change':'Not enabled');
+ text('summary-audit-events',value('log-session-events')?'Enabled':'Disabled');
+ const status=$('session-policy-status');if(status)status.textContent=sessionDraftState;
+}
+function applyValues(values){
+ settingIds.forEach(id=>{
+  const el=$(id);if(!el)return;
+  if(el.type==='checkbox')el.checked=!!values[id];
+  else el.value=values[id]??defaultValues[id];
+ });
+ updateSessionPreview();
+}
+function captureValues(){
+ const result={};settingIds.forEach(id=>result[id]=readValue(id));return result;
+}
+function setSection(name){
+ activeSection=name;
+ document.querySelectorAll('.ss-nav-btn').forEach(b=>{
+  const active=b.dataset.section===name;
+  b.classList.toggle('active',active);
+  if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
+ });
+ document.querySelectorAll('.ss-section').forEach(s=>s.classList.toggle('active',s.id==='section-'+name));
+}
+function saveDraft(section){
+ const current=captureValues();
+ if(section){
+  const idsBySection={
+   general:['timezone','date-format','number-format','landing-page'],
+   appearance:['theme','density','sidebar-expanded','unsaved-warning','reduced-motion'],
+   data:['source-method'],
+   security:['mfa-policy'],
+   session:['idle-timeout','warning-window','absolute-lifetime','concurrent-sessions','allow-extension','require-browser-restart','revoke-on-password-change','log-session-events'],
+   backup:['backup-frequency','backup-retention','restore-test']
+  };
+  (idsBySection[section]||[]).forEach(id=>savedDraft[id]=current[id]);
+  if(section==='session')sessionDraftState='Draft saved · not active';
+  toast(sectionLabels[section]+' review note saved in this preview session.');
+ }else{
+  savedDraft={...current};
+  sessionDraftState='Draft saved · not active';
+  toast('Settings draft saved in this preview session only.');
+ }
+ updateSessionPreview();
+}
+function resetSection(section){
+ const idsBySection={
+  general:['timezone','date-format','number-format','landing-page'],
+  appearance:['theme','density','sidebar-expanded','unsaved-warning','reduced-motion'],
+  data:['source-method'],
+  security:['mfa-policy'],
+  session:['idle-timeout','warning-window','absolute-lifetime','concurrent-sessions','allow-extension','require-browser-restart','revoke-on-password-change','log-session-events'],
+  backup:['backup-frequency','backup-retention','restore-test']
+ };
+ (idsBySection[section]||[]).forEach(id=>{
+  const el=$(id);if(!el)return;
+  const value=savedDraft[id]??defaultValues[id];
+  if(el.type==='checkbox')el.checked=!!value;else el.value=value;
+ });
+ if(section==='session')sessionDraftState='Draft restored · not active';
+ updateSessionPreview();
+ toast(sectionLabels[section]+' draft values restored.');
+}
+setSection(activeSection);
+document.querySelectorAll('.ss-nav-btn').forEach(b=>b.addEventListener('click',()=>setSection(b.dataset.section)));
+document.querySelectorAll('[data-save-section]').forEach(b=>b.addEventListener('click',()=>saveDraft(b.dataset.saveSection)));
+document.querySelectorAll('[data-reset-section]').forEach(b=>b.addEventListener('click',()=>resetSection(b.dataset.resetSection)));
+$('save-settings').addEventListener('click',()=>saveDraft());
+$('reset-settings').addEventListener('click',()=>{
+ sessionDraftState='Draft restored · not active';
+ applyValues(savedDraft);
+ toast('Unsaved preview changes have been reset.');
+});
+$('open-session-policy').addEventListener('click',()=>setSection('session'));
+$('back-to-security').addEventListener('click',()=>setSection('security'));
+document.querySelectorAll('#section-session select,#section-session input').forEach(el=>el.addEventListener('change',()=>{
+ sessionDraftState='Unsaved changes · not active';
+ updateSessionPreview();
+}));
+$('preview-timeout-warning').addEventListener('click',()=>{location.href='session-timeout-preview.html'});
+$('preview-session-expired').addEventListener('click',()=>{location.href='session-expired-preview.html'});
+document.querySelectorAll('.nav-link').forEach(b=>b.addEventListener('click',()=>{
+ const page=b.dataset.page;
+ const params=new URLSearchParams(window.location.search);
+ const embedded=window.self!==window.top||params.get('embedded')==='1';
+ if(embedded){window.parent.postMessage({type:'TFI_NAVIGATE_MODULE',page},'*');return}
+ if(window.TFINavigatePreview){window.TFINavigatePreview(page);return}
+ const routes={'Dashboard':'dashboard-preview.html','Product Entry':'product-entry-preview.html','Production Entry':'production-entry-preview.html','Production Schedule':'production-schedule-preview.html','DMP Production':'dmp-production-preview.html','DMR Production':'dmr-production-preview.html','DMR Coding':'dmr-coding-preview.html','Hourly Meat':'hourly-meat-preview.html','Hourly Coding':'hourly-coding-preview.html','Hourly Agri':'hourly-agri-preview.html','OEE':'oee-preview.html','Productivity':'productivity-preview.html','Yield Monitoring':'yield-monitoring-preview.html','PR Monitoring':'pr-monitoring-preview.html','Coding DPR':'coding-dpr-preview.html','CO QA':'co-qa-preview.html','NON-PROD':'non-prod-preview.html','Spreadsheet Import':'spreadsheet-import-center-preview.html','Import History':'import-history-preview.html','Master Data':'master-data-preview.html','Reports':'reports-reconciliation-preview.html','Users & Access':'users-access-preview.html','Audit Trail':'audit-trail-preview.html','Settings':'system-settings-preview.html'};
+ if(routes[page])location.href=routes[page];
+}));
+applyValues(defaultValues);
+
+</script><script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+</body></html>
+
+[executed on device: DESKTOP-F1NGRI3 (8b895d9b-a075-47fb-bed3-5bc3a72923c9)]
+
+[executed on device: DESKTOP-F1NGRI3 (8b895d9b-a075-47fb-bed3-5bc3a72923c9)]
+
+[executed on device: DESKTOP-F1NGRI3 (8b895d9b-a075-47fb-bed3-5bc3a72923c9)]

@@ -1,0 +1,549 @@
+{
+  "manifest_version": "2026-11-21-v1",
+  "source": {
+    "workbook": "Copy of TFI - Production Monitoring Sheet 1",
+    "spreadsheet_id": "1rCbQ16wj7MRjQCFF3tA-WEMkudraJK0RkwcqayUlz7k",
+    "production_entry": {
+      "sheet_title": "Production Entry",
+      "sheet_id": 1923467491,
+      "source_range": "Production Entry!A1:W19",
+      "source_data_rows": [
+        8,
+        19
+      ],
+      "source_column_count": 23
+    },
+    "production_summary": {
+      "sheet_title": "Production Summary",
+      "sheet_id": 1846667474,
+      "header_row": 6,
+      "first_data_row": 7,
+      "last_known_grid_row": 13188,
+      "source_column_count": 24,
+      "source_range": "Production Summary!A1:X13188"
+    },
+    "legend": {
+      "sheet_title": "DPR LEGEND",
+      "sheet_id": 508797580,
+      "product_name_range": "DPR LEGEND!I2:AN2",
+      "product_code_range": "DPR LEGEND!I3:AN100"
+    }
+  },
+  "form": {
+    "title": "OPENING & CLOSING REPORT",
+    "date_input": "A",
+    "lines": [
+      {
+        "line": "Agri",
+        "count": 4,
+        "source_rows": [
+          8,
+          9,
+          10,
+          11
+        ]
+      },
+      {
+        "line": "Meat",
+        "count": 4,
+        "source_rows": [
+          12,
+          13,
+          14,
+          15
+        ]
+      },
+      {
+        "line": "Finishing",
+        "count": 4,
+        "source_rows": [
+          16,
+          17,
+          18,
+          19
+        ]
+      }
+    ],
+    "slots": [
+      {
+        "source_row_number": 8,
+        "line": "Agri",
+        "line_slot": 1
+      },
+      {
+        "source_row_number": 9,
+        "line": "Agri",
+        "line_slot": 2
+      },
+      {
+        "source_row_number": 10,
+        "line": "Agri",
+        "line_slot": 3
+      },
+      {
+        "source_row_number": 11,
+        "line": "Agri",
+        "line_slot": 4
+      },
+      {
+        "source_row_number": 12,
+        "line": "Meat",
+        "line_slot": 1
+      },
+      {
+        "source_row_number": 13,
+        "line": "Meat",
+        "line_slot": 2
+      },
+      {
+        "source_row_number": 14,
+        "line": "Meat",
+        "line_slot": 3
+      },
+      {
+        "source_row_number": 15,
+        "line": "Meat",
+        "line_slot": 4
+      },
+      {
+        "source_row_number": 16,
+        "line": "Finishing",
+        "line_slot": 1
+      },
+      {
+        "source_row_number": 17,
+        "line": "Finishing",
+        "line_slot": 2
+      },
+      {
+        "source_row_number": 18,
+        "line": "Finishing",
+        "line_slot": 3
+      },
+      {
+        "source_row_number": 19,
+        "line": "Finishing",
+        "line_slot": 4
+      }
+    ],
+    "source_headers": [
+      "Date",
+      "Line",
+      "Product Name",
+      "Product Code",
+      "No. of Batches",
+      "Target",
+      "Produced",
+      "UOM",
+      "% Attainment",
+      "Plan Start",
+      "Actual Start",
+      "Plan End",
+      "Actual End (Prod)",
+      "Actual End (Cleaning)",
+      "Man Reqmt",
+      "Present",
+      "Absent",
+      "% Attendance",
+      "OT Hrs",
+      "Remarks / Reasons (Delay, <95%, Co-run, PD)",
+      "Source Tab",
+      "Check",
+      "Has data"
+    ],
+    "source_groups": [
+      {
+        "title": "PRODUCT",
+        "start": 1,
+        "end": 4,
+        "tone": "dark"
+      },
+      {
+        "title": "PRODUCTION (PLAN vs ACTUAL)",
+        "start": 5,
+        "end": 9,
+        "tone": "teal"
+      },
+      {
+        "title": "TIME",
+        "start": 10,
+        "end": 14,
+        "tone": "dark"
+      },
+      {
+        "title": "MANPOWER & OT (1st row of line per day)",
+        "start": 15,
+        "end": 19,
+        "tone": "teal"
+      },
+      {
+        "title": "REMARKS",
+        "start": 20,
+        "end": 20,
+        "tone": "dark"
+      },
+      {
+        "title": "TRACE",
+        "start": 21,
+        "end": 23,
+        "tone": "teal"
+      }
+    ]
+  },
+  "summary": {
+    "headers": [
+      "Date",
+      "Line",
+      "Product Name",
+      "Product Code",
+      "No. of Batches",
+      "Target",
+      "Produced",
+      "UOM",
+      "% Attainment",
+      "Plan Start",
+      "Actual Start",
+      "Plan End",
+      "Actual End (Prod)",
+      "Actual End (Cleaning)",
+      "Man Reqmt",
+      "Present",
+      "Absent",
+      "% Attendance",
+      "OT Hrs",
+      "Remarks / Reasons (Delay, <95%, Co-run, PD)",
+      "Saved on",
+      "Check",
+      "Has data",
+      "Day has data"
+    ],
+    "groups": [
+      {
+        "title": "PRODUCT",
+        "start": 1,
+        "end": 4
+      },
+      {
+        "title": "PRODUCTION (PLAN VS ACTUAL)",
+        "start": 5,
+        "end": 9
+      },
+      {
+        "title": "TIME",
+        "start": 10,
+        "end": 14
+      },
+      {
+        "title": "MANPOWER & OT (1ST ROW OF LINE PER DAY)",
+        "start": 15,
+        "end": 19
+      },
+      {
+        "title": "REMARKS",
+        "start": 20,
+        "end": 20
+      },
+      {
+        "title": "TRACE",
+        "start": 21,
+        "end": 24
+      }
+    ]
+  },
+  "product_names": [
+    "Green Peas & Dry Peas",
+    "Garbanzos",
+    "Mayon Sweet Beans",
+    "Mayon Red Monggo Beans",
+    "Black Beans",
+    "Pork/Beef and Beans",
+    "Baked Beans",
+    "Tomato Paste",
+    "Cream Style Corn",
+    "Whole Kernel Corn",
+    "Philips Meat Loaf",
+    "Seniorita Beef/Meat Loaf Low Cost Generic",
+    "Seniorita Liver Spread",
+    "Philips Gold Liver Spread",
+    "Mang Rene Liver Spread",
+    "Seniorita Beef/Meat Loaf Regular",
+    "Maharlika Luncheon Meat",
+    "Seniorita Corned Beef Low Cost",
+    "Seniorita Carne Norte",
+    "Seniorita Corned Beef Premium",
+    "Seniorita Corned Beef Reg",
+    "Landers Premium Corned Beef",
+    "American Corned Beef ",
+    "Seniorita Luncheon Meat",
+    "Philips Gold Premium Luncheon Meat",
+    "Philips Frankfurter/HMPS",
+    "Seniorita Vienna Sausage",
+    "Laing",
+    "Nata de Coco",
+    "Maharlika Roast Beef",
+    "Whole Peeled Tomato",
+    "Aguila Corned Beef"
+  ],
+  "product_codes": {
+    "Green Peas & Dry Peas": [
+      "MDP-100-155",
+      "MDP-48-225",
+      "MDP-24-425",
+      "SDP-100-155",
+      "SDP-48-225",
+      "SDP-24-425",
+      "PGP-100-155",
+      "MGP-48-225",
+      "MGP-24-425",
+      "CDP-100-155",
+      "MGPE-48-225",
+      "SDPE-24-425",
+      "SDPE-48-225",
+      "MGPE-24-425",
+      "SDPE-100-155",
+      "MDPE-100-155"
+    ],
+    "Garbanzos": [
+      "MGB-48-225",
+      "MGB-24-425",
+      "MGBE-48-225",
+      "MGBE-24-425",
+      "MGBE-48-425",
+      "MGB-6-2800",
+      "MSGB-24-380"
+    ],
+    "Mayon Sweet Beans": [
+      "MSB-24-380"
+    ],
+    "Mayon Red Monggo Beans": [
+      "TMRMB-24-380"
+    ],
+    "Black Beans": [
+      "SBB-48-180",
+      "SBB-100-110",
+      "PGBB-50-110",
+      "CBB-100-180"
+    ],
+    "Pork/Beef and Beans": [
+      "SPB-50-165",
+      "SPB-48-225",
+      "SPB-24-425",
+      "SPB-12-900",
+      "PGPB-50-165",
+      "PGPB-50-225",
+      "SBNB-50-165",
+      "UBBSTS-48-225",
+      "PPBT-50-165"
+    ],
+    "Baked Beans": [
+      "Baked Beans-225",
+      "ABB-50-175",
+      "ABB-48-230",
+      "UBBSTS-48-225",
+      "ABB-6-2600",
+      "MSB-24-380"
+    ],
+    "Tomato Paste": [
+      "STP-48-155",
+      "TMTPDC-24-400"
+    ],
+    "Cream Style Corn": [
+      "MCS-24-425",
+      "ISCS-24-425",
+      "TMCCS-24-425"
+    ],
+    "Whole Kernel Corn": [
+      "MWKC-24-425",
+      "ISWK-24-425",
+      "MWKC-6-2800",
+      "MWKC-6-2950"
+    ],
+    "Philips Meat Loaf": [
+      "PML-50-150",
+      "PML-48-200"
+    ],
+    "Seniorita Beef/Meat Loaf Low Cost Generic": [
+      "SMLD-100-150",
+      "SMLD-48-150",
+      "SBLD-48-150",
+      "ISBL-48-150",
+      "SML-48-210",
+      "TSLG-48-150",
+      "TSLG-100-150"
+    ],
+    "Seniorita Liver Spread": [
+      "SLS-100-85",
+      "SLS-12-900",
+      "SLS-24-350",
+      "SCLS-100-85"
+    ],
+    "Philips Gold Liver Spread": [
+      "PGLS-50-85",
+      "PLST-50-85"
+    ],
+    "Mang Rene Liver Spread": [
+      "MRLS-48-85"
+    ],
+    "Seniorita Beef/Meat Loaf Regular": [
+      "SML-48-150",
+      "SBL-48-150",
+      "SML-48-210"
+    ],
+    "Maharlika Luncheon Meat": [
+      "MLM-24-350"
+    ],
+    "Seniorita Corned Beef Low Cost": [
+      "SCB-100-150",
+      "SCBD-48-150"
+    ],
+    "Seniorita Carne Norte": [
+      "SCN-48-150",
+      "SCN-100-100"
+    ],
+    "Seniorita Corned Beef Premium": [
+      "SPCB-48-150"
+    ],
+    "Seniorita Corned Beef Reg": [
+      "SCBR-48-150",
+      "TSCBG-100-150",
+      "TSCB-48-260",
+      "TSCB-48-150"
+    ],
+    "Landers Premium Corned Beef": [
+      "BCBCE-24-380",
+      "BCBCGE-24-380",
+      "LPCBR-24-380",
+      "LPCBS-24-380"
+    ],
+    "American Corned Beef ": [
+      "ACBR-48-150",
+      "ACBR-48-210",
+      "TACB-30-380",
+      "TACB-48-210",
+      "TACB-48-150",
+      "TACB-12-1800",
+      "TACBS-48-150",
+      "TACBC-48-150"
+    ],
+    "Seniorita Luncheon Meat": [
+      "SLM-24-350"
+    ],
+    "Philips Gold Premium Luncheon Meat": [
+      "PGPLM-24-350"
+    ],
+    "Philips Frankfurter/HMPS": [
+      "PF-24-225",
+      "HMPS"
+    ],
+    "Seniorita Vienna Sausage": [
+      "SVS-48-70",
+      "SVS-48-114",
+      "SVST-48-70",
+      "SCVT-48-70"
+    ],
+    "Laing": [
+      "MLCM-48-155"
+    ],
+    "Nata de Coco": [
+      "TMNDCR-24-380",
+      "TMNDCW-24-380",
+      "TMNDCG-24-380",
+      "TMNDCP-24-380",
+      "TMNDCR-24-425",
+      "TMNDCW-24-425",
+      "TMNDCG-24-425",
+      "TMNDCP-24-425",
+      "TMKG-24-380",
+      "TMKR-24-380"
+    ],
+    "Maharlika Roast Beef": [
+      "MRB-24-380"
+    ],
+    "Whole Peeled Tomato": [
+      "TMWPT-6-2800"
+    ],
+    "Aguila Corned Beef": [
+      "AGCBE-24-350",
+      "AGCGCBE-24-350",
+      "PLACBT-24-350",
+      "PLACBS-24-350"
+    ]
+  },
+  "uom": [
+    "can",
+    "case",
+    "batch",
+    "ton",
+    "kg"
+  ],
+  "input_columns": [
+    "A",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "S",
+    "T"
+  ],
+  "computed_columns": [
+    "I",
+    "Q",
+    "R",
+    "W"
+  ],
+  "source_formula_columns": [
+    "A",
+    "I",
+    "Q",
+    "R",
+    "W"
+  ],
+  "formulas": {
+    "attainment": "IF(AND(ISNUMBER(F),ISNUMBER(G),F>0),G/F,'')",
+    "absent": "IF(AND(ISNUMBER(O),ISNUMBER(P)),O-P,'')",
+    "attendance": "IF(AND(ISNUMBER(O),ISNUMBER(P),O>0),P/O,'')",
+    "has_data": "OR(C,D,F,G,O,P,S,T are nonblank)"
+  },
+  "has_data_columns": [
+    "C",
+    "D",
+    "F",
+    "G",
+    "O",
+    "P",
+    "S",
+    "T"
+  ],
+  "trace_columns": {
+    "production_entry": {
+      "U": "Source Tab",
+      "V": "Check",
+      "W": "Has data"
+    },
+    "production_summary": {
+      "U": "Saved on",
+      "V": "Check",
+      "W": "Has data",
+      "X": "Day has data"
+    }
+  },
+  "notes": [
+    "One form contains 12 fixed source slots: four each for Agri, Meat, and Finishing.",
+    "The date is entered once at form level and is copied into column A for each saved run.",
+    "Column B is derived from the fixed source row slot and is not user-editable.",
+    "Product Code choices depend on Product Name and use the exact product-specific DPR LEGEND lists.",
+    "Only rows where at least one of C, D, F, G, O, P, S, or T is nonblank satisfy the source Has data formula and are saved.",
+    "I, Q, R, and W are computed by TFI2 from the source formulas. A is a form-level date input, not a per-row field.",
+    "Production Summary columns V (Check) and X (Day has data) are preserved as null until their exact source formulas or business rules are verified. No formula is invented for them.",
+    "The old preview snapshot values are not live data and are intentionally excluded from the TFI2 catalog and KPI calculations."
+  ]
+}

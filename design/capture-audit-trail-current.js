@@ -1,0 +1,20 @@
+const puppeteer=require("C:/Users/Rominick/AppData/Local/npm-cache/_npx/4b4c857f6efdfb61/node_modules/puppeteer");
+const path=require("path");const{pathToFileURL}=require("url");const dir="C:/Users/Rominick/Desktop/TFI_NEW/design";
+(async()=>{
+ const browser=await puppeteer.launch({headless:true,args:["--no-sandbox","--disable-setuid-sandbox","--allow-file-access-from-files"]});
+ const page=await browser.newPage();const errors=[],failed=[];
+ page.on("pageerror",e=>errors.push(e.message));page.on("console",m=>{if(m.type()==="error")errors.push(m.text())});page.on("requestfailed",r=>failed.push(r.url()+" "+r.failure()?.errorText));
+ await page.setViewport({width:1440,height:1000});
+ await page.goto(pathToFileURL(path.join(dir,"dashboard-preview.html")).href+"?module=Audit%20Trail",{waitUntil:"load"});
+ await page.waitForFunction(()=>{const f=document.querySelector(".tfi-module-frame.is-active");return f&&f.dataset.loadedModule==="Audit Trail"&&(f.src||"").includes("audit-trail-preview.html")});
+ let frame=page.frames().find(f=>f.url().includes("audit-trail-preview.html"));
+ await frame.waitForSelector("#audit-rows");
+ const desktop=await frame.evaluate(()=>({title:document.title,rows:document.querySelectorAll("#audit-rows tr").length,empty:document.querySelector("#audit-rows").innerText.includes("No verified audit events"),metrics:[...document.querySelectorAll(".audit-metrics .metric-value")].map(x=>x.textContent.trim()),exportDisabled:document.querySelector("#export-audit").disabled,activeNav:document.querySelector(".sidebar .nav-link.active")?.dataset.page}));
+ await page.screenshot({path:path.join(dir,"audit-trail-verified-desktop.png"),fullPage:true});
+ await page.setViewport({width:390,height:844});await new Promise(r=>setTimeout(r,180));
+ const mobile=await frame.evaluate(()=>({viewport:innerWidth,scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth,noOverflow:document.documentElement.scrollWidth<=document.documentElement.clientWidth,tableScroll:document.querySelector(".audit-table-wrap").scrollWidth>document.querySelector(".audit-table-wrap").clientWidth}));
+ await page.screenshot({path:path.join(dir,"audit-trail-verified-mobile.png"),fullPage:true});
+ const shell=await page.evaluate(()=>({sessionManagementLinks:document.querySelectorAll('.sidebar .nav-link[data-page="Session Management"]').length,auditActive:document.querySelector('.sidebar .nav-link[data-page="Audit Trail"].active')!==null}));
+ const result={desktop,mobile,shell,errors,failed,pass:desktop.rows===1&&desktop.empty&&desktop.metrics.every(x=>x==="—")&&desktop.exportDisabled&&desktop.activeNav==="Audit Trail"&&mobile.noOverflow&&mobile.tableScroll&&shell.sessionManagementLinks===1&&shell.auditActive&&errors.length===0&&failed.length===0};
+ console.log(JSON.stringify(result,null,2));await browser.close();if(!result.pass)process.exitCode=1;
+})().catch(e=>{console.error(e);process.exitCode=1});

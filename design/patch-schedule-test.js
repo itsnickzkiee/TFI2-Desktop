@@ -1,0 +1,11 @@
+const fs=require("fs");
+const file="C:/Users/Rominick/Desktop/TFI_NEW/design/test-schedule-summary.js";
+const lines=fs.readFileSync(file,"utf8").split(/\r?\n/);
+const hi=lines.findIndex(line=>line.includes('const headers = [...document.querySelectorAll(".ss-table thead th")]'));
+if(hi<0) throw new Error("Header extraction line not found.");
+lines[hi]='    const headers = [...document.querySelectorAll(".ss-table thead th")].map(th => th.querySelector("button").childNodes[0].textContent.trim());';
+const ni=lines.findIndex(line=>line.startsWith("  const returnToProductionSummary ="));
+if(ni<0) throw new Error("Report navigation assertion not found.");
+lines.splice(ni,5,'  const returnToProductionSummary = !!reportFrame && await reportFrame.evaluate(() => document.body.dataset.tfiReport === "production-summary");');
+fs.writeFileSync(file,lines.join("\n"),"utf8");
+console.log("Test assertions updated.");

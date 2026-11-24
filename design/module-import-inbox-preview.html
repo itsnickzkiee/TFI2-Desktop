@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TFI | Module Import Inbox</title>
+<style>
+:root{--green:#086333;--deep:#064b29;--ink:#17251d;--muted:#7c8981;--line:#e7ede8;--canvas:#f4f7f5;--soft:#eaf4ed;--shadow:0 10px 30px rgba(25,55,37,.055)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--canvas);color:var(--ink);font-family:"Segoe UI",Inter,Arial,sans-serif;font-size:14px}button,input,select{font:inherit}button{cursor:pointer}
+.shell{min-height:100vh;display:flex}.sidebar{width:258px;flex:0 0 258px;background:linear-gradient(180deg,var(--green),var(--deep));color:#fff;display:flex;flex-direction:column;min-height:100vh;padding:22px 15px 18px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand{background:#fff;border-radius:14px;padding:9px 11px;display:flex;align-items:center;justify-content:center;min-height:76px}.brand img{width:100%;max-width:208px;max-height:60px;object-fit:contain}.brand-caption{text-align:center;color:#ffffffb8;font-size:9px;font-weight:800;letter-spacing:1.65px;margin:13px 0 26px}
+.nav-group{margin:0 0 18px}.nav-label{font-size:9px;text-transform:uppercase;letter-spacing:1.35px;font-weight:800;color:#ffffff85;padding:0 12px;margin:0 0 8px}.nav-link{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;margin:2px 0;border:0;border-radius:10px;background:transparent;color:#ffffffd1;font-size:12px;font-weight:600;text-align:left}.nav-link svg{width:17px;height:17px;flex:0 0 17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.nav-link:hover{background:#ffffff1a;color:#fff}.nav-link.active{background:#fff;color:var(--green);box-shadow:0 5px 14px #0002}.spacer{flex:1;min-height:15px}.user-foot{border-top:1px solid #ffffff26;padding:15px 7px 0;display:flex;align-items:center;gap:10px}.avatar{width:34px;height:34px;border-radius:50%;background:#e5f0e8;color:var(--green);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 34px}.user-foot strong,.profile strong{display:block;font-size:12px}.user-foot small{display:block;font-size:10px;color:#ffffffa3;margin-top:3px}
+.main{min-width:0;flex:1}.topbar{height:74px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:5}.crumb{display:flex;align-items:center;gap:9px;color:#8a968e;font-size:12px;font-weight:600}.crumb b{color:#314239}.slash{color:#c1cbc4}.top-actions{display:flex;align-items:center;gap:15px}.search{height:38px;width:220px;border:1px solid #e8eee9;border-radius:10px;background:#fafcfb;display:flex;align-items:center;gap:9px;padding:0 12px;color:#95a199}.search svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}.search input{border:0;outline:0;background:transparent;width:100%;font-size:12px}.profile{display:flex;align-items:center;gap:9px}.profile small{display:block;font-size:10px;color:#758279;margin-top:2px}
+.content{max-width:1680px;margin:0 auto;padding:28px 30px 34px}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:19px}.eyebrow{font-size:10px;letter-spacing:1.5px;color:var(--green);font-weight:900;text-transform:uppercase;margin-bottom:7px}h1{font-size:27px;letter-spacing:-.8px;margin:0;font-weight:760}.subtitle{margin:7px 0 0;color:#78857d;font-size:12px;line-height:1.5}.heading-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.btn{border:0;border-radius:9px;padding:10px 13px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:10px;font-weight:780;transition:background .16s,border-color .16s}.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.primary{background:var(--green);color:#fff;box-shadow:0 5px 12px #08633329}.primary:hover{background:#07572e}.outline{background:#fff;color:#3e5146;border:1px solid #e2eae4}.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #e8eee9;background:#fff;border-radius:30px;padding:8px 11px;font-size:9px;color:#758279;font-weight:800;white-space:nowrap}.pill:before{content:"";width:6px;height:6px;background:#a0aaa3;border-radius:50%}
+.info-note{display:flex;align-items:flex-start;gap:10px;background:#fff;border:1px solid #e8eee9;border-radius:12px;padding:12px 14px;margin-bottom:16px;color:#748278;font-size:10px;line-height:1.55}.info-note .note-icon{width:25px;height:25px;border-radius:8px;background:#edf5ef;color:var(--green);display:grid;place-items:center;flex:0 0 25px;font-weight:900}.info-note strong{color:#405248}
+.module-context{display:grid;grid-template-columns:minmax(230px,1.15fr) minmax(180px,1fr) minmax(160px,.75fr) minmax(170px,.8fr);gap:11px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 15px;margin-bottom:16px;box-shadow:var(--shadow)}
+.context-item{min-width:0;padding:2px 7px;border-right:1px solid #edf1ee}.context-item:last-child{border:0}.context-item label{display:block;color:#8b978f;font-size:8px;font-weight:850;letter-spacing:.65px;text-transform:uppercase;margin-bottom:6px}.context-item strong{display:block;color:#34483b;font-size:11px;overflow-wrap:anywhere}.context-item small{display:block;color:#9aa59e;font-size:8px;margin-top:4px}
+.module-select{width:100%;height:35px;border:1px solid #dfe8e1;border-radius:8px;background:#fbfdfb;padding:0 9px;color:#34483b;font-size:10px;font-weight:750;outline:0}.module-select:focus{border-color:#83b191;box-shadow:0 0 0 3px #08633312}
+.scope-line{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 1px 15px;color:#849087;font-size:9px}.scope-line strong{color:#536258}.scope-chip{display:inline-flex;align-items:center;gap:6px;background:#edf5ef;color:#3b6d4b;border-radius:20px;padding:6px 9px;font-size:8px;font-weight:850;white-space:nowrap}
+.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px;margin-bottom:17px}.metric{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 15px;box-shadow:var(--shadow);min-width:0}.metric-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.metric-label{font-size:8px;color:#87938b;font-weight:850;text-transform:uppercase;letter-spacing:.5px}.metric-icon{width:27px;height:27px;border-radius:8px;background:#f0f5f1;color:var(--green);display:grid;place-items:center;font-size:13px}.metric-value{font-size:23px;font-weight:820;letter-spacing:-.6px;color:#25382c;margin-top:7px}.metric-note{font-size:8px;color:#9aa59e;margin-top:3px}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.tabs{display:flex;align-items:center;gap:4px;background:#eaf0eb;padding:4px;border-radius:10px;overflow:auto}.tab{border:0;background:transparent;color:#6e7d73;border-radius:7px;padding:8px 10px;font-size:9px;font-weight:800;white-space:nowrap}.tab.active{background:#fff;color:var(--green);box-shadow:0 2px 6px #16332014}.tools{display:flex;align-items:center;gap:8px}.searchbox{height:35px;width:220px;border:1px solid #e2eae4;background:#fff;border-radius:9px;padding:0 11px;outline:0;font-size:10px}.searchbox:focus{border-color:#8db79a}.batch-filter{height:35px;border:1px solid #e2eae4;background:#fff;border-radius:9px;padding:0 10px;color:#536258;font-size:10px;outline:0}
+.table-card{background:#fff;border:1px solid #e8eee9;border-radius:15px;box-shadow:var(--shadow);overflow:hidden}.table-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 17px;border-bottom:1px solid #edf1ee}.table-summary strong{font-size:11px;color:#35473c}.table-summary span{font-size:9px;color:#8b978f}.table-wrap{overflow:auto}.inbox-table{width:100%;border-collapse:collapse;min-width:1060px}.inbox-table th{text-align:left;padding:12px 13px;background:#f8faf8;color:#87938b;text-transform:uppercase;letter-spacing:.5px;font-size:8px;font-weight:850;white-space:nowrap;border-bottom:1px solid #edf1ee}.inbox-table td{padding:12px 13px;border-bottom:1px solid #f0f3f0;color:#68766d;font-size:9px;vertical-align:middle}.inbox-table tbody tr:last-child td{border-bottom:0}.check{width:14px;height:14px;accent-color:var(--green)}.record-name{display:block;color:#34463b;font-weight:780;font-size:10px}.record-sub{display:block;color:#9aa59e;font-size:8px;margin-top:3px}.source-cell strong{display:block;color:#536258;font-size:9px}.source-cell small{display:block;color:#9aa59e;font-size:8px;margin-top:3px}.status{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:5px 8px;font-size:8px;font-weight:850;white-space:nowrap}.status:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}.ready{background:#eaf5ed;color:#267344}.incomplete{background:#fff5e7;color:#9b6a1b}.existing{background:#fff0f0;color:#b74747}.held{background:#f0f2f1;color:#758279}.action-link{border:0;background:transparent;color:var(--green);font-size:9px;font-weight:800;padding:5px}
+.empty-state{padding:44px 18px;text-align:center;color:#87948b;font-size:10px;line-height:1.6}.empty-graphic{width:48px;height:48px;border-radius:14px;background:#f0f6f1;color:#70977a;margin:0 auto 11px;display:grid;place-items:center}.empty-graphic svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.empty-state strong,.empty-state span{display:block}.empty-state strong{color:#526258;font-size:11px;margin-bottom:5px}.empty-state .btn{margin-top:13px}
+.bottom-bar{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px 16px;margin-top:15px;box-shadow:var(--shadow)}.selection-copy strong{display:block;color:#34463b;font-size:10px}.selection-copy small{display:block;color:#89958d;font-size:9px;margin-top:3px}.bottom-actions{display:flex;align-items:center;gap:8px}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-top:15px}.rule{background:#fff;border:1px solid #e8eee9;border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}.rule-icon{width:25px;height:25px;border-radius:8px;display:grid;place-items:center;flex:0 0 25px;font-weight:900;font-size:11px}.rule-icon.green{background:#eaf5ed;color:#267344}.rule-icon.amber{background:#fff5e7;color:#9b6a1b}.rule-icon.red{background:#fff0f0;color:#b74747}.rule strong{display:block;font-size:9px;color:#405248}.rule small{display:block;color:#87938b;font-size:8px;line-height:1.5;margin-top:3px}
+.footer{display:flex;justify-content:space-between;gap:12px;color:#9aa59e;font-size:9px;padding:19px 2px 0}.footer strong{color:#708076}
+.toast{position:fixed;right:24px;bottom:24px;z-index:30;background:#173d29;color:#fff;padding:12px 15px;border-radius:10px;box-shadow:0 12px 30px #0003;font-size:10px}
+@media(max-width:1250px){.content{padding:24px 22px}.topbar{padding:0 22px}.metrics{grid-template-columns:repeat(3,1fr)}.module-context{grid-template-columns:repeat(2,minmax(0,1fr))}.context-item:nth-child(2){border:0}}
+@media(max-width:900px){.toolbar{align-items:flex-start;flex-direction:column}.tools{width:100%}.searchbox{flex:1;width:auto}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.rules{grid-template-columns:1fr}.scope-line{align-items:flex-start;flex-direction:column}}
+@media(max-width:620px){.content{padding:18px 13px}.topbar{height:62px;padding:0 13px}.search{display:none}.profile>div:last-child{display:none}.heading,.bottom-bar{align-items:flex-start;flex-direction:column}.heading-actions{width:100%}.module-context{grid-template-columns:1fr}.context-item{border:0;border-bottom:1px solid #edf1ee;padding:7px 2px}.context-item:last-child{border:0}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.tools{flex-wrap:wrap}.searchbox{min-width:100%}.bottom-actions{width:100%;flex-wrap:wrap}.scope-chip{white-space:normal}.rules{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="tfi-shell-standard.css">
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar">
+ <div class="brand"><img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc."></div>
+ <div class="brand-caption">PRODUCTION MANAGEMENT</div>
+ <nav>
+  <div class="nav-group"><div class="nav-label">Overview</div><button class="nav-link" data-page="Dashboard"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg><span>Dashboard</span></button></div>
+  <div class="nav-group"><div class="nav-label">Production</div>
+   <button class="nav-link" data-page="Product Entry"><svg viewBox="0 0 24 24"><path d="m4 7.5 8-4.5 8 4.5v9L12 21l-8-4.5z"/></svg><span>Product Entry</span></button>
+   <button class="nav-link" data-page="Production Entry"><svg viewBox="0 0 24 24"><path d="M4 20V9l8-5 8 5v11M8 13h8M8 16h8"/></svg><span>Production Entry</span></button>
+   <button class="nav-link" data-page="Production Schedule"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg><span>Production Schedule</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Monitoring</div>
+   <button class="nav-link" data-page="DMP Production"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h17M7 15l4-4 3 2 6-7"/></svg><span>DMP Production</span></button>
+   <button class="nav-link" data-page="DMR Production"><svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>DMR Production</span></button>
+   <button class="nav-link" data-page="DMR Coding"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>DMR Coding</span></button>
+   <button class="nav-link" data-page="Hourly Meat"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Meat</span></button>
+   <button class="nav-link" data-page="Hourly Coding"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Coding</span></button>
+   <button class="nav-link" data-page="Hourly Agri"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Hourly Agri</span></button>
+   <button class="nav-link" data-page="OEE"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/></svg><span>OEE</span></button>
+   <button class="nav-link" data-page="Productivity"><svg viewBox="0 0 24 24"><path d="M3 17 9 11l4 4 8-9"/></svg><span>Productivity</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Quality &amp; Control</div>
+   <button class="nav-link" data-page="Coding DPR"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14"/><path d="M8 9h8M8 13h8"/></svg><span>Coding DPR</span></button>
+   <button class="nav-link" data-page="CO QA"><svg viewBox="0 0 24 24"><path d="m12 3 8 3v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/></svg><span>CO QA</span></button>
+   <button class="nav-link" data-page="NON-PROD"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg><span>NON-PROD</span></button>
+   <button class="nav-link" data-page="PR Monitoring"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>PR Monitoring</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Data &amp; Reports</div>
+   <button class="nav-link" data-page="Spreadsheet Import"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg><span>Spreadsheet Import</span></button>
+   <button class="nav-link active" data-page="Module Import Inbox" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v3h6V9"/></svg><span>Module Import Inbox</span></button>
+   <button class="nav-link" data-page="Import History"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Import History</span></button>
+   <button class="nav-link" data-page="Master Data"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/></svg><span>Master Data</span></button>
+   <button class="nav-link" data-page="Reports"><svg viewBox="0 0 24 24"><path d="M5 3h10l4 4v14H5z"/></svg><span>Reports</span></button>
+  </div>
+  <div class="nav-group"><div class="nav-label">Administration</div>
+   <button class="nav-link" data-page="Users & Access"><svg viewBox="0 0 24 24"><circle cx="10" cy="7" r="3.5"/><path d="M3 21v-1.5a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5V21"/></svg><span>Users &amp; Access</span></button>
+   <button class="nav-link" data-page="Audit Trail"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"/></svg><span>Audit Trail</span></button>
+   <button class="nav-link" data-page="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></button>
+  </div>
+ </nav>
+ <div class="spacer"></div><div class="user-foot"><div class="avatar">AD</div><div><strong>System Administrator</strong><small>Administrator Account</small></div></div>
+</aside>
+<div class="main">
+ <header class="topbar"><div class="crumb"><span>TFI</span><span class="slash">/</span><span>Data &amp; Reports</span><span class="slash">/</span><b>Module Import Inbox</b></div><div class="top-actions"><label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="global-search" placeholder="Search..." aria-label="Search"></label><div class="profile"><div class="avatar">AD</div><div><strong>Administrator</strong><small>System Admin</small></div></div></div></header>
+ <main class="content">
+  <div class="heading"><div><div class="eyebrow">DATA MANAGEMENT / MODULE STAGING</div><h1 id="page-title">Module Import Inbox</h1><p class="subtitle">Save eligible operational source rows directly into their live module table. Incomplete DMP records remain editable there.</p></div><div class="heading-actions"><span class="pill">Module-scoped workspace</span><button class="btn outline" id="back-batch"><svg viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Back to batch review</button><button class="btn primary" id="new-import"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5M4 15v4h16v-4"/></svg>New spreadsheet import</button></div></div>
+  <div class="info-note"><span class="note-icon">i</span><span><strong>Import protection is active.</strong> DMP Production imports save complete and incomplete operational rows directly into the live records table. Missing values stay blank and editable. Confirmed duplicates and existing records are protected; invalid or non-operational rows remain in review.</span></div>
+  <section class="module-context" aria-label="Selected module context">
+   <div class="context-item"><label for="module-select">Selected destination module</label><select class="module-select" id="module-select"><option value="">Choose an operational module</option></select><small>Choose one destination for this inbox view</small></div>
+   <div class="context-item"><label>Mapped source worksheet</label><strong id="source-worksheet">Not selected</strong><small>Official source tab name</small></div>
+   <div class="context-item"><label>Verified sheetId</label><strong id="source-sheet-id">—</strong><small>Source workbook reference</small></div>
+   <div class="context-item"><label>Inbox scope</label><strong>All staged batches</strong><small>For the selected module only</small></div>
+  </section>
+  <div class="scope-line"><span id="scope-description">Select a module to view its staged source records.</span><span class="scope-chip" id="scope-chip">No module selected</span></div>
+  <section class="metrics" aria-label="Inbox summary">
+   <div class="metric"><div class="metric-top"><span class="metric-label">Total staged records</span><span class="metric-icon">▤</span></div><div class="metric-value" id="metric-total">—</div><div class="metric-note">Awaiting verified inbox connection</div></div>
+   <div class="metric"><div class="metric-top"><span class="metric-label">Ready for Draft</span><span class="metric-icon">✓</span></div><div class="metric-value" id="metric-ready">—</div><div class="metric-note">New records with required fields</div></div>
+   <div class="metric"><div class="metric-top"><span class="metric-label">Incomplete · Eligible</span><span class="metric-icon">◷</span></div><div class="metric-value" id="metric-incomplete">—</div><div class="metric-note">New records retained with gaps</div></div>
+   <div class="metric"><div class="metric-top"><span class="metric-label">Existing · Protected</span><span class="metric-icon">⊘</span></div><div class="metric-value" id="metric-existing">—</div><div class="metric-note">Blocked from re-import</div></div>
+   <div class="metric"><div class="metric-top"><span class="metric-label">Held for review</span><span class="metric-icon">!</span></div><div class="metric-value" id="metric-held">—</div><div class="metric-note">Selectable for review and Draft preparation; only confirmed duplicates are blocked.</div></div>
+  </section>
+  <div class="toolbar"><div class="tabs" role="tablist" aria-label="Filter module inbox records"><button class="tab active" data-filter="all" aria-selected="true">All records</button><button class="tab" data-filter="ready">Ready for Draft</button><button class="tab" data-filter="incomplete">Incomplete</button><button class="tab" data-filter="existing">Existing / duplicate</button><button class="tab" data-filter="held">Held for review</button></div><div class="tools"><input class="searchbox" id="record-search" placeholder="Search record or source row..." aria-label="Search records"><select class="batch-filter" id="batch-filter" aria-label="Source batch filter" disabled><option>All source batches</option></select></div></div>
+  <section class="table-card">
+   <div class="table-summary"><div><strong id="table-title">Staged records</strong> <span id="visible-count">No module selected</span></div><span>Source worksheet and row remain traceable</span></div>
+   <div class="table-wrap"><table class="inbox-table"><thead><tr><th style="width:34px"><input type="checkbox" class="check" id="select-all" aria-label="Select all non-existing records on this page" disabled></th><th>Record / business key</th><th>Source worksheet / row</th><th>Source batch</th><th>Completeness</th><th>Inbox status</th><th>Captured</th><th>Action</th></tr></thead><tbody id="inbox-rows"><tr><td colspan="8"><div class="empty-state"><strong>Choose a module to open its Import Inbox.</strong><span>Staged source rows will appear here after a verified scan batch is saved.</span></div></td></tr></tbody></table></div>
+   <div class="table-summary"><span id="table-foot">No live inbox records are connected to this preview.</span><span>Read-only source staging</span></div>
+  </section>
+  <div class="bottom-bar"><div class="selection-copy"><strong id="selected-count">No records selected</strong><small>All new, incomplete, and review-required rows remain selectable. Only confirmed duplicates and existing records are blocked.</small></div><div class="bottom-actions"><button class="btn outline" id="clear-selection">Clear selection</button><button class="btn outline" id="review-drafts" hidden>Review Drafts</button><button class="btn primary" id="save-all-dmp" hidden disabled>Save all to DMP Production</button><button class="btn outline" id="prepare-drafts" disabled>Prepare selected review rows →</button></div></div>
+  <section class="rules" aria-label="Import handling rules">
+   <div class="rule"><span class="rule-icon green">✓</span><div><strong>New and complete</strong><small>Saved directly into the operational module table when the import batch is confirmed.</small></div></div>
+   <div class="rule"><span class="rule-icon amber">◷</span><div><strong>New but incomplete</strong><small>Saved into the operational module as Incomplete. Missing fields remain blank and can be corrected using the module's Edit action.</small></div></div>
+   <div class="rule"><span class="rule-icon red">⊘</span><div><strong>Already exists</strong><small>Locked from re-import. Existing operational records remain untouched.</small></div></div>
+  </section>
+  <footer class="footer"><span><strong>TOSEN FOODS, INC.</strong> · Production Management System</span><span>Admin UI design preview · v0.1</span></footer>
+ </main>
+</div>
+</div>
+<script>
+(function(){
+"use strict";
+const modules=[
+ {value:"product-entry",label:"Product Entry",sheet:"Product Entry",sheetId:"545274882",page:"product-entry-preview.html",group:"Production"},
+ {value:"production-entry",label:"Production Entry",sheet:"Production Entry",sheetId:"1923467491",page:"production-entry-preview.html",group:"Production"},
+ {value:"production-schedule",label:"Production Schedule",sheet:"Production Schedule",sheetId:"1538651320",page:"production-schedule-preview.html",group:"Production"},
+ {value:"dmp-production",label:"DMP Production",sheet:"DMP - Production",sheetId:"1312335050",page:"dmp-production-preview.html",group:"Monitoring"},
+ {value:"dmr-production",label:"DMR Production",sheet:"DMR Production",sheetId:"2048043346",page:"dmr-production-preview.html",group:"Monitoring"},
+ {value:"dmr-coding",label:"DMR Coding",sheet:"DMR Coding",sheetId:"675328096",page:"dmr-coding-preview.html",group:"Monitoring"},
+ {value:"hourly-meat",label:"Hourly Meat",sheet:"Hourly Meat",sheetId:"428082343",page:"hourly-meat-preview.html",group:"Monitoring"},
+ {value:"hourly-coding",label:"Hourly Coding",sheet:"Hourly Coding",sheetId:"1916766220",page:"hourly-coding-preview.html",group:"Monitoring"},
+ {value:"hourly-agri",label:"Hourly Agri",sheet:"Hourly Agri",sheetId:"534145404",page:"hourly-agri-preview.html",group:"Monitoring"},
+ {value:"oee",label:"OEE",sheet:"OEE",sheetId:"1750442014",page:"oee-preview.html",group:"Monitoring"},
+ {value:"productivity",label:"Productivity",sheet:"Productivity",sheetId:"1688444278",page:"productivity-preview.html",group:"Monitoring"},
+ {value:"coding-dpr",label:"Coding DPR",sheet:"Coding DPR",sheetId:"1266086431",page:"coding-dpr-preview.html",group:"Quality & Control"},
+ {value:"co-qa",label:"CO QA",sheet:"co QA",sheetId:"1359678099",page:"co-qa-preview.html",group:"Quality & Control"},
+ {value:"non-prod",label:"NON-PROD",sheet:"NON-PROD",sheetId:"1381857831",page:"non-prod-preview.html",group:"Quality & Control"},
+ {value:"pr-monitoring",label:"PR Monitoring",sheet:"PR MONITORING",sheetId:"867256143",page:"pr-monitoring-preview.html",group:"Quality & Control"}
+];
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+const state={module:params.get("targetModule")||"",filter:"all",search:"",selected:new Set(),records:[]};
+const eligible=new Set(["ready","incomplete"]);
+const labels={ready:"Ready for Draft",incomplete:"Incomplete · Eligible",existing:"Existing / duplicate",held:"Held for review"};
+const moduleSelect=$("module-select");
+for(const group of ["Production","Monitoring","Quality & Control"]){
+ const optgroup=document.createElement("optgroup");optgroup.label=group;
+ modules.filter(m=>m.group===group).forEach(m=>{const option=document.createElement("option");option.value=m.value;option.textContent=m.label;optgroup.appendChild(option)});
+ moduleSelect.appendChild(optgroup);
+}
+function selectedModule(){return modules.find(m=>m.value===state.module)||null}
+function updateBackButton(){
+ const m=selectedModule();
+ const fromModule=params.get("from")==="module-page";
+ const button=$("back-batch");
+ button.innerHTML='<svg viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>'+(fromModule&&m?"Back to "+m.label:"Back to batch review");
+ button.title=fromModule&&m?"Return to "+m.label:"Return to batch review";
+}
+function updateUrl(clearBatchContext=false){
+ const url=new URL(location.href);
+ if(clearBatchContext)["sourceName","sourceType","batchId"].forEach(k=>url.searchParams.delete(k));
+ if(state.module)url.searchParams.set("targetModule",state.module);else url.searchParams.delete("targetModule");
+ const m=selectedModule();
+ if(m){url.searchParams.set("targetLabel",m.label);url.searchParams.set("sourceWorksheet",m.sheet);url.searchParams.set("sourceSheetId",m.sheetId)}
+ else{["targetLabel","sourceWorksheet","sourceSheetId"].forEach(k=>url.searchParams.delete(k))}
+ history.replaceState(null,"",url.toString());
+}
+function updateContext(){
+ const m=selectedModule();
+ $("source-worksheet").textContent=m?m.sheet:"Not selected";
+ $("source-sheet-id").textContent=m?m.sheetId:"—";
+ $("scope-description").textContent=m?("Showing the module-scoped staging area for "+m.label+". Only source rows mapped to "+m.sheet+" belong in this inbox."):"Select a module to view its staged source records.";
+ $("scope-chip").textContent=m?(m.group+" · "+m.label):"No module selected";
+ $("table-title").textContent=m?(m.label+" staged records"):"Staged records";
+ $("visible-count").textContent=m?"No staged records available":"No module selected";
+ $("table-foot").textContent=m?"No verified staged rows are connected yet. This preview does not display sample transactions.":"Select a destination module to continue.";
+ $("metric-total").textContent="—";$("metric-ready").textContent="—";$("metric-incomplete").textContent="—";$("metric-existing").textContent="—";$("metric-held").textContent="—";
+ $("select-all").disabled=true;
+ $("prepare-drafts").disabled=true;
+ updateBackButton();
+}
+function render(){
+ const m=selectedModule(),q=state.search.trim().toLowerCase();
+ const rows=state.records.filter(r=>(state.filter==="all"||r.status===state.filter)&&(!q||(r.key+" "+r.sheet+" "+r.row+" "+r.batch+" "+r.reason).toLowerCase().includes(q)));
+ $("inbox-rows").innerHTML=rows.length?rows.map(r=>'<tr><td><input type="checkbox" class="check row-check" data-id="'+r.id+'" '+(state.selected.has(r.id)?"checked":"")+' '+(eligible.has(r.status)?"":"disabled")+' aria-label="Select record"></td><td><span class="record-name">'+r.key+'</span><span class="record-sub">'+(r.detail||"")+'</span></td><td><span class="source-cell"><strong>'+r.sheet+'</strong><small>Row '+r.row+'</small></span></td><td>'+r.batch+'</td><td>'+r.completeness+'</td><td><span class="status '+r.status+'">'+labels[r.status]+'</span></td><td>'+r.captured+'</td><td><button class="action-link" data-view="'+r.id+'">View details</button></td></tr>').join(""):'<tr><td colspan="8"><div class="empty-state"><div class="empty-graphic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 9h16M9 9v3h6V9"/></svg></div><strong>'+(m?"No staged records for "+m.label+" yet.":"Choose a module to open its Import Inbox.")+'</strong><span>'+(m?"Once a completed scan batch is saved, new and incomplete source rows will appear here. Existing matches remain protected.":"Staged source rows will appear here after a verified scan batch is saved.")+'</span>'+(m?'<button class="btn outline" id="empty-new-import">Open Spreadsheet Import</button>':"")+'</div></td></tr>';
+ $("visible-count").textContent=m?(state.records.length?"Showing "+rows.length+" of "+state.records.length+" staged records":"No staged records available"):"No module selected";
+ $("table-foot").textContent=m?(state.records.length?"Source worksheet and row references are retained.":"No verified staged rows are connected yet. This preview does not display sample transactions."):"Select a destination module to continue.";
+ $("select-all").disabled=!state.records.some(r=>eligible.has(r.status));
+ updateSelection();
+ document.querySelectorAll(".row-check").forEach(c=>c.addEventListener("change",()=>{const id=Number(c.dataset.id);if(c.checked)state.selected.add(id);else state.selected.delete(id);updateSelection()}));
+ document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>toast("Record details will be available when verified inbox rows are connected.")));
+ const emptyImport=$("empty-new-import");if(emptyImport)emptyImport.addEventListener("click",startNewImport);
+}
+function updateSelection(){
+ const count=Array.from(state.selected).filter(id=>{const r=state.records.find(x=>x.id===id);return r&&eligible.has(r.status)}).length;
+ $("selected-count").textContent=count?count+" eligible record"+(count===1?"":"s")+" selected":"No records selected";
+ $("prepare-drafts").disabled=count===0;
+ $("select-all").checked=state.records.filter(r=>eligible.has(r.status)).length>0&&count===state.records.filter(r=>eligible.has(r.status)).length;
+ $("select-all").indeterminate=count>0&&count<state.records.filter(r=>eligible.has(r.status)).length;
+}
+function setModule(value){
+ const changed=state.module!==value;
+ state.module=value;state.selected.clear();moduleSelect.value=value;updateUrl(changed);updateContext();render();
+}
+function setFilter(filter){
+ state.filter=filter;document.querySelectorAll(".tab").forEach(b=>{const active=b.dataset.filter===filter;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});render();
+}
+function toast(message){const el=document.createElement("div");el.className="toast";el.textContent=message;document.body.appendChild(el);setTimeout(()=>el.remove(),2400)}
+function startNewImport(){
+ const m=selectedModule();const q=new URLSearchParams();
+ if(m)q.set("targetModule",m.value);
+ q.set("from","module-inbox");
+ location.href="spreadsheet-import-center-preview.html?"+q.toString();
+}
+function backToBatch(){
+ const m=selectedModule();
+ if(params.get("from")==="module-page"&&m){
+  if(window.self!==window.top){
+   window.parent.postMessage({type:"TFI_NAVIGATE_MODULE",page:m.label},"*");
+   return;
+  }
+  location.href=m.page;
+  return;
+ }
+ const q=new URLSearchParams();
+ if(m){q.set("targetModule",m.value);q.set("targetLabel",m.label);q.set("sourceWorksheet",m.sheet);q.set("sourceSheetId",m.sheetId)}
+ const currentParams=new URLSearchParams(location.search);
+ ["sourceName","sourceType","batchId"].forEach(k=>{const v=currentParams.get(k);if(v)q.set(k,v)});
+ q.set("from","module-inbox");
+ location.href="central-import-inbox-preview.html?"+q.toString();
+}
+moduleSelect.addEventListener("change",e=>setModule(e.target.value));
+// Status tabs are managed by the live inbox controller.
+// Record search is managed by the live inbox controller.
+// Global search is managed by the live inbox controller.
+// Select All is managed exclusively by the live inbox controller.
+// Clear selection is managed by the live inbox controller.
+// Draft action remains gated until the operational draft API is integrated.
+$("new-import").addEventListener("click",startNewImport);
+$("back-batch").addEventListener("click",backToBatch);
+document.querySelectorAll(".nav-link[data-page]").forEach(b=>b.addEventListener("click",()=>{const page=b.dataset.page;if(page==="Module Import Inbox")return;if(window.self!==window.top){window.parent.postMessage({type:"TFI_NAVIGATE_MODULE",page},"*");return;}if(page==="Spreadsheet Import"){location.href="spreadsheet-import-center-preview.html";return;}if(page==="Import History"){location.href="import-history-preview.html";return;}if(page==="Master Data"){location.href="master-data-preview.html";return;}if(page==="Users & Access"){location.href="users-access-preview.html";return;}if(page==="Audit Trail"){location.href="audit-trail-preview.html";return;}if(page==="Settings"){location.href="system-settings-preview.html";return;}toast(page+" workspace is available from the main navigation.");}));
+const initial=selectedModule();if(initial){moduleSelect.value=initial.value;updateUrl();}updateContext();render();
+})();
+</script>
+<script src="tfi-preview-router.js"></script>
+<script src="tfi-shell-controls.js"></script>
+<script src="tfi-module-inbox-live.js"></script>
+</body>
+</html>

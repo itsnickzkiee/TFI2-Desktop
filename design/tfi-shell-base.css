@@ -1,0 +1,57 @@
+/* TFI shared shell BASE styles.
+   Load before tfi-shell-standard.css; module CSS should only style its own content. */
+:root{
+  --green:#086333;
+  --deep:#064b29;
+  --teal:#0b3c45;
+  --teal2:#0f8585;
+  --mint:#d9f2ed;
+  --yellow:#ffc000;
+  --line:#d3dfd8;
+  --canvas:#f4f7f5;
+  --ink:#17251d;
+  --muted:#78857d;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Segoe UI",Inter,Arial,sans-serif;color:var(--ink);background:var(--canvas);font-size:13px;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.shell{min-height:100vh;display:flex}
+.sidebar{background:linear-gradient(180deg,var(--green),var(--deep));color:#fff;display:flex;flex-direction:column}
+.brand{background:#fff;border-radius:14px;padding:9px 11px;display:flex;align-items:center;justify-content:center;min-height:76px;flex:0 0 auto}
+.brand img{display:block;width:100%;max-width:208px;max-height:60px;height:auto;object-fit:contain;object-position:center}
+.brand-caption{color:#ffffffb8;font-size:9px;font-weight:800;letter-spacing:1.65px;text-align:center}
+.sidebar>nav{width:100%;min-width:0}
+.nav-group{margin:0 0 18px}
+.nav-label{font-size:9px;text-transform:uppercase;font-weight:800;letter-spacing:1.35px;color:#ffffff85}
+.nav-link{appearance:none;-webkit-appearance:none;width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;margin:2px 0;border:0;border-radius:10px;background:transparent;color:#ffffffd1;font-size:12px;font-weight:600;line-height:1.25;text-align:left;box-shadow:none}
+.nav-link span{min-width:0}
+.nav-link svg{width:17px;height:17px;flex:0 0 17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-link:hover{background:#ffffff1a;color:#fff}
+.nav-link.active{background:#fff;color:var(--green);box-shadow:0 5px 14px rgba(0,0,0,.10)}
+.spacer{flex:1;min-height:12px}
+.user-foot{border-top:1px solid #ffffff26;display:flex;align-items:center;gap:10px;padding:15px 7px 0}
+.user-foot strong{display:block;font-size:12px;color:#fff}
+.user-foot small{display:block;font-size:10px;color:#ffffffa3;margin-top:3px}
+.avatar{width:34px;height:34px;border-radius:50%;background:#e5f0e8;color:var(--green);display:grid;place-items:center;font-size:11px;font-weight:900;flex:0 0 34px}
+.main{min-width:0;flex:1;display:flex;flex-direction:column}
+.topbar{height:74px;min-height:74px;background:#fff;border-bottom:1px solid #e5ece7;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}
+.crumb{display:flex;align-items:center;gap:9px;color:#89958d;font-size:12px;font-weight:600;min-width:0}
+.crumb b{color:#314239}
+.profile{display:flex;align-items:center;gap:9px;min-width:0}
+.profile strong{display:block;font-size:12px;color:#263a2e}
+.profile small{display:block;font-size:10px;color:#758279;margin-top:2px}
+.content{width:100%;max-width:1700px;margin:0 auto;padding:18px 22px 28px;min-width:0}
+@media(max-width:900px){
+  .sidebar{width:76px;flex-basis:76px;padding:18px 10px}
+  .brand{padding:7px;min-height:52px}
+  .brand img{width:48px;height:38px;max-width:48px;max-height:38px;object-fit:contain}
+  .brand-caption,.nav-label,.nav-link span,.user-foot>div:last-child{display:none}
+  .nav-link{justify-content:center;padding:12px 7px}
+  .user-foot{justify-content:center;padding:14px 0 0}
+}
+@media(max-width:640px){
+  .topbar{height:62px;min-height:62px;padding:0 14px}
+  .profile>div:last-child{display:none}
+  .content{padding:14px 10px 22px}
+}

@@ -1,0 +1,1 @@
+create index if not exists tfi_productivity_records_updated_by_idx on public.tfi_productivity_records(updated_by); create index if not exists tfi_productivity_records_archived_by_idx on public.tfi_productivity_records(archived_by); create index if not exists tfi_productivity_revisions_changed_by_idx on public.tfi_productivity_revisions(changed_by);

@@ -1,0 +1,36 @@
+.hm-saved-section,.tfi-hourly-modal-card{background:#fff;border:1px solid #dbe5df;border-radius:12px;box-shadow:0 8px 24px rgba(16,50,31,.07);margin-top:18px;overflow:hidden}
+.hm-saved-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:#f4f8f5;border-bottom:1px solid #e2eae4}
+.hm-saved-heading strong{display:block;color:#164d31;font-size:12px;letter-spacing:.5px}.hm-saved-heading span{display:block;color:#718077;font-size:11px;margin-top:4px}
+.hm-saved-filters{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr)) auto;gap:10px;padding:12px 14px;background:#fbfdfb;align-items:end}
+.hm-saved-filters label,.tfi-hourly-field{display:flex;flex-direction:column;gap:5px;color:#64736a;font-size:10px;font-weight:800}
+.hm-saved-filters input,.hm-saved-filters select,.tfi-hourly-field input,.tfi-hourly-field select{width:100%;min-height:36px;border:1px solid #d5e0d8;border-radius:7px;padding:7px 9px;background:#fff;color:#1c2b21}
+.hm-saved-status{padding:8px 14px;color:#61766a;font-size:11px;border-top:1px solid #edf1ee}
+.hm-saved-scroll{overflow:auto;max-width:100%}.hm-saved-table{width:100%;min-width:1300px;border-collapse:collapse;font-size:10px}
+.hm-saved-table th,.hm-saved-table td{padding:9px 8px;border-bottom:1px solid #e7ede9;text-align:left;white-space:nowrap}
+.hm-saved-table th{background:#eaf4ef;color:#24563b;font-weight:800;position:sticky;top:0}
+.hm-saved-table td button,.hc-actions-cell button,.ha-actions-cell button{border:1px solid #cbdacf;background:#fff;color:#24563b;border-radius:5px;padding:5px 7px;margin:1px;font-size:9px;font-weight:800}
+.hm-saved-table td button:hover,.hc-actions-cell button:hover,.ha-actions-cell button:hover{background:#edf7f0}
+.hm-saved-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;color:#718077;font-size:11px}
+.hm-saved-footer>div{display:flex;align-items:center;gap:10px}.hm-saved-footer button{border:1px solid #d3dfd7;border-radius:6px;background:#fff;padding:7px 10px;color:#315640;font-size:10px;font-weight:800}
+.hc-actions-cell,.ha-actions-cell{white-space:nowrap}
+.tfi-hourly-modal{position:fixed;inset:0;z-index:9999;background:rgba(12,29,19,.56);display:flex;align-items:center;justify-content:center;padding:20px}
+.tfi-hourly-modal[hidden]{display:none}
+.tfi-hourly-modal-card{width:min(760px,100%);max-height:min(90vh,900px);overflow:auto;margin:0}
+.tfi-hourly-modal-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#0c5430;color:#fff}
+.tfi-hourly-modal-head strong{font-size:13px;letter-spacing:.5px}
+.tfi-hourly-modal-head button{border:0;background:transparent;color:#fff;font-size:25px;line-height:1;cursor:pointer}
+.tfi-hourly-edit-form{padding:18px}
+.tfi-hourly-field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tfi-hourly-field{margin-bottom:12px}
+.tfi-hourly-modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:12px}
+.tfi-hourly-modal-actions button{border:1px solid #cbdacf;border-radius:7px;background:#fff;padding:9px 14px;color:#315640;font-size:11px;font-weight:800}
+.tfi-hourly-modal-actions button[type=submit]{background:#0b6b3b;border-color:#0b6b3b;color:#fff}
+.tfi-hourly-history{padding:16px}
+.tfi-hourly-revision{padding:12px;margin-bottom:10px;border:1px solid #e0e8e2;border-radius:8px;background:#fafcfb}
+.tfi-hourly-revision strong,.tfi-hourly-revision small{display:block}
+.tfi-hourly-revision small{margin-top:5px;color:#738078}
+.tfi-hourly-revision pre{max-height:300px;overflow:auto;padding:10px;background:#f0f5f1;border-radius:6px;font-size:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+@media(max-width:900px){.hm-saved-filters{grid-template-columns:repeat(2,minmax(0,1fr))}.hm-saved-filters button{min-height:36px}}
+@media(max-width:560px){.tfi-hourly-field-grid{grid-template-columns:1fr}.hm-saved-heading{align-items:flex-start;flex-direction:column}.hm-saved-filters{grid-template-columns:1fr}}
+
+.tfi-hourly-live{table-layout:auto!important;min-width:1500px;width:100%}.tfi-hourly-live td,.tfi-hourly-live th{padding:9px 12px!important}.tfi-hourly-live td:last-child,.ha-actions-cell,.hc-actions-cell{min-width:180px;white-space:nowrap}.tfi-hourly-live td:last-child button,.ha-actions-cell button,.hc-actions-cell button{margin:3px 5px;padding:6px 9px;white-space:nowrap}

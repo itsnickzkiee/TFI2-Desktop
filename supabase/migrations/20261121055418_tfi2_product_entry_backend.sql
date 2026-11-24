@@ -1,0 +1,3 @@
+-- Migration ledger placeholder created during the Product Entry backend setup.
+-- No schema changes were applied in this migration; the actual implementation is in
+-- 20261121055419_tfi2_product_entry_backend_schema.sql.

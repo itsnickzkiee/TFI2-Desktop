@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#064b29">
+  <meta name="robots" content="noindex,nofollow">
+  <title>TFI | Administrator Sign In</title>
+  <link rel="stylesheet" href="admin-login.css">
+</head>
+<body>
+  <main class="login-layout">
+    <section class="login-brand" aria-label="Tosen Foods TFI application">
+      <div class="login-brand-top">
+        <div class="login-logo-panel">
+          <img src="assets/tosen-foods-logo.webp" alt="Tosen Foods, Inc.">
+        </div>
+      </div>
+
+      <div class="login-brand-copy">
+        <p class="login-brand-kicker">TFI · Production Management System</p>
+        <h1>Production oversight, in one connected workspace.</h1>
+        <p>Manage production records, monitor daily operations, and review source data through one central application.</p>
+        <div class="login-feature-list" aria-label="Application areas">
+          <span class="login-feature">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h16M7 15l4-4 3 2 5-6"/></svg>
+            Production monitoring
+          </span>
+          <span class="login-feature">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg>
+            Records and reports
+          </span>
+          <span class="login-feature">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+            Administrator review
+          </span>
+        </div>
+      </div>
+
+      <footer class="login-brand-footer">
+        <span>© 2026 Tosen Foods, Inc.</span>
+        <span>TFI Admin Portal</span>
+      </footer>
+    </section>
+
+    <section class="login-form-side" aria-label="Administrator sign in">
+      <div class="login-card">
+        <div class="login-card-top">
+          <span class="login-card-eyebrow">Administrator access</span>
+          <h2>Sign in to TFI</h2>
+          <p class="login-card-intro">Use your authorized administrator account to continue to the production management workspace.</p>
+        </div>
+
+        <form class="login-form" id="admin-login-form" novalidate>
+          <div class="login-field">
+            <label for="admin-identity">Work email</label>
+            <input
+              class="login-input"
+              id="admin-identity"
+              name="identity"
+              type="email"
+              placeholder="Enter your registered work email"
+              autocomplete="email"
+              autocapitalize="none"
+              spellcheck="false"
+              required
+              aria-required="true"
+            >
+          </div>
+
+          <div class="login-field">
+            <label for="admin-password">Password</label>
+            <div class="login-input-wrap">
+              <input
+                class="login-input login-password-input"
+                id="admin-password"
+                name="password"
+                type="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+                aria-required="true"
+                aria-describedby="password-hint"
+              >
+              <button
+                class="login-password-toggle"
+                id="password-toggle"
+                type="button"
+                aria-label="Show password"
+                aria-pressed="false"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.7"/></svg>
+                <span>Show</span>
+              </button>
+            </div>
+            <span class="login-field-hint" id="password-hint">Your password is case-sensitive.</span>
+          </div>
+
+          <div class="login-forgot-row"><a class="login-forgot-link" href="/design/password-recovery-request.html">Forgot password?</a></div>
+
+          <button class="login-submit" type="submit">
+            <span>Sign in</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+
+          <div class="login-status" id="login-status" role="status" aria-live="polite" hidden></div>
+        </form>
+
+        <div class="login-preview-warning">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2.8 19h18.4L12 3Z"/><path d="M12 9v4M12 16.5h.01"/></svg>
+          <span><strong>Authorized access only.</strong> Only active accounts with assigned roles and permissions can enter the TFI workspace.</span>
+        </div>
+
+        <div class="login-form-footer">
+          <strong>TFI · Production Management System</strong><br>
+          Administrator access is subject to the approved account and permission policy.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="admin-login-ui.js"></script>
+</body>
+</html>

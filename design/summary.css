@@ -1,0 +1,24 @@
+/* Summary report — exact 32-column, three-header-row source layout */
+.sum-table{min-width:3600px;table-layout:fixed}
+.sum-table th,.sum-table td{border-right:1px solid #d8e1dc;border-bottom:1px solid #d8e1dc}
+.sum-table thead th{position:sticky;text-align:center;white-space:normal;line-height:1.2}
+.sum-table thead .sum-group-row th{top:0;z-index:32;height:34px;padding:6px 8px;background:#0b3c45;color:#fff;font-size:10px;font-weight:850;letter-spacing:.35px;border-color:#315a60}
+.sum-table thead .sum-subgroup-row th{top:34px;z-index:31;height:30px;padding:5px 7px;background:#d9f2ed;color:#245b57;font-size:9px;font-weight:850;border-color:#b9d8d0}
+.sum-table thead .sum-column-row th{top:64px;z-index:30;height:66px;padding:5px 4px;background:#eaf4ef;color:#173f3d;font-size:9px;font-weight:800;border-bottom:2px solid #70aaa1}
+.sum-table thead .sum-column-row th button{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;height:100%;padding:2px;border:0;background:transparent;color:inherit;font:inherit;line-height:1.2;cursor:pointer}
+.sum-table thead .sum-column-row th button span{flex:0 0 auto;color:#7d978c;font-size:10px}
+.sum-table thead .sum-column-row th[aria-sort=ascending] button span,.sum-table thead .sum-column-row th[aria-sort=descending] button span{color:#075b38}
+.sum-table tbody td{height:36px;padding:6px 7px;background:#fff;color:#34483e;font-size:10px}
+.sum-table tbody tr:nth-child(even) td{background:#fbfdfb}
+.sum-table tbody tr:hover td{background:#f0f8f3}
+.sum-table tbody td.sum-number{text-align:right;font-variant-numeric:tabular-nums}
+.sum-table tbody td.sum-percent{text-align:right;color:#276b57;font-variant-numeric:tabular-nums}
+.sum-filter-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.sum-search-field{grid-column:span 1}
+.sum-table-scroll{max-height:650px}
+@media(max-width:1300px){.sum-filter-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:900px){.sum-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.sum-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.sum-search-field{grid-column:span 2}.sum-table-scroll{max-height:560px}}
+
+/* Four report views, including Removed Rows. */
+@media(max-width:620px){.rr-report-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;overflow:visible}.rr-report-tab{min-width:0;flex:none;padding:7px 4px;font-size:8px;line-height:1.2;white-space:normal;text-align:center}}

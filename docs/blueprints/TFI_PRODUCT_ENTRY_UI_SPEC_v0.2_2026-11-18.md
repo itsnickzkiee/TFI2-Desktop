@@ -1,0 +1,1 @@
+SUPERSEDED: v0.2 remains as a historical specification. Use TFI_PRODUCT_ENTRY_UI_SPEC_v0.3_2026-11-19.md for the current Product Entry shell, scrolling, navigation, and refinement baseline.
