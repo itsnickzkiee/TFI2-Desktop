@@ -60,3 +60,5 @@ dist/
 build/
 coverage/
 
+
+.env.example
